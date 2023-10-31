@@ -1,0 +1,108 @@
+:root {
+	--color-border: #ccc;
+	--color-project: #64A6BD;
+	--color-personal: #F5CB5C;
+	--color-text: #595959;
+    
+    --color-3: #CC2936;
+    --color-4: #595959;
+	--color-head-text: #2E7866
+}
+html,body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	margin: 0;
+}
+.header {
+	display: flex;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 5px;
+	border-bottom: 1px solid var(--color-border);
+	position: fixed;
+    width: 100vw;
+    z-index: 2;
+    background-color: white;
+}
+.nav-content {
+	display: flex;
+	justify-content: space-between;
+}
+.headline {
+	padding: 5px;
+	color: var(--color-head-text);
+	font-family: Noto Sans TC;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 700;
+}
+.nav-menu {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+.nav-opt {
+	color: var(--color-text);
+	font-size: 20px;
+	font-size: 16px;
+    font-weight: 400;
+}
+#project:hover {
+	border-bottom: 5px solid;
+    border-color: var(--color-project);
+    box-sizing: border-box;
+}
+#personal:hover {
+	border-bottom: 5px solid;
+    border-color: var(--color-personal);
+    box-sizing: border-box;
+}
+#member:hover {
+	opacity: 0.75;
+}
+.headline:hover {
+	padding: 2px 5px 8px 5px;
+}
+.hyperlink {
+	text-decoration: none;
+}
+.sight-fit {
+	width: 1200px;
+}
+.mouseover {
+	cursor: pointer;
+}
+#member {
+	background-image: url("https://d2o8k69neolkqv.cloudfront.net/user.png");
+	width: 35px;
+    height: 35px;
+    background-size: contain;
+    border-radius: 50%;
+}
+.footer {
+	height: 80px;
+	background-color: var(--color-head-text);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 1;
+}
+.footer-text {
+	font-family: Noto Sans TC;
+	font-size: 16px;
+	font-weight: 700;
+	color: white;
+}
+@media (max-width: 1200px) {
+	.sight-fit {
+		width: 100%;
+	}
+}
+
+/* FOR DEBUG */
+.tmp {
+	height: 1000px;
+	background-color: #eeeeee;
+}
