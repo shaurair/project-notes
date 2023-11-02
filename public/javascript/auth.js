@@ -8,20 +8,6 @@ const signOutBtn = document.getElementById('opt-sign-out');
 let isMemberDialogueShowing = false;
 let userInfo;
 
-function setLocationHint() {
-	if(location.pathname == '/projects') {
-		console.log('checked')
-		projectsOptBtn.classList.add('in-project');
-	}
-	if(location.pathname == '/personal') {
-		personalOptBtn.classList.add('in-personal');
-	}
-
-	if(location.pathname == '/member') {
-		memberOptBtn.classList.add('in-member');
-	}
-}
-
 function showMemberNav() {
 	projectsOptBtn.classList.remove('unseen');
 	personalOptBtn.classList.remove('unseen');
