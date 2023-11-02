@@ -55,6 +55,17 @@ async function signIn(email, password) {
 	}
 }
 
+async function initLog() {
+	await getUser();
+
+	if(userInfo == null) {
+		showPublicNav();
+	}
+	else {
+		showMemberNav();
+	}
+}
+
 demoBtn.addEventListener('click', () => {
 	signInEmailElement.value = 'test@test.com';
 	signInPasswordElement.value = 'test123';

@@ -2,7 +2,7 @@ async function initIndex() {
 	await getUser();
 
 	if(userInfo == null) {
-		showPublicNav()
+		showPublicNav();
 	}
 	else {
 		showMemberNav();
