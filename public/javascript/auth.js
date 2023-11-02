@@ -28,6 +28,10 @@ function showMemberNav() {
 	memberOptBtn.classList.remove('unseen');
 }
 
+function showPublicNav() {
+	signOptBtn.classList.remove('unseen');
+}
+
 async function getUser() {
 	let token = localStorage.getItem('token');
 	let response = await fetch("/auth", {
@@ -35,11 +39,7 @@ async function getUser() {
 	});
 	let result = await response.json();
 
-	userInfo = result['data']
-
-	if(userInfo == null) {
-		signOptBtn.classList.remove('unseen');
-	}
+	userInfo = result['data'];
 }
 
 window.addEventListener('click', (event) => {
