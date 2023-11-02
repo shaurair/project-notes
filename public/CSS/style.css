@@ -3,10 +3,9 @@
 	--color-project: #64A6BD;
 	--color-personal: #F5CB5C;
 	--color-text: #595959;
-    
-    --color-3: #CC2936;
+    --color-highlight: #CC2936;
     --color-4: #595959;
-	--color-head-text: #2E7866
+	--color-head-text: #2E7866;
 }
 html,body {
 	display: flex;
@@ -14,6 +13,9 @@ html,body {
 	min-height: 100vh;
 	margin: 0;
 }
+/* ================== */
+/*  navigation usage  */
+/* ================== */
 .header {
 	display: flex;
 	justify-content: center;
@@ -48,30 +50,30 @@ html,body {
 	font-size: 16px;
     font-weight: 400;
 }
-#project:hover {
+#project:hover, .in-project {
 	border-bottom: 5px solid;
     border-color: var(--color-project);
     box-sizing: border-box;
 }
-#personal:hover {
+#personal:hover, .in-personal {
 	border-bottom: 5px solid;
     border-color: var(--color-personal);
     box-sizing: border-box;
 }
-#member:hover {
-	opacity: 0.75;
+#member:hover, .in-member {
+	box-shadow: 0 0 5px 0px var(--color-border);
+}
+#sign {
+	padding: 5px 0;
+	border-bottom: solid;
+	box-sizing: border-box;
+	border-color: white;
+}
+#sign:hover {
+	border-color: var(--color-head-text);
 }
 .headline:hover {
-	padding: 2px 5px 8px 5px;
-}
-.hyperlink {
-	text-decoration: none;
-}
-.sight-fit {
-	width: 1200px;
-}
-.mouseover {
-	cursor: pointer;
+	filter: brightness(1.2);
 }
 #member {
 	background-image: url("https://d2o8k69neolkqv.cloudfront.net/user.png");
@@ -80,6 +82,153 @@ html,body {
     background-size: contain;
     border-radius: 50%;
 }
+.member-selection {
+	display: flex;
+	justify-content: center;
+    box-sizing: border-box;
+	position: absolute;
+	z-index: 2;
+	top: 60px;
+	right: calc(50% - 600px);
+	width: 91px;
+	min-height: 80px;
+	background: #e1e6e880;
+	border-radius: 5px;
+	animation: fadeIn 0.3s;
+}
+@keyframes fadeIn {
+	from {
+		opacity: 0.5;
+	}
+	to {
+		opacity: 1;
+	}
+}
+.member-position {
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+}
+.member-selection-item {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	height: -webkit-fill-available;
+}
+.selection-item-text {
+	text-align: center;
+	color: var(--color-text);
+    font-family: Noto Sans TC;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+}
+#opt-member-center {
+	border-bottom: 1px solid;
+	border-bottom-color: var(--color-border);
+}
+/* ================== */
+/*  sign page usage   */
+/* ================== */
+.sign-area {
+	width: 340px;
+	min-height: 235px;
+	box-sizing: border-box;
+	margin: 15px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	align-items: center;
+}
+.sign-main-title {
+	width: 100%;
+	color: var(--color-text);
+	text-align: center;
+	font-family: Noto Sans TC;
+	font-size: 28px;
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+.sign-box {
+	display: flex;
+	width: 100%;
+}
+.sign-input-text {
+	width: 100%;
+	border: none;
+	box-sizing: border-box;
+	padding: 15px;
+	color: var(--color-text);
+	font-family: Noto Sans TC;
+	font-size: 16px;
+	font-style: normal;
+	border: 1px solid var(--color-border);
+	border-radius: 5px;
+}
+.sign-btn {
+	width: 100%;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: var(--color-text);
+}
+.sign-btn:hover {
+	opacity: 0.75;
+}
+.sign-btn-text {
+	color: white;
+	text-align: center;
+	font-family: Noto Sans TC;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 400;
+}
+.sign-message {
+	color: var(--color-highlight);
+	text-align: center;
+	font-family: Noto Sans TC;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	min-height: 26px;
+}
+.sign-switch {
+	width: 100%;
+	box-sizing: border-box;
+	background-color: var(--color-personal);
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: white;
+	text-align: center;
+	font-family: Noto Sans TC;
+	font-size: 22px;
+	font-style: normal;
+	font-weight: 500;
+}
+.sign-switch:hover {
+	filter: saturate(1.2);
+}
+#go-sign-in-btn {
+	background-color: var(--color-project);
+}
+.demo-user {
+	background-color: var(--color-highlight);
+    color: white;
+	box-sizing: border-box;
+    border: solid;
+	line-height: 2;
+	width: 100%;
+	text-align: center;
+	border-radius: 8px;
+	padding: 3px 10px;
+	font-size: 16px;
+}
+.demo-user:hover {
+	opacity: 0.75;
+}
+/* ================== */
+/*  footer usage      */
+/* ================== */
 .footer {
 	height: 80px;
 	background-color: var(--color-head-text);
@@ -95,14 +244,75 @@ html,body {
 	font-weight: 700;
 	color: white;
 }
+/* ================== */
+/*  main layout      */
+/* ================== */
+.main {
+	margin-top: 60px;
+	margin-bottom: 10px;
+}
+.main-index {
+	display: flex;
+	justify-content: center;
+}
+.main-log {
+	display: flex;
+	flex-direction: column;
+	align-items: center;	
+}
+.main-project {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.main-personal {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.main-member {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+/* ================== */
+/*  common usage      */
+/* ================== */
+.hyperlink {
+	text-decoration: none;
+}
+.sight-fit {
+	width: 1200px;
+}
+.mouseover {
+	cursor: pointer;
+}
+.unseen {
+	display: none;
+}
+.separator {
+	width: 100%;
+    border-style: solid;
+    color: var(--color-border);
+}
+
+/* ====================================== */
+/*  600 px ~ 1200 px screen               */
+/* ====================================== */
 @media (max-width: 1200px) {
 	.sight-fit {
 		width: 100%;
 	}
+	.member-selection {
+		right: 6px;
+	}
 }
 
-/* FOR DEBUG */
-.tmp {
-	height: 1000px;
-	background-color: #eeeeee;
+/* ====================================== */
+/*  < 600 px screen                       */
+/* ====================================== */
+@media (max-width: 600px) {
+	.headline {
+		font-size: 20px;
+	}
 }
