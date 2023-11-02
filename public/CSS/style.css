@@ -86,7 +86,7 @@ html,body {
 	display: flex;
 	justify-content: center;
     box-sizing: border-box;
-	position: absolute;
+	position: fixed;
 	z-index: 2;
 	top: 60px;
 	right: calc(50% - 600px);
@@ -253,7 +253,9 @@ html,body {
 }
 .main-index {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 }
 .main-log {
 	display: flex;
@@ -314,5 +316,17 @@ html,body {
 @media (max-width: 600px) {
 	.headline {
 		font-size: 20px;
+	}
+	.nav-menu {
+		gap: 0px;
+		text-align: center;
+	}
+	.nav-opt {
+		width: min-content;
+		margin-right: 30px;
+	}
+	#sign {
+		width: max-content;
+		margin: 0;
 	}
 }
