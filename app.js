@@ -30,6 +30,8 @@ app.get("/member", (req, res) => {
 // routes            //
 // ----------------- //
 const logRouter = require('./routes/log');
+const authRouter = require('./routes/auth');
 app.use('/log', logRouter);
+app.use('/auth', authRouter);
 
 app.listen(port);
