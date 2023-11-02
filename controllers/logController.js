@@ -13,7 +13,7 @@ const checkSignInData = async (req, res) => {
 			'email': email
 		};
 
-		let userToken = await token.encodeToken(payload);
+		let userToken = await token.encode(payload);
 		res.status(result.statusCode).send({'token': userToken});
 	}
 	else {

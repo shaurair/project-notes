@@ -44,7 +44,7 @@ async function signIn(email, password) {
 
 		if(response.ok) {
 			localStorage.setItem('token', result["token"]);
-			location.reload();
+			location.href = '/';
 		}
 		else {
 			messageElement.textContent = result['message'];
