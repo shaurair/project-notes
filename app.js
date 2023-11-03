@@ -19,6 +19,9 @@ app.get("/log", (req, res) => {
 app.get("/projects", (req, res) => {
 	res.render('projects');
 })
+app.get("/project/:id", (req,res) => {
+	res.render('projectId.ejs', {id: req.params.id});
+})
 app.get("/personal", (req, res) => {
 	res.render('personal');
 })
