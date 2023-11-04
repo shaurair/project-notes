@@ -3,17 +3,69 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Project Notes</title>
+	<title>Project Tracker</title>
 	<link rel="stylesheet" type="text/css" href="/CSS/style.css"/>
 </head>
 <body>
 <%- include('header') -%>
 <div class="main main-project">
-
+	<div class="search-container sight-fit">
+		<div class="dropdown-container">
+			<div class="dropdown">
+				<label class="dropdown-label">My character</label>
+				<select class="dropdown-select">
+					<option>I am Asignee</option>
+					<option>I am Developers</option>
+					<option>Not specify</option>
+				</select>
+			</div>
+			<div class="dropdown">
+				<label class="dropdown-label">Project Status</label>
+				<select class="dropdown-select">
+					<option>In progress / Reviewing</option>
+					<option>Open</option>
+					<option>Done</option>
+					<option>Not specify</option>
+				</select>
+			</div>
+			<div class="dropdown">
+				<label class="dropdown-label">Sorted by</label>
+				<select class="dropdown-select">
+					<option>Priority(critical → minor)</option>
+					<option>Status(open → done)</option>
+				</select>
+			</div>
+			<div class="search">
+				<label class="dropdown-label">Keyword</label>
+				<input class="keyword-input" type="text" placeholder="project id / summery">
+			</div>
+		</div>
+		<div class="search-button-container">
+			<button class="search-btn mouseover">Search</button>
+		</div>
+	</div>
+	<hr class="separator-sight-fit"/>
+	<div class="project-list">
+		<table class="project-table sight-fit">
+			<thead>
+				<tr>
+					<th class="table-action-col"></th><th>Project</th><th>Assignee</th><th>Status</th><th>Priority</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><div class="action-container mouseover"><img class="action-image" src="/images/viewmore.png"/></div></td><td><a href="/project/123" target="_blank">P-Id 123 solve xxx problem</a></td><td>member a</td><td>in progress</td><td>major</td>
+				</tr>
+				<tr>
+					<td><div class="action-container mouseover"><img class="action-image" src="/images/viewmore.png"/><div style="position: absolute;"><dialog open class="viewmore-dialogue">Add to my notes</dialog></div> </div></td><td><a href="/project/125" target="_blank">P-Id 125 solve xxx problem</a></td><td>member a</td><td>in progress</td><td>major</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 <%- include('footer') -%>
 </body>
-<script src="javascript/auth.js"></script>
-<script src="javascript/project.js"></script>
+<script src="/javascript/auth.js"></script>
+<script src="/javascript/project.js"></script>
 <script>initProject();</script>
 </html>
