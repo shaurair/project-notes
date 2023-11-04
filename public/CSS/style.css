@@ -381,6 +381,7 @@ html,body {
     font-weight: bold;
     padding: 5px;
 	background-color: var(--color-personal);
+	filter: saturate(0.9);
 }
 .note-button:hover {
 	filter: brightness(1.1);
