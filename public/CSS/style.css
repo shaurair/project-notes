@@ -292,7 +292,6 @@ html,body {
 }
 .search-btn:hover {
 	filter: brightness(1.1);
-	margin: 0 2px 2px 0;
 }
 .project-table th{
 	background-color:var(--color-project);
@@ -338,21 +337,156 @@ html,body {
 	top: 0px;
 	left: 5px;
 }
+.project-summery{
+	font-weight: 600;
+}
 /* ================== */
 /*  personal usage    */
 /* ================== */
+.note-options-area {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 30px;
+}
+.note-options-container {
+	display: flex;
+	gap: 15px;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.note-title-container {
+	display: flex;
+    flex-direction: column;
+	width: 340px;
+}
+.note-title-label {
+	color: var(--color-personal);
+    filter: brightness(0.8);
+    font-weight: 500;
+    font-size: 20px;
+}
+.note-option-button-container {
+	display: flex;
+	align-items: end;
+}
+.note-button {
+	line-height: 1.5;
+	width: fit-content;
+    border-radius: 10px;
+    border-width: 0;
+    font-family: Noto Sans TC;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+	background-color: var(--color-personal);
+}
+.note-button:hover {
+	filter: brightness(1.1);
+}
 .personal-list {
 	display: flex;
-	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
 	gap: 15px;
 }
 .note {
 	display: flex;
 	flex-direction: column;
+	gap: 10px;
+	width: 500px;
+	box-sizing: border-box;
+    padding: 6px;
+	border-style: dashed;
+    border-color: var(--color-border);
+}
+.note:hover, .note-selected {
 	border-style: solid;
+	border-radius: 10px;
+	border-color: var(--color-personal);
+}
+.note-head {
+	display: flex;
+	justify-content: space-between;
+}
+.note-title {
+	font-size: 20px;
+	font-weight: 600;
+	font-family: Noto Sans TC;
+}
+.project-text {
+	color: var(--color-head-text);
+}
+.new-title-text {
+	color: var(--color-text);
+}
+.note-button-group {
+	display: flex;
+	justify-content: end;
+	align-items: center;
+}
+.note-text-button-container {
+	display: flex;
+	align-items: center;
+}
+.note-text-button {
+	height: 30px;
+	width: fit-content;
+    border-radius: 5px;
+    border-width: 0;
+    font-family: Noto Sans TC;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+	background-color: var(--color-highlight);
+	opacity: 0.5;
+}
+.note-save-enable {
+	opacity: 1;
+}
+.note-save-enable:hover {
+	filter: saturate(1.2);
+}
+.note-delete-icon {
+	width: 35px;
+	height: 35px;
+	background: url("/images/delete.svg") no-repeat center;
+	background-size: contain;
+}
+.note-delete-icon:hover {
+	opacity: 0.75;
+}
+.note-action-container {
+	display: flex;
+	align-items: center;
+}
+.note-action-image {
+	width: 25px;
+	height: 25px;
+}
+.note-action-image:hover {
+	opacity: 0.75;
+}
+.viewmore-dialogue-note {
+	position: absolute;
+	top: 0px;
+    left: -90px;
+	font-size: 14px;
+    width: max-content;
+    line-height: 1;
+    border: 1px solid;
+	padding: 5px;
+	background-color: white;
+}
+.move-note {
+	padding: 3px;
 }
 .input-note {
-	height: 40px;
+	font-size: 16px;
+	width: 470px;
+    height: 100px;
 }
 /* ================== */
 /*  footer usage      */
@@ -402,6 +536,7 @@ html,body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: 10px;
 }
 .main-member {
 	display: flex;
@@ -475,5 +610,11 @@ html,body {
 	#sign {
 		width: max-content;
 		margin: 0;
+	}
+	.note {
+		width: calc(100% - 10px);
+	}
+	.input-note {
+		width: calc(100% - 20px);
 	}
 }
