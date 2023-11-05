@@ -490,6 +490,61 @@ html,body {
     height: 100px;
 }
 /* ================== */
+/*  project/id usage  */
+/* ================== */
+.project-head {
+	display: flex;
+	gap: 15px;
+	box-sizing: border-box;
+	padding: 0 30px;
+	margin-bottom: 40px;
+}
+.viewmore-dialogue-project {
+	position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 14px;
+    width: max-content;
+    line-height: 1;
+    border: 1px solid;
+    padding: 5px;
+    background-color: white;
+}
+.project-content {
+	display: flex;
+	justify-content: space-between;
+	box-sizing: border-box;
+	padding: 0 40px 0 60px;
+}
+.project-minor {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+.main-block {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.main-block-vertical {
+	display: flex;
+	flex-direction: column;
+}
+.block-title {
+	width: 80px;
+	font-weight: 600;
+}
+.block-content {
+	font-size: 16px;
+	font-weight: 500;
+}
+.normal-text {
+	color: var(--color-text);
+}
+.content-description {
+	margin-top: 5px;
+}
+/* ================== */
 /*  footer usage      */
 /* ================== */
 .footer {
