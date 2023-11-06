@@ -523,6 +523,12 @@ html,body {
 	padding: 0 30px;
 	margin-bottom: 40px;
 }
+.project-title {
+	font-size: 28px;
+	font-weight: 600;
+	font-family: Noto Sans TC;
+	filter: brightness(0.8);
+}
 .viewmore-dialogue-project {
 	position: absolute;
     top: 15px;
@@ -577,7 +583,15 @@ html,body {
 	display: flex;
 	justify-content: end;
 	box-sizing: border-box;
-    padding-right: 30px;
+    padding-right: 50px;
+}
+.status-select {
+	background-color: darkblue;
+    color: white;
+    border-radius: 5px;
+    font-weight: 700;
+    border-style: none;
+    height: 35px;
 }
 .note-title-project {
 	color: var(--color-personal);
