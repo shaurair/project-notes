@@ -4,7 +4,7 @@ async function initProjectId() {
 	await getUser();
 
 	if(userInfo == null) {
-		showPublicNav();
+		location.href = '/';
 	}
 	else {
 		showMemberNav();
@@ -19,5 +19,4 @@ viewmoreBtn.addEventListener('click', () => {
 	else {
 		viewmoreDialogueElement.classList.add('unseen');
 	}
-	
 })
