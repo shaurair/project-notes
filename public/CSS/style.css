@@ -27,6 +27,10 @@ html,body {
     z-index: 2;
     background-color: white;
 }
+.headline-container {
+	display: flex;
+	align-items: center;
+}
 .nav-content {
 	display: flex;
 	justify-content: space-between;
@@ -49,6 +53,19 @@ html,body {
 	font-size: 20px;
 	font-size: 16px;
     font-weight: 400;
+}
+.create-btn {
+	width: fit-content;
+	line-height: 1.6;
+	border-radius: 5px;
+    border-width: 0;
+    font-family: Noto Sans TC;
+    color: white;
+    font-size: 16px;
+	background-color: var(--color-head-text);
+}
+.create-btn:hover {
+	opacity: 0.75;
 }
 #project:hover, .in-project {
 	border-bottom: 5px solid;
@@ -80,6 +97,7 @@ html,body {
 	width: 35px;
     height: 35px;
     background-size: contain;
+	background-repeat: no-repeat;
     border-radius: 50%;
 }
 .member-selection {
@@ -250,6 +268,8 @@ html,body {
 	display: flex;
 	gap: 40px;
 	justify-content: space-between;
+	box-sizing: border-box;
+	padding: 0 5px;
 }
 .search-button-container {
 	display: flex;
@@ -634,7 +654,7 @@ html,body {
 }
 
 /* ====================================== */
-/*  600 px ~ 1200 px screen               */
+/*  700 px ~ 1200 px screen               */
 /* ====================================== */
 @media (max-width: 1200px) {
 	.sight-fit, .separator-sight-fit {
@@ -651,7 +671,7 @@ html,body {
 /* ====================================== */
 /*  < 600 px screen                       */
 /* ====================================== */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 	.headline {
 		font-size: 20px;
 	}
@@ -659,9 +679,9 @@ html,body {
 		gap: 0px;
 		text-align: center;
 	}
-	.nav-opt {
+	.nav-opt, .create-btn {
 		width: min-content;
-		margin-right: 30px;
+		margin-right: 10px;
 	}
 	#sign {
 		width: max-content;

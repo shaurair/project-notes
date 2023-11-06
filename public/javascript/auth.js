@@ -1,6 +1,7 @@
 const signOptBtn = document.getElementById('sign');
 const projectsOptBtn = document.getElementById('project');
 const personalOptBtn = document.getElementById('personal');
+const createProjectBtn = document.getElementById('create-project');
 const memberOptBtn = document.getElementById('member');
 const memberSelectionElement = document.querySelector(".member-selection");
 const memberCenterBtn = document.getElementById('opt-member-center');
@@ -9,9 +10,10 @@ let isMemberDialogueShowing = false;
 let userInfo;
 
 function showMemberNav() {
-	projectsOptBtn.classList.remove('unseen');
-	personalOptBtn.classList.remove('unseen');
 	memberOptBtn.classList.remove('unseen');
+	personalOptBtn.classList.remove('unseen');
+	projectsOptBtn.classList.remove('unseen');
+	createProjectBtn.classList.remove('unseen');
 }
 
 function showPublicNav() {
