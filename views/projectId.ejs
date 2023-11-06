@@ -39,28 +39,63 @@
 			<div class="main-block-vertical">
 				<div class="block-title project-text">Description:</div>
 				<div class="block-content normal-text">
-					<p class="content-description">This is a project for solving problems </br>
 					 descriptions~~~
-					</p>
 				</div>
 			</div>
 			<div class="main-block-vertical">
+				<div class="block-title project-text">Authorization:</div>
+				<select class="dropdown-select auth-drop">
+					<option>All people</option>
+					<option>Only owner, assignee, followers</option>
+				</select>
+			</div>
+			<div class="comment-block-vertical">
 				<div class="block-title project-text">Comment:</div>
-				<div class="block-content normal-text">
+				<div class="block-content normal-text unseen">
 					No comment yet.
 				</div>
-				<div class="block-content normal-text">
-					<input type="text" placeholder="Leave a comment">
-					<button>Add</button>
+				<div class="comment-container">
+					<div class="comment-block">
+						<div class="comment-img"></div>
+						<div class="comment-content">
+							<div class="comment-info">
+								<div class="comment-info-user">Amy</div><div class="comment-info-datetime">11/May/23 11:50 AM.</div>
+							</div>
+							<div class="comment-text">
+								This is good.
+							</div>
+							<div class="actions-container">
+								<div class="action-opt">Edit</div>
+								<div class="action-opt">Delete</div>
+							</div>
+						</div>
+					</div>
+					<div class="comment-block">
+						<div class="comment-img"></div>
+						<div class="comment-content">
+							<div class="comment-info">
+								<div class="comment-info-user">Mike</div><div class="comment-info-datetime">12/May/23 11:55 AM.</div>
+							</div>
+							<div class="comment-text">
+								OK.pass
+							</div>
+							<div class="actions-container">
+								<div class="action-opt">Edit</div>
+								<div class="action-opt">Delete</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="add-comment-container normal-text">
+					<textarea class="add-comment-text" type="text" placeholder="Leave a comment"></textarea>
+					<button class="add-comment-button">Add</button>
 				</div>
 			</div>
 			<div class="main-block-vertical">
 				<div class="block-title note-title-project">My personal note</div>
-				<div class="block-content normal-text">
-					<div class="note-action-container mouseover">
-						<div><textarea id="note-text-4" class="input-note" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
-							</textarea>
-						</div>
+				<div class="block-content-note normal-text">
+					<div><textarea class="input-note-project" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
+						</textarea>
 					</div>
 					<div class="note-button-group">
 						<div class="note-text-button-container">
@@ -72,32 +107,29 @@
 			</div>
 		</div>
 		<div class="project-minor">
-			<div class="main-block-vertical">
-				<div class="block-title normal-text">Priority:</div>
+			<div class="minor-block">
+				<div class="minor-block-title normal-text">Priority</div>
 				<div class="block-content">Major</div>
 			</div>
-			<div class="main-block-vertical">
-				<div class="block-title normal-text">Owner:</div>
+			<div class="minor-block">
+				<div class="minor-block-title normal-text">Deadline</div>
+				<div class="block-content">12/Mar/24</div>
+			</div>
+			<div class="minor-block">
+				<div class="minor-block-title normal-text">Owner</div>
 				<div class="block-content">Mary</div>
 			</div>
-			<div class="main-block-vertical">
-				<div class="block-title normal-text">Assignee:</div>
+			<div class="minor-block">
+				<div class="minor-block-title normal-text">Assignee</div>
 				<div class="block-content">Mary</div>
 			</div>
-			<div class="main-block-vertical">
-				<div class="block-title normal-text">Followers:</div>
-				<div class="block-content">Jane, Mark</div>
+			<div class="minor-block">
+				<div class="minor-block-title normal-text">Follower</div>
+				<div class="block-content">Jane, Mark, Jonh, Leanne, Anne</div>
 			</div>
-			<div class="main-block-vertical">
-				<div class="block-title normal-text">Creator:</div>
+			<div class="minor-block">
+				<div class="minor-block-title normal-text">Creator</div>
 				<div class="block-content">Will</div>
-			</div>
-			<div class="main-block-vertical">
-				<div class="block-title normal-text">Authorization:</div>
-				<select class="dropdown-select">
-					<option>All people</option>
-					<option>Only owner, assignee, followers</option>
-				</select>
 			</div>
 		</div>
 	</div>

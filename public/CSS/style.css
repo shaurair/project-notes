@@ -549,21 +549,38 @@ html,body {
 .project-main {
 	display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 .project-minor {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
+	box-sizing: border-box;
+    padding-right: 30px;
+	max-width: 300px;
 }
 .main-block {
 	display: flex;
-	align-items: center;
+	align-items: first baseline;
 	gap: 5px;
 }
 .main-block-vertical {
 	display: flex;
 	flex-direction: column;
+}
+.minor-block {
+	display: flex;
+	align-items: first baseline;
+	gap: 5px;
+}
+.minor-block-title {
+	width: 100px;
+	font-weight: 600;
+}
+.comment-block-vertical {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 .block-title {
 	width: max-content;
@@ -572,6 +589,7 @@ html,body {
 .block-content {
 	font-size: 16px;
 	font-weight: 500;
+	width: min-content;
 }
 .normal-text {
 	color: var(--color-text);
@@ -593,10 +611,76 @@ html,body {
     border-style: none;
     height: 35px;
 }
+.auth-drop {
+	width: 120px;
+}
+.comment-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.comment-block {
+	display: flex;
+	gap: 10px;
+}
+.comment-img {
+	background-image: url(https://d2o8k69neolkqv.cloudfront.net/user.png);
+    width: 35px;
+    height: 35px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+}
+.comment-content {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+.comment-info {
+	display: flex;
+	align-items: end;
+	gap: 15px;
+	color: var(--color-text);
+}
+.comment-info-user {
+	font-weight: 500;
+}
+.comment-info-datetime {
+	font-size: 14px;
+}
+.comment-text {
+	color: #555;
+	font-size: 16px;
+	font-weight: 400;
+}
+.actions-container {
+	display: flex;
+	color: var(--color-text);
+	font-size: 14px;
+	gap: 10px;
+}
+.add-comment-container {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+.add-comment-text {
+	width: 470px;
+    height: 50px;
+}
+.add-comment-button {
+	height: 30px;
+	width: min-content;
+}
 .note-title-project {
 	color: var(--color-personal);
 	filter: brightness(0.9);
 	padding: 10px 0 ;
+}
+.input-note-project {
+	font-size: 16px;
+	width: 470px;
+    height: 100px;
 }
 /* ================== */
 /*  footer usage      */
@@ -700,6 +784,9 @@ html,body {
 	.search-container,.dropdown-container {
 		flex-wrap: wrap;
 	}
+	.minor-block {
+		flex-direction: column;
+	}
 }
 
 /* ====================================== */
@@ -722,9 +809,15 @@ html,body {
 		margin: 0;
 	}
 	.note {
-		width: calc(100% - 10px);
+		width: calc(100% - 100px);
 	}
 	.input-note {
 		width: calc(100% - 20px);
+	}
+	.add-comment-text {
+		width: calc(100% - 40px);
+	}
+	.input-note-project {
+		width: calc(100% - 40px);
 	}
 }
