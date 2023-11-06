@@ -512,6 +512,10 @@ html,body {
 /* ================== */
 /*  project/id usage  */
 /* ================== */
+.project-head-container {
+	display: flex;
+	justify-content: space-between;
+}
 .project-head {
 	display: flex;
 	gap: 15px;
@@ -536,6 +540,11 @@ html,body {
 	box-sizing: border-box;
 	padding: 0 40px 0 60px;
 }
+.project-main {
+	display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .project-minor {
 	display: flex;
 	flex-direction: column;
@@ -551,7 +560,7 @@ html,body {
 	flex-direction: column;
 }
 .block-title {
-	width: 80px;
+	width: max-content;
 	font-weight: 600;
 }
 .block-content {
@@ -563,6 +572,17 @@ html,body {
 }
 .content-description {
 	margin-top: 5px;
+}
+.project-status {
+	display: flex;
+	justify-content: end;
+	box-sizing: border-box;
+    padding-right: 30px;
+}
+.note-title-project {
+	color: var(--color-personal);
+	filter: brightness(0.9);
+	padding: 10px 0 ;
 }
 /* ================== */
 /*  footer usage      */

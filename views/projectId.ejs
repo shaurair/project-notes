@@ -9,18 +9,30 @@
 <body>
 <%- include('header') -%>
 <div class="main main-project-id" style="font-size: larger;">
-	<div class="project-head sight-fit">
-		<div id="project-viewmore" class="note-action-container mouseover">
-			<img class="note-action-image" src="/images/viewmore.png"/>
-			<div style="position: absolute;">
-				<div class="viewmore-dialogue-project unseen">
-					<div class="move-note">Edit</div>
-					<hr/>
-					<div class="move-note">Add to my notes</div>
+	<div class="project-head-container sight-fit">
+		<div class="project-head">
+			<div id="project-viewmore" class="note-action-container mouseover">
+				<img class="note-action-image" src="/images/viewmore.png"/>
+				<div style="position: absolute;">
+					<div class="viewmore-dialogue-project unseen">
+						<div class="move-note">Edit</div>
+						<hr/>
+						<div class="move-note">Add to my notes</div>
+					</div>
 				</div>
 			</div>
+			<div class="note-title project-text">Project id: <%= id%> solve xxx problem</div>
 		</div>
-		<div class="note-title project-text">Project id: <%= id%> solve xxx problem</div>
+		<div class="project-status">
+			<div class="main-block-vertical">
+				<select class="dropdown-select">
+					<option>Open</option>
+					<option>In progress</option>
+					<option>Reviewing</option>
+					<option>Done</option>
+				</select>
+			</div>
+		</div>
 	</div>
 	<div class="project-content sight-fit">
 		<div class="project-main">
@@ -42,15 +54,31 @@
 					<button>Add</button>
 				</div>
 			</div>
+			<div class="main-block-vertical">
+				<div class="block-title note-title-project">My personal note:</div>
+				<div class="block-content normal-text">
+					<div class="note-action-container mouseover">
+						<div><textarea id="note-text-4" class="input-note" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
+							</textarea>
+						</div>
+					</div>
+					<div class="note-button-group">
+						<div class="note-text-button-container">
+							<button class="note-text-button">Save</button>
+						</div>
+						<div class="note-delete-icon mouseover"></div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="project-minor">
 			<div class="main-block-vertical">
-				<div class="block-title normal-text">Status:</div>
-				<div class="block-content">in progress</div>
-			</div>
-			<div class="main-block-vertical">
 				<div class="block-title normal-text">Priority:</div>
 				<div class="block-content">Major</div>
+			</div>
+			<div class="main-block-vertical">
+				<div class="block-title normal-text">Owner:</div>
+				<div class="block-content">Mary</div>
 			</div>
 			<div class="main-block-vertical">
 				<div class="block-title normal-text">Assignee:</div>
@@ -58,11 +86,18 @@
 			</div>
 			<div class="main-block-vertical">
 				<div class="block-title normal-text">Followers:</div>
-				<div class="block-content">Mary, Jane, Mark</div>
+				<div class="block-content">Jane, Mark</div>
 			</div>
 			<div class="main-block-vertical">
 				<div class="block-title normal-text">Creator:</div>
 				<div class="block-content">Will</div>
+			</div>
+			<div class="main-block-vertical">
+				<div class="block-title normal-text">Authorization:</div>
+				<select class="dropdown-select">
+					<option>All people</option>
+					<option>Only owner, assignee, followers</option>
+				</select>
 			</div>
 		</div>
 	</div>
