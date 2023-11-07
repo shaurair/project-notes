@@ -3,10 +3,13 @@ const multer = require('multer');
 const sharp = require('sharp');
 const imageStorage = multer.memoryStorage();
 const upload = multer({storage: imageStorage});
+const uploadStorage = require('../utilities/conn-aws-S3');
 
 const updateImage = async (req, res) => {
 	let memberInfo;
 	let existFilename = null;
+	let newFilename;
+	let result;
 
 	try {
 		let userToken = req.headers.authorization.replace('Bearer ', '');
@@ -30,14 +33,23 @@ const updateImage = async (req, res) => {
 				imageResize = await image.resize({height: 200, fit: 'contain'}).toBuffer();
 			}
 
-			if(existFilename == null) {
-				// Add
-				existFilename = memberInfo.id + '.' + imageMetaData.format;
+			// Add to S3
+			newFilename = `${Date.now()}-${memberInfo.id}.${imageMetaData.format}`;
+			result = await uploadStorage.uploadToImageStorage(imageResize, newFilename, fileMimeType);
 
+			if(!result.ok) {
+				res.status(500).send({data: {"message" : "Upload image file failed"}});
+				return;
 			}
 			else {
-				// Update
+				if(existFilename != null) {
+					// Delete old image on S3
+	
+				}
 			}
+
+			// Update filename to rds
+
 
 			// debug temp
 			res.status(200).send({data: {"message" : "Well received"}});
