@@ -1,8 +1,6 @@
 const database = require('./conn-aws-RDS');
 
 async function updateUserImage(memberId, filename) {
-	console.log('updateUserImage: ', memberId, filename);
-
 	let sql = 'UPDATE member SET image_filename = ? WHERE id = ?;';
 	try {
 		await database.databasePool.query(sql, [filename, memberId]);
