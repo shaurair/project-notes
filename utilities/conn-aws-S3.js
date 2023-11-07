@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {S3Client, PutObjectCommand} = require("@aws-sdk/client-s3")
+const {S3Client, PutObjectCommand, DeleteObjectCommand} = require("@aws-sdk/client-s3")
 const myBucket = process.env.S3_BUCKET;
 
 const s3 = new S3Client({
@@ -15,7 +15,7 @@ async function uploadToS3(buffer, imageFilename, fileMimeType) {
 		Bucket: myBucket,
 		Key: `project-note/user_img/${imageFilename}`,
 		Body: buffer,
-		ContentType: fileMimeType,
+		ContentType: fileMimeType
 	};
 	const command = new PutObjectCommand(params);
 
@@ -26,6 +26,21 @@ async function uploadToS3(buffer, imageFilename, fileMimeType) {
 	return result;
 }
 
+async function deleteFileOnS3(imageFilename) {
+	const params = {
+		Bucket: myBucket,
+		Key: `project-note/user_img/${imageFilename}`
+	};
+	const command = new DeleteObjectCommand(params);
+
+	let response = await s3.send(command);
+	let result = {};
+
+	result["ok"] = (response["$metadata"]["httpStatusCode"] == 200) ? true : false;
+	return result;
+}
+
 module.exports = {
-	uploadToImageStorage: uploadToS3
+	uploadToImageStorage: uploadToS3,
+	deleteImageOnStorage: deleteFileOnS3
 }

@@ -3,7 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const imageStorage = multer.memoryStorage();
 const upload = multer({storage: imageStorage});
-const uploadStorage = require('../utilities/conn-aws-S3');
+const operateStorage = require('../utilities/conn-aws-S3');
 
 const updateImage = async (req, res) => {
 	let memberInfo;
@@ -35,24 +35,23 @@ const updateImage = async (req, res) => {
 
 			// Add to S3
 			newFilename = `${Date.now()}-${memberInfo.id}.${imageMetaData.format}`;
-			result = await uploadStorage.uploadToImageStorage(imageResize, newFilename, fileMimeType);
+			result = await operateStorage.uploadToImageStorage(imageResize, newFilename, fileMimeType);
 
 			if(!result.ok) {
 				res.status(500).send({data: {"message" : "Upload image file failed"}});
-				return;
 			}
 			else {
+				// Update filename to rds
+
+
 				if(existFilename != null) {
 					// Delete old image on S3
-	
+					result = await operateStorage.deleteImageOnStorage(existFilename);
 				}
+
+				// debug temp
+				res.status(200).send({data: {"message" : "Well received"}});
 			}
-
-			// Update filename to rds
-
-
-			// debug temp
-			res.status(200).send({data: {"message" : "Well received"}});
 		}
 		else {
 			res.status(400).json({"message": "Upload file is not valid(only .png / .jpeg is allowed)"});
