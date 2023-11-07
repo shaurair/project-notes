@@ -4,15 +4,17 @@ const sharp = require('sharp');
 const imageStorage = multer.memoryStorage();
 const upload = multer({storage: imageStorage});
 const operateStorage = require('../utilities/conn-aws-S3');
+const memberModel = require('../models/memberModel')
 
 const updateImage = async (req, res) => {
+	let userToken;
 	let memberInfo;
 	let existFilename = null;
 	let newFilename;
 	let result;
 
 	try {
-		let userToken = req.headers.authorization.replace('Bearer ', '');
+		userToken = req.headers.authorization.replace('Bearer ', '');
 		memberInfo = token.decode(userToken);
 		existFilename = memberInfo.file_name;
 	}
@@ -24,7 +26,6 @@ const updateImage = async (req, res) => {
 		const fileMimeType = req.file.mimetype;
 
 		if(fileMimeType === 'image/jpeg' || fileMimeType === 'image/png') {
-			// resize
 			let imageResize = req.file.buffer;
 			const image = sharp(imageResize);
 			const imageMetaData = await image.metadata();
@@ -33,24 +34,31 @@ const updateImage = async (req, res) => {
 				imageResize = await image.resize({height: 200, fit: 'contain'}).toBuffer();
 			}
 
-			// Add to S3
 			newFilename = `${Date.now()}-${memberInfo.id}.${imageMetaData.format}`;
 			result = await operateStorage.uploadToImageStorage(imageResize, newFilename, fileMimeType);
 
-			if(!result.ok) {
-				res.status(500).send({data: {"message" : "Upload image file failed"}});
+			if(result.ok) {
+				result = await memberModel.updateUserImage(memberInfo.id, newFilename);
+				if(result.data.message == 'ok') {
+					if(existFilename != null) {
+						operateStorage.deleteImageOnStorage(existFilename);
+					}
+
+					let payload = {
+						'id': memberInfo.id,
+						'name': memberInfo.name,
+						'email': memberInfo.email,
+						'file_name': newFilename
+					};
+					userToken = await token.encode(payload);
+					res.status(200).send({data: {"ok" : true, 'token' : userToken}});
+				}
+				else {
+					res.status(500).send({data: {"message" : "Save image file to database failed"}});
+				}
 			}
 			else {
-				// Update filename to rds
-
-
-				if(existFilename != null) {
-					// Delete old image on S3
-					result = await operateStorage.deleteImageOnStorage(existFilename);
-				}
-
-				// debug temp
-				res.status(200).send({data: {"message" : "Well received"}});
+				res.status(500).send({data: {"message" : "Upload image file failed"}});
 			}
 		}
 		else {

@@ -59,20 +59,17 @@ async function sendImageFile() {
 	});
 	let result = await response.json();
 
-	// debug temp
-	console.log(response.ok);
-	console.log(result);
-
 	if(response.ok) {
-// 		submitImageWaitingElement.classList.add("unseen");
-// 		submitImageSuccessElement.classList.remove("unseen");
-// 		alert("更新成功！頁面將自動跳轉");
-// 		location.href = "/member";
+		submitImageWaitingElement.classList.add("unseen");
+		submitImageSuccessElement.classList.remove("unseen");
+		localStorage.setItem('token', result['data']['token']);
+		alert("Successfully updated! This page will automatically redirect");
+		location.href = '/member';
 	}
 	else {
-// 		alert(result["message"]);
-// 		submitImageWaitingElement.classList.add("unseen");
-// 		disableButton();
+		alert(result['data']["message"] + " Please redirect this page and try again.");
+		submitImageWaitingElement.classList.add("unseen");
+		disableButton();
 	}
 }
 
@@ -103,7 +100,7 @@ fileInputBtn.addEventListener('change', ()=>{
 
 submitImageBtn.addEventListener('click', ()=>{
 	if(isAllowImageSubmit == true) {
-		submitImageSuccessElement.classList.remove("unseen");
+		submitImageWaitingElement.classList.remove("unseen");
 		disableButton();
 		sendImageFile();
 	}
