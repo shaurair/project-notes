@@ -46,31 +46,35 @@ function enableButton() {
 	isAllowImageSubmit = true;
 }
 
-// async function sendImageFile() {
-// 	let token = localStorage.getItem('token');
-// 	let formData = new FormData();
-// 	formData.append('photo', imageFile);
-// 	let response = await fetch("../api/update/profile/image", {
-// 			method: "POST",
-// 			body: formData,
-// 			headers: {
-// 				'Authorization':`Bearer ${token}`,
-// 			}
-// 	});
-// 	let result = await response.json();
+async function sendImageFile() {
+	let token = localStorage.getItem('token');
+	let formData = new FormData();
+	formData.append('photo', imageFile);
+	let response = await fetch("/member/update/image", {
+			method: "PATCH",
+			body: formData,
+			headers: {
+				'Authorization':`Bearer ${token}`,
+			}
+	});
+	let result = await response.json();
 
-// 	if(response.ok) {
+	// debug temp
+	console.log(response.ok);
+	console.log(result);
+
+	if(response.ok) {
 // 		submitImageWaitingElement.classList.add("unseen");
 // 		submitImageSuccessElement.classList.remove("unseen");
 // 		alert("更新成功！頁面將自動跳轉");
 // 		location.href = "/member";
-// 	}
-// 	else {
+	}
+	else {
 // 		alert(result["message"]);
 // 		submitImageWaitingElement.classList.add("unseen");
 // 		disableButton();
-// 	}
-// }
+	}
+}
 
 editImageBtn.addEventListener('click', ()=>{
 	if(editImageBtn.textContent == "取消編輯") {
@@ -101,6 +105,6 @@ submitImageBtn.addEventListener('click', ()=>{
 	if(isAllowImageSubmit == true) {
 		submitImageSuccessElement.classList.remove("unseen");
 		disableButton();
-		// sendImageFile();
+		sendImageFile();
 	}
 });
