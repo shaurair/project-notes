@@ -34,7 +34,9 @@ app.get("/member", (req, res) => {
 // ----------------- //
 const logRouter = require('./routes/log');
 const authRouter = require('./routes/auth');
+const memberRouter = require('./routes/member');
 app.use('/log', logRouter);
 app.use('/auth', authRouter);
+app.use('/member', memberRouter);
 
 app.listen(port);
