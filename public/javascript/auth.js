@@ -18,8 +18,8 @@ function showMemberNav() {
 }
 
 function updateUserImage(updateElement) {
-	let imgSrc = userInfo["file_name"] == null ? "user" : userInfo["id"];
-	updateElement.style.backgroundImage = "url(" + "https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/" + imgSrc + ".png" + ")";
+	let imgSrc = userInfo["file_name"] == null ? "user.png" : userInfo["file_name"];
+	updateElement.style.backgroundImage = "url(" + "https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/" + imgSrc + ")";
 }
 
 function showPublicNav() {
