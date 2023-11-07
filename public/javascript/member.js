@@ -17,7 +17,6 @@ async function initMember() {
 }
 
 function setMemberInfo() {
-	let imgSrc = userInfo["file_name"] == null ? "user" : userInfo["id"];
 	let element = document.getElementById("member-name");
 	element.textContent = userInfo["name"];
 
@@ -25,7 +24,7 @@ function setMemberInfo() {
 	element.textContent = userInfo["email"];
 
 	element = document.getElementById("member-image");
-	element.style.backgroundImage = "url(" + "https://d2o8k69neolkqv.cloudfront.net/" + imgSrc + ".png" + ")";
+	updateUserImage(element);
 }
 
 editImageBtn.addEventListener('click', ()=>{

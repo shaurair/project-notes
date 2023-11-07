@@ -93,7 +93,6 @@ html,body {
 	filter: brightness(1.2);
 }
 #member {
-	background-image: url("https://d2o8k69neolkqv.cloudfront.net/user.png");
 	width: 35px;
     height: 35px;
     background-size: contain;
