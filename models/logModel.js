@@ -19,6 +19,7 @@ async function checkUserSignIn(email, password) {
 					message: 'ok',
 					id: result[0].id, 
 					name: result[0].name,
+					imageFilename: result[0].image_filename
 				},
 				statusCode: 200
 			};

@@ -10,7 +10,8 @@ const checkSignInData = async (req, res) => {
 		let payload = {
 			'id': result.data.id,
 			'name': result.data.name,
-			'email': email
+			'email': email,
+			'file_name': result.data.imageFilename
 		};
 
 		let userToken = await token.encode(payload);
