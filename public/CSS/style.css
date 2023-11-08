@@ -63,6 +63,8 @@ html,body {
     color: white;
     font-size: 16px;
 	background-color: var(--color-head-text);
+	box-sizing: border-box;
+	padding: 0 5px;
 }
 .create-btn:hover {
 	opacity: 0.75;
