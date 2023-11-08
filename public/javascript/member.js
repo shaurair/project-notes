@@ -25,6 +25,9 @@ function setMemberInfo() {
 	let element = document.getElementById("member-name");
 	element.textContent = userInfo["name"];
 
+	element = document.getElementById("member-id");
+	element.textContent = userInfo["id"];
+
 	element = document.getElementById("member-email");
 	element.textContent = userInfo["email"];
 
