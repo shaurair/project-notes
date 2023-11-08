@@ -584,6 +584,10 @@ html,body {
 .block-title {
 	width: max-content;
 	font-weight: 600;
+	font-size: x-large;
+}
+.block-subtitle {
+	font-size: large;
 }
 .block-content {
 	font-size: 16px;
