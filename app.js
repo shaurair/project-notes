@@ -38,8 +38,10 @@ app.get("/create-project", (req, res) => {
 const logRouter = require('./routes/log');
 const authRouter = require('./routes/auth');
 const memberRouter = require('./routes/member');
+const searchRouter = require('./routes/search');
 app.use('/log', logRouter);
 app.use('/auth', authRouter);
 app.use('/member', memberRouter);
+app.use('/search', searchRouter);
 
 app.listen(port);
