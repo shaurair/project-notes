@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Create Project</title>
+	<link rel="stylesheet" type="text/css" href="/CSS/style.css"/>
+</head>
+<body>
+<%- include('header') -%>
+<div class="main main-create-project">
+	<div class="all-content">
+		<div class="head-container">
+			<div class="head project-text">Summary</div>
+			<div><input class="summary-input-content" type="text"></div>
+		</div>
+	</div>
+</div>
+<%- include('footer') -%>
+</body>
+<script src="/javascript/auth.js"></script>
+<script src="/javascript/create-project.js"></script>
+<script>initCreateProject();</script>
+</html>

@@ -28,6 +28,9 @@ app.get("/personal", (req, res) => {
 app.get("/member", (req, res) => {
 	res.render('member');
 })
+app.get("/create-project", (req, res) => {
+	res.render('create-project');
+})
 
 // ----------------- //
 // routes            //
