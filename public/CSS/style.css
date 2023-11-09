@@ -633,7 +633,7 @@ html,body {
 	background-image: url(https://d2o8k69neolkqv.cloudfront.net/user.png);
     width: 35px;
     height: 35px;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     border-radius: 50%;
 }
@@ -753,9 +753,12 @@ html,body {
 	background-image: url(https://d2o8k69neolkqv.cloudfront.net/user.png);
     width: 35px;
     height: 35px;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     border-radius: 50%;
+}
+.people-text {
+	width: max-content;
 }
 .close {
 	width: 1.5rem;
