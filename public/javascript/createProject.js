@@ -13,8 +13,10 @@ const followerSearchContainerElement = document.getElementById('follower-search-
 const followerSearchListElement = document.getElementById('follower-search-list');
 const followerSearchKeyWord = document.getElementById('follower-input');
 const followerPeopleList = document.getElementById('follower-people-list');
+const addProjectBtn = document.getElementById('add-project');
+const summaryElement = document.getElementById('summary-input-content');
 let isSearchResultShowing = false;
-let associatePeople = {owner:{}, assignee:{}, follower:{}}
+let associatePeople = {owner:{}, assignee:{}, follower:{}};
 
 async function initCreateProject() {
 	await getUser();
@@ -167,3 +169,33 @@ window.addEventListener('click', (event) => {
 		isSearchResultShowing = false;
 	}
 });
+
+addProjectBtn.addEventListener('click', () => {
+	let checkContentResult = checkContent();
+	if(checkContentResult == 'ok') {
+		// TODO
+	}
+	else {
+		alert(checkContentResult);
+	}
+})
+
+function checkContent() {
+	if(summaryElement.value == '') {
+		summaryElement.classList.add('highlight-block');
+		return 'Summary should not be empty'
+	}
+	else {
+		summaryElement.classList.remove('highlight-block');
+	}
+
+	if(Object.keys(associatePeople['owner']).length == 0) {
+		ownerSearchKeyWord.classList.add('highlight-block');
+		return 'Owner should not be empty'
+	}
+	else {
+		ownerSearchKeyWord.classList.remove('highlight-block');
+	}
+
+	return 'ok';
+}

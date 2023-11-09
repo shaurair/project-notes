@@ -709,7 +709,7 @@ html,body {
 	font-weight: 600;
 	width: 100px;
 }
-.summary-input-content {
+#summary-input-content {
 	width: 300px;
     line-height: 2;
 }
@@ -1052,6 +1052,9 @@ html,body {
 	color: var(--color-highlight);
 	font-weight: 700;
 }
+.highlight-block {
+	border: 2px solid #f22;
+}
 
 /* ====================================== */
 /*  700 px ~ 1200 px screen               */
@@ -1108,7 +1111,7 @@ html,body {
 	.input-note-project {
 		width: calc(100% - 40px);
 	}
-	.summary-input-content, .description-input  {
+	#summary-input-content, .description-input  {
 		width: max-content;
 	}
 }
