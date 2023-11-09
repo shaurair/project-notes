@@ -76,6 +76,10 @@ function addSearchResult(resultData, listContainer, listElement, peopleListEleme
 
 function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, associateRole) {
 	resultElement.addEventListener('click', () => {
+		if(associatePeople[associateRole][id]) {
+			return;
+		}
+
 		let elementContainer = document.createElement('div');
 		elementContainer.className = 'people-container';
 		peopleListElement.appendChild(elementContainer);
