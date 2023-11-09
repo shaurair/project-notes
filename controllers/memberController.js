@@ -20,6 +20,7 @@ const updateImage = async (req, res) => {
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
 	}
 
 	if(req.file) {
@@ -70,7 +71,39 @@ const updateImage = async (req, res) => {
 	}
 }
 
+const updateName = async (req, res) => {
+	let userToken;
+	let memberInfo;
+	let newName = req.body.name;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await memberModel.updateUserName(memberInfo.id, newName);
+	if(result.data.message == 'ok') {
+		let payload = {
+			'id': memberInfo.id,
+			'name': newName,
+			'email': memberInfo.email,
+			'file_name': memberInfo.file_name
+		};
+		userToken = await token.encode(payload);
+		res.status(200).send({data: {"ok" : true, 'token' : userToken}});
+	}
+	else {
+		res.status(500).send({data: {"message" : "Save image file to database failed"}});
+	}
+}
+
 module.exports = {
 	updateImage,
-	upload
+	upload,
+	updateName
 }

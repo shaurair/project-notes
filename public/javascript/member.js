@@ -1,12 +1,19 @@
 const changeImageElement = document.getElementById('change-image');
 const editImageBtn = document.getElementById('edit-image');
+const editNameBtn = document.getElementById('edit-name');
 const editImageElement = document.getElementById('edit-image-area');
+const editNameElement = document.getElementById('edit-name-area');
+const newNameInputElement = document.getElementById('change-name-txt');
 const memberInfoAreaElement = document.getElementById('member-info-area');
 const fileInputBtn = document.getElementById('fileInput');
 const submitImageBtn = document.getElementById("upload-submit");
 const submitImageSuccessElement = document.getElementById("submit-success");
 const submitImageWaitingElement = document.getElementById("submit-waiting");
+const submitDataBtn = document.getElementById("upload-member-data-submit");
+const submitDataSuccessElement = document.getElementById("update-success");
+const submitDataWaitingElement = document.getElementById("update-waiting");
 let isAllowImageSubmit = false;
+let isAllowDataSubmit = true;
 
 async function initMember() {
 	await getUser();
@@ -49,6 +56,18 @@ function enableButton() {
 	isAllowImageSubmit = true;
 }
 
+function disableDataButton() {
+	submitDataBtn.style.cursor = "not-allowed";
+	submitDataBtn.classList.remove("mouseover");
+	isAllowDataSubmit = false;
+}
+
+function enableDataButton() {
+	submitDataBtn.style.cursor = "pointer";
+	submitDataBtn.classList.add("mouseover");
+	isAllowDataSubmit = true;
+}
+
 async function sendImageFile() {
 	let token = localStorage.getItem('token');
 	let formData = new FormData();
@@ -76,20 +95,66 @@ async function sendImageFile() {
 	}
 }
 
+async function updateData(name) {
+	let token = localStorage.getItem('token');
+	let response = await fetch("/member/update/name", {
+			method: "PATCH",
+			body: JSON.stringify({
+				"name":name
+			}),
+			headers: {
+				'Authorization':`Bearer ${token}`,
+				'Content-Type':'application/json'
+			}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		submitDataWaitingElement.classList.add("unseen");
+		submitDataSuccessElement.classList.remove("unseen");
+		localStorage.setItem('token', result['data']["token"]);
+		alert("Successfully updated! This page will automatically redirect");
+		location.href = '/member';
+	}
+	else {
+		alert(result['data']["message"] + " Please redirect this page and try again.");
+		submitDataWaitingElement.classList.add("unseen");
+		enableDataButton();
+	}
+}
+
 editImageBtn.addEventListener('click', ()=>{
-	if(editImageBtn.textContent == "取消編輯") {
+	if(editImageBtn.textContent == "Cancel") {
 		editImageElement.classList.add("unseen");
 		memberInfoAreaElement.classList.remove("unseen");
-		// editDataBtn.classList.remove("unseen");
+		editNameBtn.classList.remove("unseen");
 		// editPasswordBtn.classList.remove("unseen");
-		editImageBtn.textContent = "修改大頭貼";
+		editImageBtn.textContent = "Upload new photo";
 	}
 	else {
 		editImageElement.classList.remove("unseen");
 		memberInfoAreaElement.classList.add("unseen");
-		// editDataBtn.classList.add("unseen");
+		editNameBtn.classList.add("unseen");
 		// editPasswordBtn.classList.add("unseen");
-		editImageBtn.textContent = "取消編輯";
+		editImageBtn.textContent = "Cancel";
+	}
+});
+
+editNameBtn.addEventListener('click', ()=>{
+	if(editNameBtn.textContent == "Cancel") {
+		editNameElement.classList.add("unseen");
+		memberInfoAreaElement.classList.remove("unseen");
+		editImageBtn.classList.remove("unseen");
+		// editPasswordBtn.classList.remove("unseen");
+		editNameBtn.textContent = "Upload name";
+	}
+	else {
+		editNameElement.classList.remove("unseen");
+		memberInfoAreaElement.classList.add("unseen");
+		editImageBtn.classList.add("unseen");
+		newNameInputElement.value = userInfo['name'];
+		// editPasswordBtn.classList.add("unseen");
+		editNameBtn.textContent = "Cancel";
 	}
 });
 
@@ -108,3 +173,11 @@ submitImageBtn.addEventListener('click', ()=>{
 		sendImageFile();
 	}
 });
+
+submitDataBtn.addEventListener('click', ()=>{
+	if(isAllowDataSubmit == true) {
+		submitImageWaitingElement.classList.remove("unseen");
+		disableDataButton();
+		updateData(newNameInputElement.value);
+	}
+})

@@ -23,6 +23,30 @@ async function updateUserImage(memberId, filename) {
 	}
 }
 
+async function updateUserName(memberId, name) {
+	let sql = 'UPDATE member SET name = ? WHERE id = ?;';
+	try {
+		await database.databasePool.query(sql, [name, memberId]);
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
-	updateUserImage
+	updateUserImage,
+	updateUserName
 }
