@@ -1,7 +1,7 @@
 const database = require('./conn-aws-RDS');
 
 async function checkUserSignIn(email, password) {
-	let sql = 'SELECt * FROM member WHERE email = ? AND password = ?;';
+	let sql = 'SELECT * FROM member WHERE email = ? AND password = ?;';
 	try {
 		let result = await database.databasePool.query(sql, [email, password]);
 
@@ -39,7 +39,7 @@ async function checkUserSignIn(email, password) {
 }
 
 async function checkExistEmail(email) {
-	let sql = 'SELECt * FROM member WHERE email = ?;';
+	let sql = 'SELECT * FROM member WHERE email = ?;';
 	try {
 		let result = await database.databasePool.query(sql, [email]);
 		if(result.length == 0) {

@@ -1,7 +1,7 @@
 const database = require('./conn-aws-RDS');
 
 async function searchName(name) {
-	let sql = 'SELECt id, name, image_filename FROM member WHERE name like ?;';
+	let sql = 'SELECT id, name, image_filename FROM member WHERE name like ?;';
 	try {
 		let result = await database.databasePool.query(sql, [`%${name}%`]);
 
@@ -37,7 +37,7 @@ async function searchName(name) {
 }
 
 async function searchId(id) {
-	let sql = 'SELECt id, name, image_filename FROM member WHERE id = ?;';
+	let sql = 'SELECT id, name, image_filename FROM member WHERE id = ?;';
 	try {
 		let result = await database.databasePool.query(sql, [id]);
 
