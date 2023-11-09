@@ -8,6 +8,11 @@ const assigneeSearchContainerElement = document.getElementById('assignee-search-
 const assigneeSearchListElement = document.getElementById('assignee-search-list');
 const assigneeSearchKeyWord = document.getElementById('assignee-input');
 const assigneePeopleList = document.getElementById('assignee-people-list');
+const followerSearchBtn = document.getElementById('follower-search');
+const followerSearchContainerElement = document.getElementById('follower-search-result');
+const followerSearchListElement = document.getElementById('follower-search-list');
+const followerSearchKeyWord = document.getElementById('follower-input');
+const followerPeopleList = document.getElementById('follower-people-list');
 let isSearchResultShowing = false;
 let associatePeople = {owner:{}, assignee:{}, follower:{}}
 
@@ -118,6 +123,13 @@ assigneeSearchBtn.addEventListener('click', async() => {
 	addSearchResult(searchResult['data'], assigneeSearchContainerElement, assigneeSearchListElement, assigneePeopleList, 'assignee');
 })
 
+followerSearchBtn.addEventListener('click', async() => {
+	searchMethod = document.getElementById('select-id-follower').checked ? searchId : searchName;
+	let searchResult = await searchMethod(followerSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], followerSearchContainerElement, followerSearchListElement, followerPeopleList, 'follower');
+})
+
 ownerSearchKeyWord.addEventListener('keypress', (event) => {
 	if(event.key === 'Enter') {
 		ownerSearchBtn.click();
@@ -130,6 +142,12 @@ assigneeSearchKeyWord.addEventListener('keypress', (event) => {
 	}
 })
 
+followerSearchKeyWord.addEventListener('keypress', (event) => {
+	if(event.key === 'Enter') {
+		followerSearchBtn.click();
+	}
+})
+
 window.addEventListener('click', (event) => {
 	if(isSearchResultShowing) {
 		if(!ownerSearchContainerElement.classList.contains('unseen')) {
@@ -137,6 +155,9 @@ window.addEventListener('click', (event) => {
 		}
 		if(!assigneeSearchContainerElement.classList.contains('unseen')) {
 			assigneeSearchContainerElement.classList.add('unseen');
+		}
+		if(!followerSearchContainerElement.classList.contains('unseen')) {
+			followerSearchContainerElement.classList.add('unseen');
 		}
 		
 		isSearchResultShowing = false;

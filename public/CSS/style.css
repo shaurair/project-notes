@@ -799,11 +799,11 @@ html,body {
 .search-icon:hover {
 	filter: brightness(0.5);
 }
-#owner-search-result, #assignee-search-result {
+#owner-search-result, #assignee-search-result, #follower-search-result {
 	position: absolute;
 	z-index: 2;
 }
-#owner-search-list, #assignee-search-list {
+#owner-search-list, #assignee-search-list, #follower-search-list {
 	position: absolute;
 	background-color: white;
 	top: 2.5rem;

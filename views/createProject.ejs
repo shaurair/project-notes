@@ -34,7 +34,7 @@
 			<div class="head project-text">Owner</div>
 			<div class="people-area">
 				<div class="name-input-area">
-					<input type="text" id="owner-input" name="assignee">
+					<input type="text" id="owner-input" name="owner">
 					<div class="icon-container">
 						<div id="owner-search" class="search-icon mouseover"></div>
 					</div>
@@ -72,8 +72,8 @@
 			<div class="head project-text">Follower</div>
 			<div class="people-area">
 				<div class="name-input-area">
-					<input type="text" id="follower-input" name="assignee">
-					<div class="icon-container">
+					<input type="text" id="follower-input" name="follower">
+					<div id="follower-search" class="icon-container">
 						<div class="search-icon mouseover"></div>
 					</div>
 				</div>
@@ -81,22 +81,10 @@
 					<input type="radio" name="select-follower" id="select-name-follower" checked>User name
 					<input type="radio" name="select-follower" id="select-id-follower">Id
 				</div>
-				<div class="people-list">
-					<div class="people-container">
-						<div class="people-img"></div>
-						<div class="people-text">Moris Lin</div>
-						<div class="close mouseover">
-							<div class="close-icon"></div>
-						</div>
-					</div>
-					<div class="people-container">
-						<div class="people-img"></div>
-						<div class="people-text">Bill Gate</div>
-						<div class="close mouseover">
-							<div class="close-icon"></div>
-						</div>
-					</div>
+				<div id="follower-search-result" class="unseen">
+					<div id="follower-search-list"></div>
 				</div>
+				<div id="follower-people-list" class="people-list"></div>
 			</div>
 		</div>
 		<div class="button-container">
