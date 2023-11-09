@@ -219,14 +219,11 @@ async function createNewProject() {
 	});
 	let result = await response.json();
 
-	// TODO
-	console.log(response, result);
 	if(response.ok) {
-		// alert('Successfully created!');
-		// location.href = '/project/newProjectId';
+		alert('Successfully created!');
+		location.href = `/project/${result['id']}`;
 	}
 	else {
-		// TODO
-		// alert('')
+		alert(result["message"] + " Please redirect this page and try again.");
 	}
 }

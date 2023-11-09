@@ -39,9 +39,11 @@ const logRouter = require('./routes/log');
 const authRouter = require('./routes/auth');
 const memberRouter = require('./routes/member');
 const searchRouter = require('./routes/search');
+const projectRouter = require('./routes/project');
 app.use('/log', logRouter);
 app.use('/auth', authRouter);
 app.use('/member', memberRouter);
 app.use('/search', searchRouter);
+app.use('/project', projectRouter);
 
 app.listen(port);
