@@ -721,6 +721,15 @@ html,body {
 	line-height: 2;
 	font-size: medium;
 }
+.search-people-container {
+	display: flex;
+    align-items: center;
+    height: min-content;
+    background-color: #eee;
+    padding: 0.2rem 0.5rem;
+	gap: 0.5rem;
+	border-bottom: solid white;
+}
 .people-area {
 	display: flex;
 	flex-direction: column;
@@ -790,6 +799,23 @@ html,body {
 .search-icon:hover {
 	filter: brightness(0.5);
 }
+#owner-search-result {
+	position: absolute;
+	z-index: 2;
+}
+#owner-search-list {
+	position: absolute;
+	background-color: white;
+	top: 2.5rem;
+	min-width: 150px;
+	box-shadow: 0px 0px 10px 0px #ccc;
+}
+.result {
+	background-color: white;
+}
+.result:hover {
+	filter: brightness(0.9);
+}
 .button-container {
 	display: flex;
 	justify-content: end;
@@ -799,7 +825,6 @@ html,body {
     box-sizing: border-box;
     padding: 0.5rem;
     border-radius: 1rem;
-
 }
 .create-button:hover {
     font-weight: 600;

@@ -10,7 +10,12 @@ const search = async (req, res) => {
 	}
 	else if(id) {
 		result = await searchModel.searchId(id);
-	} 
+	}
+	else {
+		result = {data: {
+			message: 'No results'
+		}};
+	}
 	res.send(result);
 }
 
