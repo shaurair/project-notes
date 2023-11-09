@@ -713,7 +713,7 @@ html,body {
 	width: 300px;
     line-height: 2;
 }
-.description-input {
+#description-input {
 	width: 300px;
 	height: 100px;
 }
