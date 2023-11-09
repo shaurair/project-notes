@@ -22,7 +22,7 @@ async function initCreateProject() {
 	await getUser();
 
 	if(userInfo == null) {
-		showPublicNav();
+		location.href = '/';
 	}
 	else {
 		showMemberNav();
