@@ -115,6 +115,26 @@ function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, 
 	})
 }
 
+function checkContent() {
+	if(summaryElement.value == '') {
+		summaryElement.classList.add('highlight-block');
+		return 'Summary should not be empty'
+	}
+	else {
+		summaryElement.classList.remove('highlight-block');
+	}
+
+	if(Object.keys(associatePeople['owner']).length == 0) {
+		ownerSearchKeyWord.classList.add('highlight-block');
+		return 'Owner should not be empty'
+	}
+	else {
+		ownerSearchKeyWord.classList.remove('highlight-block');
+	}
+
+	return 'ok';
+}
+
 ownerSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
 	let searchResult = await searchMethod(ownerSearchKeyWord.value);
@@ -173,29 +193,40 @@ window.addEventListener('click', (event) => {
 addProjectBtn.addEventListener('click', () => {
 	let checkContentResult = checkContent();
 	if(checkContentResult == 'ok') {
-		// TODO
+		createNewProject();
 	}
 	else {
 		alert(checkContentResult);
 	}
 })
 
-function checkContent() {
-	if(summaryElement.value == '') {
-		summaryElement.classList.add('highlight-block');
-		return 'Summary should not be empty'
+async function createNewProject() {
+	let summary = summaryElement.value;
+	let description = document.getElementById('description-input').value;
+	let priority = document.getElementById('create-priority').value;
+	let deadline = document.getElementById('deadline-input').value;
+	let creator = userInfo['id'];
+
+	let response = await fetch("/project/", {
+		method: "POST",
+		body: JSON.stringify({ 'summary': summary,
+							   'description': description,
+							   'priority': priority,
+							   'deadline': deadline,
+							   'creator': creator
+		}),
+		headers: {'Content-Type':'application/json'}
+	});
+	let result = await response.json();
+
+	// TODO
+	console.log(response, result);
+	if(response.ok) {
+		// alert('Successfully created!');
+		// location.href = '/project/newProjectId';
 	}
 	else {
-		summaryElement.classList.remove('highlight-block');
+		// TODO
+		// alert('')
 	}
-
-	if(Object.keys(associatePeople['owner']).length == 0) {
-		ownerSearchKeyWord.classList.add('highlight-block');
-		return 'Owner should not be empty'
-	}
-	else {
-		ownerSearchKeyWord.classList.remove('highlight-block');
-	}
-
-	return 'ok';
 }
