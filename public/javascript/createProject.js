@@ -3,6 +3,11 @@ const ownerSearchContainerElement = document.getElementById('owner-search-result
 const ownerSearchListElement = document.getElementById('owner-search-list');
 const ownerSearchKeyWord = document.getElementById('owner-input');
 const ownerPeopleList = document.getElementById('owner-people-list');
+const assigneeSearchBtn = document.getElementById('assignee-search');
+const assigneeSearchContainerElement = document.getElementById('assignee-search-result');
+const assigneeSearchListElement = document.getElementById('assignee-search-list');
+const assigneeSearchKeyWord = document.getElementById('assignee-input');
+const assigneePeopleList = document.getElementById('assignee-people-list');
 let isSearchResultShowing = false;
 let associatePeople = {owner:{}, assignee:{}, follower:{}}
 
@@ -106,15 +111,34 @@ ownerSearchBtn.addEventListener('click', async() => {
 	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner');
 })
 
+assigneeSearchBtn.addEventListener('click', async() => {
+	searchMethod = document.getElementById('select-id-assignee').checked ? searchId : searchName;
+	let searchResult = await searchMethod(assigneeSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], assigneeSearchContainerElement, assigneeSearchListElement, assigneePeopleList, 'assignee');
+})
+
 ownerSearchKeyWord.addEventListener('keypress', (event) => {
 	if(event.key === 'Enter') {
 		ownerSearchBtn.click();
 	}
 })
 
+assigneeSearchKeyWord.addEventListener('keypress', (event) => {
+	if(event.key === 'Enter') {
+		assigneeSearchBtn.click();
+	}
+})
+
 window.addEventListener('click', (event) => {
 	if(isSearchResultShowing) {
-		ownerSearchContainerElement.classList.add('unseen');
+		if(!ownerSearchContainerElement.classList.contains('unseen')) {
+			ownerSearchContainerElement.classList.add('unseen');
+		}
+		if(!assigneeSearchContainerElement.classList.contains('unseen')) {
+			assigneeSearchContainerElement.classList.add('unseen');
+		}
+		
 		isSearchResultShowing = false;
 	}
 });

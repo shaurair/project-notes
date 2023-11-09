@@ -54,7 +54,7 @@
 			<div class="people-area">
 				<div class="name-input-area">
 					<input type="text" id="assignee-input" name="assignee">
-					<div class="icon-container">
+					<div id="assignee-search" class="icon-container">
 						<div class="search-icon mouseover"></div>
 					</div>
 				</div>
@@ -62,22 +62,10 @@
 					<input type="radio" name="select-assignee" id="select-name-assignee" checked>User name
 					<input type="radio" name="select-assignee" id="select-id-assignee">Id
 				</div>
-				<div class="people-list">
-					<div class="people-container">
-						<div class="people-img"></div>
-						<div class="people-text">Peter Lin</div>
-						<div class="close mouseover">
-							<div class="close-icon"></div>
-						</div>
-					</div>
-					<div class="people-container">
-						<div class="people-img"></div>
-						<div class="people-text">Peter Wang</div>
-						<div class="close mouseover">
-							<div class="close-icon"></div>
-						</div>
-					</div>
+				<div id="assignee-search-result" class="unseen">
+					<div id="assignee-search-list"></div>
 				</div>
+				<div id="assignee-people-list" class="people-list"></div>
 			</div>
 		</div>
 		<div class="head-container">
