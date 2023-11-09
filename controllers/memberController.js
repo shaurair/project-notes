@@ -9,14 +9,12 @@ const memberModel = require('../models/memberModel')
 const updateImage = async (req, res) => {
 	let userToken;
 	let memberInfo;
-	let existFilename = null;
 	let newFilename;
 	let result;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
 		memberInfo = token.decode(userToken);
-		existFilename = memberInfo.file_name;
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
@@ -41,17 +39,6 @@ const updateImage = async (req, res) => {
 			if(result.ok) {
 				result = await memberModel.updateUserImage(memberInfo.id, newFilename);
 				if(result.data.message == 'ok') {
-					if(existFilename != null) {
-						operateStorage.deleteImageOnStorage(existFilename);
-					}
-
-					let payload = {
-						'id': memberInfo.id,
-						'name': memberInfo.name,
-						'email': memberInfo.email,
-						'file_name': newFilename
-					};
-					userToken = await token.encode(payload);
 					res.status(200).send({data: {"ok" : true, 'token' : userToken}});
 				}
 				else {

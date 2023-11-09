@@ -9,9 +9,7 @@ const checkSignInData = async (req, res) => {
 	if(result.statusCode == 200) {
 		let payload = {
 			'id': result.data.id,
-			'name': result.data.name,
-			'email': email,
-			'file_name': result.data.imageFilename
+			'email': email
 		};
 
 		let userToken = await token.encode(payload);
