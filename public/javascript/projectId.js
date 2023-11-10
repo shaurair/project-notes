@@ -1,4 +1,5 @@
 const viewmoreBtn = document.getElementById('project-viewmore');
+const statusSelect = document.getElementById('project-status-value');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 
 async function initProjectId() {
@@ -37,6 +38,7 @@ function setProjectContent(data) {
 
 	element = document.getElementById('project-status-value');
 	element.value = data['status'];
+	changeStatusColor();
 
 	element = document.getElementById('project-priority');
 	element.textContent = data['priority'];
@@ -67,6 +69,23 @@ function setProjectContent(data) {
 	elementContainer.appendChild(element);
 }
 
+function changeStatusColor() {
+	const selectedValue = statusSelect.value;
+
+	if(selectedValue == 'OPEN') {
+		statusSelect.style.backgroundColor = 'grey';
+	}
+	else if(selectedValue == 'IN PROGRESS') {
+		statusSelect.style.backgroundColor = 'darkblue';
+	}
+	else if(selectedValue == 'REVIEWING') {
+		statusSelect.style.backgroundColor = 'blueviolet';
+	}
+	else if(selectedValue == 'DONE') {
+		statusSelect.style.backgroundColor = 'teal';
+	}
+}
+
 viewmoreBtn.addEventListener('click', () => {
 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
 	if(viewmoreDialogueElement.classList.contains('unseen')) {
@@ -76,3 +95,5 @@ viewmoreBtn.addEventListener('click', () => {
 		viewmoreDialogueElement.classList.add('unseen');
 	}
 })
+
+statusSelect.addEventListener('change', changeStatusColor)
