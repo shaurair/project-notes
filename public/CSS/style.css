@@ -572,7 +572,7 @@ html,body {
 }
 #project-description {
 	width: auto;
-	white-space: break-spaces;
+	white-space: pre-wrap;
 }
 .minor-block {
 	display: flex;
