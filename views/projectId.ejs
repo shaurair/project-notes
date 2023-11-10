@@ -21,15 +21,15 @@
 					</div>
 				</div>
 			</div>
-			<div class="project-title project-text">Project id: <%= id%> solve xxx problem</div>
+			<div class="project-title project-text">Project-<%= id%> <span id="project-summary"></span></div>
 		</div>
 		<div class="project-status">
 			<div class="main-block-vertical">
-				<select class="dropdown-select status-select">
-					<option>Open</option>
-					<option>In progress</option>
-					<option>Reviewing</option>
-					<option>Done</option>
+				<select id="project-status-value" class="dropdown-select status-select">
+					<option value = 'OPEN'>OPEN</option>
+					<option value = 'IN PROGRESS'>IN PROGRESS</option>
+					<option value = 'REVIEWING'>REVIEWING</option>
+					<option value = 'DONE'>DONE</option>
 				</select>
 			</div>
 		</div>
@@ -38,9 +38,7 @@
 		<div class="project-main">
 			<div class="main-block-vertical">
 				<div class="block-title project-text">Description</div>
-				<div class="block-content normal-text">
-					 descriptions~~~
-				</div>
+				<div id="project-description" class="block-content normal-text"></div>
 			</div>
 			<div class="comment-block-vertical">
 				<div class="block-title project-text">Comment</div>
@@ -109,27 +107,27 @@
 		<div class="project-minor">
 			<div class="minor-block">
 				<div class="minor-block-title normal-text">Priority</div>
-				<div class="block-content">Major</div>
+				<div id="project-priority" class="block-content"></div>
 			</div>
 			<div class="minor-block">
 				<div class="minor-block-title normal-text">Deadline</div>
-				<div class="block-content">12/Mar/24</div>
+				<div id="project-deadline" class="block-content"></div>
 			</div>
 			<div class="minor-block">
 				<div class="minor-block-title normal-text">Owner</div>
-				<div class="block-content">Mary</div>
+				<div class="block-content"></div>
 			</div>
 			<div class="minor-block">
-				<div class="minor-block-title normal-text">Assignee</div>
-				<div class="block-content">Mary</div>
+				<div class="minor-block-title normal-text">Reviewer</div>
+				<div class="block-content"></div>
 			</div>
 			<div class="minor-block">
-				<div class="minor-block-title normal-text">Follower</div>
-				<div class="block-content">Jane, Mark, Jonh, Leanne, Anne</div>
+				<div class="minor-block-title normal-text">Team</div>
+				<div class="block-content"></div>
 			</div>
 			<div class="minor-block">
 				<div class="minor-block-title normal-text">Creator</div>
-				<div class="block-content">Will</div>
+				<div id="creator-container" class="block-content"></div>
 			</div>
 		</div>
 	</div>

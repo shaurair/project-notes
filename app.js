@@ -44,6 +44,6 @@ app.use('/log', logRouter);
 app.use('/auth', authRouter);
 app.use('/member', memberRouter);
 app.use('/search', searchRouter);
-app.use('/project', projectRouter);
+app.use('/api_project', projectRouter);
 
 app.listen(port);

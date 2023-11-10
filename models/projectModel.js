@@ -65,7 +65,40 @@ async function setAssociate(associate, projectId) {
 	}
 }
 
+async function getProjectContent(projectId) {
+	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creater_id = member.id WHERE project.id = ?;';
+	
+	try {
+		let contentResult = await database.databasePool.query(sql, [projectId]);
+
+		return {
+			data: {
+				message: 'ok',
+				summary: contentResult[0].summary,
+				description: contentResult[0].description,
+				status: contentResult[0].status,
+				priority: contentResult[0].priority,
+				deadline: contentResult[0].deadline,
+				creatorName: contentResult[0].name,
+				creatorImage: contentResult[0].image_filename,
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
 	createProject,
-	setAssociate
+	setAssociate,
+	getProjectContent
 }

@@ -1,4 +1,6 @@
+const token = require('../utilities/token');
 const projectModel = require('../models/projectModel');
+const { format } = require('date-fns');
 
 const create = async (req, res) => {
 	let summary = req.body.summary;
@@ -8,7 +10,9 @@ const create = async (req, res) => {
 	let creator = req.body.creator;
 	let associate = req.body.associate;
 	let data;
-	let result = await projectModel.createProject(summary, description, priority, deadline, creator);
+	let result;
+
+	result = await projectModel.createProject(summary, description, priority, deadline, creator);
 
 	if(result.data.message != 'ok') {
 		res.status(result.statusCode).send(result.data);
@@ -31,6 +35,32 @@ const create = async (req, res) => {
 	}
 }
 
+const getContent = async (req, res) => {
+	let projectId = req.query.id;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.getProjectContent(projectId);
+
+	if(result.data.deadline != null) {
+		let date = new Date(result.data.deadline);
+		result.data.deadline = format(date, 'yyyy/MM/dd');
+	}
+
+	res.status(result.statusCode).send(result.data);
+}
+
 module.exports = {
-	create
+	create,
+	getContent
 }

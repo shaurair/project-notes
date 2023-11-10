@@ -153,10 +153,10 @@ async function createNewProject() {
 	let summary = summaryElement.value;
 	let description = document.getElementById('description-input').value;
 	let priority = document.getElementById('create-priority').value;
-	let deadline = document.getElementById('deadline-input').value;
+	let deadline = document.getElementById('deadline-input').value == '' ? null : document.getElementById('deadline-input').value;
 	let creator = userInfo['id'];
 
-	let response = await fetch("/project/", {
+	let response = await fetch("/api_project/", {
 		method: "POST",
 		body: JSON.stringify({ 'summary': summary,
 							   'description': description,

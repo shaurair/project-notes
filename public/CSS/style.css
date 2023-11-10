@@ -617,6 +617,12 @@ html,body {
     border-style: none;
     height: 35px;
 }
+.project-people-container {
+	display: flex;
+    align-items: center;
+    height: min-content;
+	gap: 0.5rem;
+}
 .auth-drop {
 	width: 120px;
 }
