@@ -570,6 +570,10 @@ html,body {
 	display: flex;
 	flex-direction: column;
 }
+#project-description {
+	width: auto;
+	white-space: break-spaces;
+}
 .minor-block {
 	display: flex;
 	gap: 5px;
