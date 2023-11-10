@@ -1151,4 +1151,11 @@ html,body {
 	#summary-input-content, #description-input  {
 		width: max-content;
 	}
+	.project-content {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.project-status {
+		padding: 0;
+	}
 }
