@@ -30,7 +30,11 @@ async function getProjectContent() {
 }
 
 function setProjectContent(data) {
-	let element = document.getElementById('project-summary');
+	let element;
+	let peopleListContainer;
+	let imgUrl;
+
+	element = document.getElementById('project-summary');
 	element.textContent = data['summary'];
 
 	element = document.getElementById('project-description');
@@ -48,24 +52,46 @@ function setProjectContent(data) {
 		element.textContent = data['deadline'];
 	}
 
-	let creatorContainer = document.getElementById('creator-container');
-	let elementContainer = document.createElement('div');
-	elementContainer.className = 'project-people-container';
-	creatorContainer.appendChild(elementContainer);
+	// set creator
+	peopleListContainer = document.getElementById('creator-container');
 
-	let imgUrl = null;
-	element = document.createElement('div');
-	element.className = 'people-img';
+	imgUrl = null;
 	if(data['creatorImage'] != null) {
 		imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${data['creatorImage']}`;
+	}
+
+	setPeople(imgUrl, data['creatorName'], peopleListContainer);
+
+	// set owner
+	peopleListContainer = document.getElementById('owner-container');
+
+	for(let i = 0; i < data['owner'].length; i++) {
+		imgUrl = null;
+		if(data['owner'][i]['image_filename'] != null) {
+			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${data['owner'][i]['image_filename']}`;
+		}
+		setPeople(imgUrl, data['owner'][i]['name'], peopleListContainer);
+	}
+}
+
+function setPeople(imgUrl, name, peopleListElement) {
+	let element;
+	let elementContainer;
+
+	elementContainer = document.createElement('div');
+	elementContainer.className = 'project-people-container';
+	peopleListElement.appendChild(elementContainer);
+
+	element = document.createElement('div');
+	element.className = 'people-img';
+	if(imgUrl != null) {
 		element.style.backgroundImage = `url(${imgUrl})`;
 	}
 	elementContainer.appendChild(element);
 
-	let userName = data['creatorName'];
 	element = document.createElement('div');
 	element.className = 'people-text';
-	element.textContent = userName;
+	element.textContent = name;
 	elementContainer.appendChild(element);
 }
 

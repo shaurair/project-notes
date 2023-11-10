@@ -67,9 +67,11 @@ async function setAssociate(associate, projectId) {
 
 async function getProjectContent(projectId) {
 	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creater_id = member.id WHERE project.id = ?;';
-	
+	let sqlOwner = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
+
 	try {
 		let contentResult = await database.databasePool.query(sql, [projectId]);
+		let ownerResult = await database.databasePool.query(sqlOwner, [projectId, 'owner']);
 
 		return {
 			data: {
@@ -81,6 +83,7 @@ async function getProjectContent(projectId) {
 				deadline: contentResult[0].deadline,
 				creatorName: contentResult[0].name,
 				creatorImage: contentResult[0].image_filename,
+				owner: ownerResult
 			},
 			statusCode: 200
 		};
