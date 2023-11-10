@@ -21,7 +21,7 @@ const teamList = document.getElementById('team-list');
 const addProjectBtn = document.getElementById('add-project');
 const summaryElement = document.getElementById('summary-input-content');
 let isSearchResultShowing = false;
-let associatePeople = {owner:{}, assignee:{}, follower:{}, team:{}};
+let associate = {owner:{}, reviewer:{}, follower:{}, team:{}};
 
 async function initCreateProject() {
 	await getUser();
@@ -90,7 +90,7 @@ function addSearchResult(resultData, listContainer, listElement, peopleListEleme
 
 function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, associateRole) {
 	resultElement.addEventListener('click', () => {
-		if(associatePeople[associateRole][id]) {
+		if(associate[associateRole][id]) {
 			return;
 		}
 
@@ -115,7 +115,7 @@ function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, 
 		let closeElement = document.createElement('div');
 		closeElement.className = 'close mouseover';
 		closeElement.addEventListener('click', () => {
-			delete associatePeople[associateRole][id];
+			delete associate[associateRole][id];
 			peopleListElement.removeChild(elementContainer);
 		})
 
@@ -125,7 +125,7 @@ function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, 
 		closeElement.appendChild(closeIconElement);
 		elementContainer.appendChild(closeElement);
 
-		associatePeople[associateRole][id] = true;
+		associate[associateRole][id] = true;
 	})
 }
 
@@ -138,7 +138,7 @@ function checkContent() {
 		summaryElement.classList.remove('highlight-block');
 	}
 
-	if(Object.keys(associatePeople['owner']).length == 0) {
+	if(Object.keys(associate['owner']).length == 0) {
 		ownerSearchKeyWord.classList.add('highlight-block');
 		return 'Owner should not be empty'
 	}
@@ -147,6 +147,35 @@ function checkContent() {
 	}
 
 	return 'ok';
+}
+
+async function createNewProject() {
+	let summary = summaryElement.value;
+	let description = document.getElementById('description-input').value;
+	let priority = document.getElementById('create-priority').value;
+	let deadline = document.getElementById('deadline-input').value;
+	let creator = userInfo['id'];
+
+	let response = await fetch("/project/", {
+		method: "POST",
+		body: JSON.stringify({ 'summary': summary,
+							   'description': description,
+							   'priority': priority,
+							   'deadline': deadline,
+							   'creator': creator,
+							   'associate': associate
+		}),
+		headers: {'Content-Type':'application/json'}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		alert('Successfully created!');
+		location.href = `/project/${result['id']}`;
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
 }
 
 ownerSearchBtn.addEventListener('click', async() => {
@@ -160,7 +189,7 @@ assigneeSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-assignee').checked ? searchId : searchName;
 	let searchResult = await searchMethod(assigneeSearchKeyWord.value);
 
-	addSearchResult(searchResult['data'], assigneeSearchContainerElement, assigneeSearchListElement, assigneePeopleList, 'assignee');
+	addSearchResult(searchResult['data'], assigneeSearchContainerElement, assigneeSearchListElement, assigneePeopleList, 'reviewer');
 })
 
 followerSearchBtn.addEventListener('click', async() => {
@@ -229,31 +258,3 @@ addProjectBtn.addEventListener('click', () => {
 		alert(checkContentResult);
 	}
 })
-
-async function createNewProject() {
-	let summary = summaryElement.value;
-	let description = document.getElementById('description-input').value;
-	let priority = document.getElementById('create-priority').value;
-	let deadline = document.getElementById('deadline-input').value;
-	let creator = userInfo['id'];
-
-	let response = await fetch("/project/", {
-		method: "POST",
-		body: JSON.stringify({ 'summary': summary,
-							   'description': description,
-							   'priority': priority,
-							   'deadline': deadline,
-							   'creator': creator
-		}),
-		headers: {'Content-Type':'application/json'}
-	});
-	let result = await response.json();
-
-	if(response.ok) {
-		alert('Successfully created!');
-		location.href = `/project/${result['id']}`;
-	}
-	else {
-		alert(result["message"] + " Please redirect this page and try again.");
-	}
-}

@@ -25,6 +25,41 @@ async function createProject(summary, description, priority, deadline, creator) 
 	}
 }
 
+async function setAssociate(associate, projectId) {
+	let ownerNumber = Object.keys(associate.owner).length;
+	let ownerList = Object.keys(associate.owner);
+	let reviewerNumber = Object.keys(associate.reviewer).length;
+	let reviewerList = Object.keys(associate.reviewer);
+
+	let sql = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
+	try {
+		for( let i = 0; i < ownerNumber; i++) {
+			await database.databasePool.query(sql, [projectId, ownerList[i], 'owner']);
+		}
+		for( let i = 0; i < reviewerNumber; i++) {
+			await database.databasePool.query(sql, [projectId, reviewerList[i], 'reviewer']);
+		}
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
-	createProject
+	createProject,
+	setAssociate
 }
