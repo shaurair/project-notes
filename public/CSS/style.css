@@ -800,11 +800,11 @@ html,body {
 .search-icon:hover {
 	filter: brightness(0.5);
 }
-#owner-search-result, #assignee-search-result, #follower-search-result {
+#owner-search-result, #assignee-search-result, #follower-search-result, #team-search-result {
 	position: absolute;
 	z-index: 2;
 }
-#owner-search-list, #assignee-search-list, #follower-search-list {
+#owner-search-list, #assignee-search-list, #follower-search-list, #team-search-list {
 	position: absolute;
 	background-color: white;
 	top: 2.5rem;

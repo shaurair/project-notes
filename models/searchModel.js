@@ -72,7 +72,44 @@ async function searchId(id) {
 	}
 }
 
+async function searchTeam(team) {
+	let sql = 'SELECT id, name FROM group_table WHERE name like ?;';
+	try {
+		let result = await database.databasePool.query(sql, [`%${team}%`]);
+
+		if(result.length == 0) {
+			return {
+				data: {
+					message: 'No results'
+				},
+				statusCode: 400
+			};
+		}
+		else {
+			return {
+				data: {
+					message: 'ok',
+					result: result
+				},
+				statusCode: 200
+			};
+		}
+
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
 	searchName,
-	searchId
+	searchId,
+	searchTeam
 }

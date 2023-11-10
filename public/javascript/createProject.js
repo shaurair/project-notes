@@ -13,10 +13,15 @@ const followerSearchContainerElement = document.getElementById('follower-search-
 const followerSearchListElement = document.getElementById('follower-search-list');
 const followerSearchKeyWord = document.getElementById('follower-input');
 const followerPeopleList = document.getElementById('follower-people-list');
+const teamSearchBtn = document.getElementById('team-search');
+const teamSearchContainerElement = document.getElementById('team-search-result');
+const teamSearchListElement = document.getElementById('team-search-list');
+const teamSearchKeyWord = document.getElementById('team-input');
+const teamList = document.getElementById('team-list');
 const addProjectBtn = document.getElementById('add-project');
 const summaryElement = document.getElementById('summary-input-content');
 let isSearchResultShowing = false;
-let associatePeople = {owner:{}, assignee:{}, follower:{}};
+let associatePeople = {owner:{}, assignee:{}, follower:{}, team:{}};
 
 async function initCreateProject() {
 	await getUser();
@@ -39,6 +44,11 @@ async function searchId(id) {
 	return await response.json();
 }
 
+async function searchTeam(team) {
+	let response = await fetch(`/search?team=${team}`);
+	return await response.json();
+}
+
 function addSearchResult(resultData, listContainer, listElement, peopleListElement, associateRole) {
 	listContainer.classList.remove('unseen');
 	isSearchResultShowing = true;
@@ -56,14 +66,16 @@ function addSearchResult(resultData, listContainer, listElement, peopleListEleme
 			elementContainer.className = 'search-people-container mouseover';
 			listElement.appendChild(elementContainer);
 
-			let element = document.createElement('div');
 			let imgUrl = null;
-			element.className = 'people-img';
-			if(resultList[resultIdx]['image_filename'] != null) {
-				imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${resultList[resultIdx]['image_filename']}`;
-				element.style.backgroundImage = `url(${imgUrl})`;
+			if(associateRole != 'team') {
+				let element = document.createElement('div');
+				element.className = 'people-img';
+				if(resultList[resultIdx]['image_filename'] != null) {
+					imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${resultList[resultIdx]['image_filename']}`;
+					element.style.backgroundImage = `url(${imgUrl})`;
+				}
+				elementContainer.appendChild(element);
 			}
-			elementContainer.appendChild(element);
 
 			let userName = resultList[resultIdx]['name'];
 			element = document.createElement('div');
@@ -86,11 +98,13 @@ function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, 
 		elementContainer.className = 'people-container';
 		peopleListElement.appendChild(elementContainer);
 
-		let element = document.createElement('div');
-		element.className = 'people-img';
-		elementContainer.appendChild(element);
-		if(imgUrl != null) {
-			element.style.backgroundImage = `url(${imgUrl})`;
+		if(associateRole != 'team') {
+			let element = document.createElement('div');
+			element.className = 'people-img';
+			elementContainer.appendChild(element);
+			if(imgUrl != null) {
+				element.style.backgroundImage = `url(${imgUrl})`;
+			}
 		}
 
 		element = document.createElement('div');
@@ -156,6 +170,13 @@ followerSearchBtn.addEventListener('click', async() => {
 	addSearchResult(searchResult['data'], followerSearchContainerElement, followerSearchListElement, followerPeopleList, 'follower');
 })
 
+teamSearchBtn.addEventListener('click', async() => {
+	searchMethod = searchTeam;
+	let searchResult = await searchMethod(teamSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team');
+})
+
 ownerSearchKeyWord.addEventListener('keypress', (event) => {
 	if(event.key === 'Enter') {
 		ownerSearchBtn.click();
@@ -174,6 +195,12 @@ followerSearchKeyWord.addEventListener('keypress', (event) => {
 	}
 })
 
+teamSearchKeyWord.addEventListener('keypress', (event) => {
+	if(event.key === 'Enter') {
+		teamSearchBtn.click();
+	}
+})
+
 window.addEventListener('click', (event) => {
 	if(isSearchResultShowing) {
 		if(!ownerSearchContainerElement.classList.contains('unseen')) {
@@ -184,6 +211,9 @@ window.addEventListener('click', (event) => {
 		}
 		if(!followerSearchContainerElement.classList.contains('unseen')) {
 			followerSearchContainerElement.classList.add('unseen');
+		}
+		if(!teamSearchContainerElement.classList.contains('unseen')) {
+			teamSearchContainerElement.classList.add('unseen');
 		}
 		
 		isSearchResultShowing = false;
