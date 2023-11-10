@@ -54,7 +54,6 @@ function setProjectContent(data) {
 
 	// set creator
 	peopleListContainer = document.getElementById('creator-container');
-
 	imgUrl = null;
 	if(data['creatorImage'] != null) {
 		imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${data['creatorImage']}`;
@@ -64,13 +63,28 @@ function setProjectContent(data) {
 
 	// set owner
 	peopleListContainer = document.getElementById('owner-container');
-
 	for(let i = 0; i < data['owner'].length; i++) {
 		imgUrl = null;
 		if(data['owner'][i]['image_filename'] != null) {
 			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${data['owner'][i]['image_filename']}`;
 		}
 		setPeople(imgUrl, data['owner'][i]['name'], peopleListContainer);
+	}
+
+	// set reviewer
+	peopleListContainer = document.getElementById('reviewer-container');
+	for(let i = 0; i < data['reviewer'].length; i++) {
+		imgUrl = null;
+		if(data['reviewer'][i]['image_filename'] != null) {
+			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${data['reviewer'][i]['image_filename']}`;
+		}
+		setPeople(imgUrl, data['reviewer'][i]['name'], peopleListContainer);
+	}
+
+	// set team
+	peopleListContainer = document.getElementById('team-container');
+	for(let i = 0; i < data['team'].length; i++) {
+		setTeam(data['team'][i]['name'], peopleListContainer);
 	}
 }
 
@@ -88,6 +102,20 @@ function setPeople(imgUrl, name, peopleListElement) {
 		element.style.backgroundImage = `url(${imgUrl})`;
 	}
 	elementContainer.appendChild(element);
+
+	element = document.createElement('div');
+	element.className = 'people-text';
+	element.textContent = name;
+	elementContainer.appendChild(element);
+}
+
+function setTeam(name, teamListElement) {
+	let element;
+	let elementContainer;
+
+	elementContainer = document.createElement('div');
+	elementContainer.className = 'project-team-container';
+	teamListElement.appendChild(elementContainer);
 
 	element = document.createElement('div');
 	element.className = 'people-text';

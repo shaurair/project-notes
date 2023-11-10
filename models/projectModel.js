@@ -67,11 +67,14 @@ async function setAssociate(associate, projectId) {
 
 async function getProjectContent(projectId) {
 	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creater_id = member.id WHERE project.id = ?;';
-	let sqlOwner = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
+	let sqlRole = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
+	let sqlTeam = 'SELECT group_table.name, group_table.id FROM project_team INNER JOIN group_table ON project_team.group_id = group_table.id WHERE project_team.project_id = ?;';
 
 	try {
 		let contentResult = await database.databasePool.query(sql, [projectId]);
-		let ownerResult = await database.databasePool.query(sqlOwner, [projectId, 'owner']);
+		let ownerResult = await database.databasePool.query(sqlRole, [projectId, 'owner']);
+		let reviewerResult = await database.databasePool.query(sqlRole, [projectId, 'reviewer']);
+		let teamResult = await database.databasePool.query(sqlTeam, [projectId]);
 
 		return {
 			data: {
@@ -83,7 +86,9 @@ async function getProjectContent(projectId) {
 				deadline: contentResult[0].deadline,
 				creatorName: contentResult[0].name,
 				creatorImage: contentResult[0].image_filename,
-				owner: ownerResult
+				owner: ownerResult,
+				reviewer: reviewerResult,
+				team: teamResult
 			},
 			statusCode: 200
 		};

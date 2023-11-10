@@ -622,10 +622,32 @@ html,body {
     height: min-content;
 	gap: 0.5rem;
 }
+.project-team-container {
+	display: flex;
+    align-items: center;
+    height: min-content;
+	gap: 0.5rem;
+	box-sizing: border-box;
+    border-radius: 10px;
+    padding: 0.3rem;
+    background-color: teal;
+    color: white;
+}
 #owner-container {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
+}
+#reviewer-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+#team-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	width: auto;
 }
 .auth-drop {
 	width: 120px;
