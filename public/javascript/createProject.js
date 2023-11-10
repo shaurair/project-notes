@@ -3,11 +3,11 @@ const ownerSearchContainerElement = document.getElementById('owner-search-result
 const ownerSearchListElement = document.getElementById('owner-search-list');
 const ownerSearchKeyWord = document.getElementById('owner-input');
 const ownerPeopleList = document.getElementById('owner-people-list');
-const assigneeSearchBtn = document.getElementById('assignee-search');
-const assigneeSearchContainerElement = document.getElementById('assignee-search-result');
-const assigneeSearchListElement = document.getElementById('assignee-search-list');
-const assigneeSearchKeyWord = document.getElementById('assignee-input');
-const assigneePeopleList = document.getElementById('assignee-people-list');
+const reviewerSearchBtn = document.getElementById('reviewer-search');
+const reviewerSearchContainerElement = document.getElementById('reviewer-search-result');
+const reviewerSearchListElement = document.getElementById('reviewer-search-list');
+const reviewerSearchKeyWord = document.getElementById('reviewer-input');
+const reviewerPeopleList = document.getElementById('reviewer-people-list');
 const followerSearchBtn = document.getElementById('follower-search');
 const followerSearchContainerElement = document.getElementById('follower-search-result');
 const followerSearchListElement = document.getElementById('follower-search-list');
@@ -185,11 +185,11 @@ ownerSearchBtn.addEventListener('click', async() => {
 	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner');
 })
 
-assigneeSearchBtn.addEventListener('click', async() => {
-	searchMethod = document.getElementById('select-id-assignee').checked ? searchId : searchName;
-	let searchResult = await searchMethod(assigneeSearchKeyWord.value);
+reviewerSearchBtn.addEventListener('click', async() => {
+	searchMethod = document.getElementById('select-id-reviewer').checked ? searchId : searchName;
+	let searchResult = await searchMethod(reviewerSearchKeyWord.value);
 
-	addSearchResult(searchResult['data'], assigneeSearchContainerElement, assigneeSearchListElement, assigneePeopleList, 'reviewer');
+	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer');
 })
 
 followerSearchBtn.addEventListener('click', async() => {
@@ -212,9 +212,9 @@ ownerSearchKeyWord.addEventListener('keypress', (event) => {
 	}
 })
 
-assigneeSearchKeyWord.addEventListener('keypress', (event) => {
+reviewerSearchKeyWord.addEventListener('keypress', (event) => {
 	if(event.key === 'Enter') {
-		assigneeSearchBtn.click();
+		reviewerSearchBtn.click();
 	}
 })
 
@@ -235,8 +235,8 @@ window.addEventListener('click', (event) => {
 		if(!ownerSearchContainerElement.classList.contains('unseen')) {
 			ownerSearchContainerElement.classList.add('unseen');
 		}
-		if(!assigneeSearchContainerElement.classList.contains('unseen')) {
-			assigneeSearchContainerElement.classList.add('unseen');
+		if(!reviewerSearchContainerElement.classList.contains('unseen')) {
+			reviewerSearchContainerElement.classList.add('unseen');
 		}
 		if(!followerSearchContainerElement.classList.contains('unseen')) {
 			followerSearchContainerElement.classList.add('unseen');

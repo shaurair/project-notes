@@ -782,7 +782,7 @@ html,body {
 	gap: 1rem;
 	height: max-content;
 }
-#assignee-input {
+#reviewer-input {
 	line-height: 2;
 }
 .icon-container {
@@ -800,11 +800,11 @@ html,body {
 .search-icon:hover {
 	filter: brightness(0.5);
 }
-#owner-search-result, #assignee-search-result, #follower-search-result, #team-search-result {
+#owner-search-result, #reviewer-search-result, #follower-search-result, #team-search-result {
 	position: absolute;
 	z-index: 2;
 }
-#owner-search-list, #assignee-search-list, #follower-search-list, #team-search-list {
+#owner-search-list, #reviewer-search-list, #follower-search-list, #team-search-list {
 	position: absolute;
 	background-color: white;
 	top: 2.5rem;
