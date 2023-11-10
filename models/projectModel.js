@@ -30,14 +30,20 @@ async function setAssociate(associate, projectId) {
 	let ownerList = Object.keys(associate.owner);
 	let reviewerNumber = Object.keys(associate.reviewer).length;
 	let reviewerList = Object.keys(associate.reviewer);
+	let teamNumber = Object.keys(associate.team).length;
+	let teamList = Object.keys(associate.team);
 
-	let sql = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
+	let sqlMember = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
+	let sqlTeam =  'INSERT INTO project_team(project_id, group_id) VALUES(?, ?);';
 	try {
 		for( let i = 0; i < ownerNumber; i++) {
-			await database.databasePool.query(sql, [projectId, ownerList[i], 'owner']);
+			await database.databasePool.query(sqlMember, [projectId, ownerList[i], 'owner']);
 		}
 		for( let i = 0; i < reviewerNumber; i++) {
-			await database.databasePool.query(sql, [projectId, reviewerList[i], 'reviewer']);
+			await database.databasePool.query(sqlMember, [projectId, reviewerList[i], 'reviewer']);
+		}
+		for( let i = 0; i < teamNumber; i++) {
+			await database.databasePool.query(sqlTeam, [projectId, teamList[i]]);
 		}
 
 		return {

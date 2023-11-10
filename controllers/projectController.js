@@ -7,7 +7,6 @@ const create = async (req, res) => {
 	let deadline = req.body.deadline;
 	let creator = req.body.creator;
 	let associate = req.body.associate;
-	let projectId = result.data.id;
 	let data;
 	let result = await projectModel.createProject(summary, description, priority, deadline, creator);
 
@@ -16,6 +15,7 @@ const create = async (req, res) => {
 		return;
 	}
 	else {
+		let projectId = result.data.id;
 		result = await projectModel.setAssociate(associate, projectId);
 		if(result.data.message != 'ok') {
 			res.status(result.statusCode).send(result.data);
