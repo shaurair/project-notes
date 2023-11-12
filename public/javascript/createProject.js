@@ -20,6 +20,7 @@ const teamSearchKeyWord = document.getElementById('team-input');
 const teamList = document.getElementById('team-list');
 const addProjectBtn = document.getElementById('add-project');
 const summaryElement = document.getElementById('summary-input-content');
+const descriptionElement = document.getElementById('description-input');
 let isSearchResultShowing = false;
 let associate = {owner:{}, reviewer:{}, follower:{}, team:{}};
 
@@ -134,8 +135,20 @@ function checkContent() {
 		summaryElement.classList.add('highlight-block');
 		return 'Summary should not be empty'
 	}
+	else if(summaryElement.value.length > 250) {
+		summaryElement.classList.add('highlight-block');
+		return 'A total of ' + summaryElement.value.length + ' characters in summary exceeds the limit of 250 characters'
+	}
 	else {
 		summaryElement.classList.remove('highlight-block');
+	}
+
+	if(descriptionElement.value.length > 5000) {
+		descriptionElement.classList.add('highlight-block');
+		return 'A total of ' + descriptionElement.value.length + ' characters in summary exceeds the limit of 5000 characters'
+	}
+	else {
+		descriptionElement.classList.remove('highlight-block');
 	}
 
 	if(Object.keys(associate['owner']).length == 0) {
