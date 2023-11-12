@@ -135,9 +135,9 @@ function checkContent() {
 		summaryElement.classList.add('highlight-block');
 		return 'Summary should not be empty'
 	}
-	else if(summaryElement.value.length > 250) {
+	else if(summaryElement.value.length > 100) {
 		summaryElement.classList.add('highlight-block');
-		return 'A total of ' + summaryElement.value.length + ' characters in summary exceeds the limit of 250 characters'
+		return 'A total of ' + summaryElement.value.length + ' characters in summary exceeds the limit of 100 characters'
 	}
 	else {
 		summaryElement.classList.remove('highlight-block');

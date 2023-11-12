@@ -1,5 +1,9 @@
 const viewmoreBtn = document.getElementById('project-viewmore');
 const statusSelect = document.getElementById('project-status-value');
+const editProjectBtn = document.getElementById('edit-project');
+const cancelEditBtn = document.getElementById('cancel-edit-project');
+const darkBackgrountElement = document.querySelector('.dark-background');
+const editProjectAreaElement = document.querySelector('.edit-project-area');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 
 async function initProjectId() {
@@ -150,4 +154,14 @@ viewmoreBtn.addEventListener('click', () => {
 	}
 })
 
-statusSelect.addEventListener('change', changeStatusColor)
+statusSelect.addEventListener('change', changeStatusColor);
+
+editProjectBtn.addEventListener('click', () => {
+	darkBackgrountElement.classList.remove('unseen');
+	editProjectAreaElement.classList.remove('unseen');
+});
+
+cancelEditBtn.addEventListener('click', () => {
+	darkBackgrountElement.classList.add('unseen');
+	editProjectAreaElement.classList.add('unseen');
+})
