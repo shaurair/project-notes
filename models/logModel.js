@@ -70,6 +70,38 @@ async function checkExistEmail(email) {
 	}
 }
 
+async function checkExistName(name) {
+	let sql = 'SELECT * FROM member WHERE name = ?;';
+	try {
+		let result = await database.databasePool.query(sql, [name]);
+		if(result.length == 0) {
+			return {
+				data: {
+					message: 'ok'
+				}
+			};
+		}
+		else {
+			return {
+				data: {
+					message: 'Name is already exist! Add nickname or some characters in name.\n e.g. Mary Ho -> Mary Ho (Marr)'
+				},
+				statusCode: 400
+			};
+		}
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 async function signUpUserData(name, email, password) {
 	let sql = 'INSERT INTO member(name, email, password) VALUES(?,?,?)';
 	try {
@@ -97,5 +129,6 @@ async function signUpUserData(name, email, password) {
 module.exports = {
 	checkUserSignIn: checkUserSignIn,
 	checkExistEmail: checkExistEmail,
+	checkExistName: checkExistName,
 	signUpUserData: signUpUserData
 }

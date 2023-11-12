@@ -24,16 +24,18 @@ const checkSignUpData = async (req, res) => {
 	let name = req.body.name;
 	let email = req.body.email;
 	let password = req.body.password;
-	let result = await logModel.checkExistEmail(email);
+	let result = await logModel.checkExistName(name);
 
 	if(result.data.message == "ok") {
-		result = await logModel.signUpUserData(name, email, password);
-		res.status(result.statusCode).send(result.data);
-	}
-	else {
-		res.status(result.statusCode).send(result.data);
+		result = await logModel.checkExistEmail(email);
+		if(result.data.message == "ok") {
+			result = await logModel.signUpUserData(name, email, password);
+			res.status(result.statusCode).send(result.data);
+			return;
+		}
 	}
 
+	res.status(result.statusCode).send(result.data);
 }
 
 module.exports = {
