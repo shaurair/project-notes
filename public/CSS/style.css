@@ -517,6 +517,7 @@ html,body {
 .project-head-container {
 	display: flex;
 	justify-content: space-between;
+	flex-wrap: wrap;
 }
 .project-head {
 	display: flex;
@@ -526,10 +527,16 @@ html,body {
 	margin-bottom: 40px;
 }
 .project-title {
+	display: flex;
+	gap: 1rem;
 	font-size: 28px;
 	font-weight: 600;
 	font-family: Noto Sans TC;
 	filter: brightness(0.8);
+}
+.project-id, .project-summary-container {
+	display: flex;
+	align-items: center;
 }
 .viewmore-dialogue-project {
 	position: absolute;
@@ -619,6 +626,10 @@ html,body {
     font-weight: 700;
     border-style: none;
     height: 35px;
+}
+#project-summary {
+	width: 600px;
+	overflow: scroll;
 }
 .project-people-container {
 	display: flex;
@@ -1114,6 +1125,12 @@ html,body {
 	}
 	.main-create-project > .all-content {
 		width: calc(100% - 30px);
+	}
+	.status-select {
+		margin-left: 40px;
+	}
+	#project-summary {
+		width: calc(100vw - 250px);
 	}
 }
 
