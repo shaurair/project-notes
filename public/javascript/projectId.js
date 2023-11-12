@@ -7,6 +7,7 @@ const editProjectAreaElement = document.querySelector('.edit-project-area');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let associate = {owner:{}, reviewer:{}, team:{}};
+let editAssociate = {owner:{}, reviewer:{}, team:{}};
 
 async function initProjectId() {
 	await getUser();
@@ -46,38 +47,41 @@ async function getProjectContent() {
 }
 
 function addClickEffect(imgUrl, userName, id, peopleListElement, associateRole) {
-		let elementContainer = document.createElement('div');
-		elementContainer.className = 'people-container';
-		peopleListElement.appendChild(elementContainer);
+	if(editAssociate[associateRole][id]) {
+		return;
+	}
+	let elementContainer = document.createElement('div');
+	elementContainer.className = 'people-container';
+	peopleListElement.appendChild(elementContainer);
 
-		if(associateRole != 'team') {
-			let element = document.createElement('div');
-			element.className = 'people-img';
-			elementContainer.appendChild(element);
-			if(imgUrl != null) {
-				element.style.backgroundImage = `url(${imgUrl})`;
-			}
-		}
-
-		element = document.createElement('div');
-		element.className = 'people-text';
-		element.textContent = userName;
+	if(associateRole != 'team') {
+		let element = document.createElement('div');
+		element.className = 'people-img';
 		elementContainer.appendChild(element);
+		if(imgUrl != null) {
+			element.style.backgroundImage = `url(${imgUrl})`;
+		}
+	}
 
-		let closeElement = document.createElement('div');
-		closeElement.className = 'close mouseover';
-		closeElement.addEventListener('click', () => {
-			delete associate[associateRole][id];
-			peopleListElement.removeChild(elementContainer);
-		})
+	element = document.createElement('div');
+	element.className = 'people-text';
+	element.textContent = userName;
+	elementContainer.appendChild(element);
 
-		let closeIconElement = document.createElement('div');
-		closeIconElement.className = 'close-icon';
+	let closeElement = document.createElement('div');
+	closeElement.className = 'close mouseover';
+	closeElement.addEventListener('click', () => {
+		delete editAssociate[associateRole][id];
+		peopleListElement.removeChild(elementContainer);
+	})
 
-		closeElement.appendChild(closeIconElement);
-		elementContainer.appendChild(closeElement);
+	let closeIconElement = document.createElement('div');
+	closeIconElement.className = 'close-icon';
 
-		associate[associateRole][id] = true;
+	closeElement.appendChild(closeIconElement);
+	elementContainer.appendChild(closeElement);
+
+	editAssociate[associateRole][id] = true;
 }
 
 function setEditProjectContent() {
@@ -98,6 +102,8 @@ function setEditProjectContent() {
 		element = document.getElementById('deadline-input');
 		element.textContent = projectData['deadline'];
 	}
+
+	editAssociate = {owner:{}, reviewer:{}, team:{}};
 
 	// set owner
 	peopleListElement = document.getElementById('owner-people-list');
