@@ -107,6 +107,7 @@ function setEditProjectContent() {
 
 	// set owner
 	peopleListElement = document.getElementById('owner-people-list');
+	peopleListElement.innerHTML = '';
 	for(let i = 0; i < projectData['owner'].length; i++) {
 		imgUrl = null;
 		if(projectData['owner'][i]['image_filename'] != null) {
@@ -117,6 +118,7 @@ function setEditProjectContent() {
 
 	// set reviewer
 	peopleListElement = document.getElementById('reviewer-people-list');
+	peopleListElement.innerHTML = '';
 	for(let i = 0; i < projectData['reviewer'].length; i++) {
 		imgUrl = null;
 		if(projectData['reviewer'][i]['image_filename'] != null) {
@@ -127,6 +129,7 @@ function setEditProjectContent() {
 
 	// set team
 	peopleListElement = document.getElementById('team-list');
+	peopleListElement.innerHTML = '';
 	for(let i = 0; i < projectData['team'].length; i++) {
 		addClickEffect(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
 	}
