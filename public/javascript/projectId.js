@@ -353,6 +353,9 @@ async function updateProject() {
 	}
 }
 
+// Select change events
+statusSelect.addEventListener('change', changeStatusColor);
+
 // Click events
 viewmoreBtn.addEventListener('click', () => {
 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
@@ -363,8 +366,6 @@ viewmoreBtn.addEventListener('click', () => {
 		viewmoreDialogueElement.classList.add('unseen');
 	}
 })
-
-statusSelect.addEventListener('change', changeStatusColor);
 
 editProjectBtn.addEventListener('click', () => {
 	darkBackgrountElement.classList.remove('unseen');
