@@ -23,14 +23,14 @@ function addEnterEffect(inputElementList, buttonElementList) {
 	}
 }
 
-function addSearchResult(resultData, listContainer, listElement, peopleListElement, associateRole, associate) {
+function addSearchResult(resultData, listContainer, searchListElement, selectedListElement, associateRole, associate) {
 	listContainer.classList.remove('unseen');
-	listElement.innerHTML = '';
+	searchListElement.innerHTML = '';
 
 	if(resultData['message'] == 'No results') {
 		element = document.createElement('div');
 		element.textContent = 'No result';
-		listElement.appendChild(element);
+		searchListElement.appendChild(element);
 	}
 	else {
 		let resultList = resultData['result'];
@@ -40,37 +40,37 @@ function addSearchResult(resultData, listContainer, listElement, peopleListEleme
 			let name = resultList[resultIdx]['name'];
 			let elementContainer = document.createElement('div');
 			elementContainer.className = 'search-people-container mouseover';
-			listElement.appendChild(elementContainer);
+			searchListElement.appendChild(elementContainer);
 
 			if(associateRole != 'team') {
 				addImgToContainer(imgUrl, elementContainer);
 			}
 			addNameToContainer(name, elementContainer);
-			addClickEffect(elementContainer, imgUrl, name, resultList[resultIdx]['id'], peopleListElement, associateRole, associate);
+			addClickEffect(elementContainer, imgUrl, name, resultList[resultIdx]['id'], selectedListElement, associateRole, associate);
 		}
 	}
 }
 
-function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, associateRole, associate) {
+function addClickEffect(resultElement, imgUrl, userName, id, selectedListElement, associateRole, associate) {
 	resultElement.addEventListener('click', () => {
-		addToList(imgUrl, userName, id, peopleListElement, associateRole, associate)
+		addToList(imgUrl, userName, id, selectedListElement, associateRole, associate)
 	})
 }
 
-function addToList(imgUrl, userName, id, peopleListElement, associateRole, associate) {
+function addToList(imgUrl, userName, id, selectedListElement, associateRole, associate) {
 	if(associate[associateRole][id]) {
 		return;
 	}
 	let elementContainer = document.createElement('div');
 	elementContainer.className = 'people-container';
-	peopleListElement.appendChild(elementContainer);
+	selectedListElement.appendChild(elementContainer);
 
 	if(associateRole != 'team') {
 		addImgToContainer(imgUrl, elementContainer);
 	}
 
 	addNameToContainer(userName, elementContainer);
-	addRemoveOption(elementContainer, peopleListElement, associate, associateRole, id);
+	addRemoveOption(elementContainer, selectedListElement, associate, associateRole, id);
 	associate[associateRole][id] = true;
 }
 
