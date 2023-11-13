@@ -134,9 +134,76 @@ async function updateProject(projectId, changedItemList, changedValueList) {
 	}
 }
 
+async function updateAssociatePeople(projectId, associateRole, changeMemberList) {
+	let sqlRemoveMember = 'DELETE FROM project_member WHERE project_id = ? AND member_id = ? AND role = ?;';
+	let sqlAddMember = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
+
+	try {
+		for( let i = 0; i < changeMemberList.add.length; i++) {
+			await database.databasePool.query(sqlAddMember, [projectId, changeMemberList.add[i], associateRole]);
+		}
+
+		for( let i = 0; i < changeMemberList.delete.length; i++) {
+			await database.databasePool.query(sqlRemoveMember, [projectId, changeMemberList.delete[i], associateRole]);
+		}
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
+async function updateAssociateGroup(projectId, changeGroupList) {
+	let sqlRemoveGroup = 'DELETE FROM project_team WHERE project_id = ? AND group_id = ?;';
+	let sqlAddGroup = 'INSERT INTO project_team(project_id, group_id) VALUES(?, ?);';
+
+	try {
+		for( let i = 0; i < changeGroupList.add.length; i++) {
+			await database.databasePool.query(sqlAddGroup, [projectId, changeGroupList.add[i]]);
+		}
+
+		for( let i = 0; i < changeGroupList.delete.length; i++) {
+			await database.databasePool.query(sqlRemoveGroup, [projectId, changeGroupList.delete[i]]);
+		}
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
+
 module.exports = {
 	createProject,
 	setAssociate,
 	getProjectContent,
-	updateProject
+	updateProject,
+	updateAssociatePeople,
+	updateAssociateGroup
 }

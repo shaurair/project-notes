@@ -63,6 +63,9 @@ const getContent = async (req, res) => {
 const update = async (req, res) => {
 	let projectId = req.body.projectId;
 	let content = req.body.content;
+	let owner = req.body.owner;
+	let reviewer = req.body.reviewer;
+	let team = req.body.team;
 	let changedItemList = Object.keys(content);
 	let changedValueList;
 	let result;
@@ -74,6 +77,24 @@ const update = async (req, res) => {
 			res.status(result.statusCode).send(result.data);
 			return;
 		}
+	}
+
+	result = await projectModel.updateAssociatePeople(projectId, 'owner', owner);
+	if(result.data.message != 'ok') {
+		res.status(result.statusCode).send(result.data);
+		return;
+	}
+
+	result = await projectModel.updateAssociatePeople(projectId, 'reviewer', reviewer);
+	if(result.data.message != 'ok') {
+		res.status(result.statusCode).send(result.data);
+		return;
+	}
+
+	result = await projectModel.updateAssociateGroup(projectId, team);
+	if(result.data.message != 'ok') {
+		res.status(result.statusCode).send(result.data);
+		return;
 	}
 
 	res.send(req.body);
