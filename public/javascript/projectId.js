@@ -1,3 +1,18 @@
+const ownerSearchBtn = document.getElementById('owner-search');
+const ownerSearchContainerElement = document.getElementById('owner-search-result');
+const ownerSearchListElement = document.getElementById('owner-search-list');
+const ownerSearchKeyWord = document.getElementById('owner-input');
+const ownerPeopleList = document.getElementById('owner-people-list');
+const reviewerSearchBtn = document.getElementById('reviewer-search');
+const reviewerSearchContainerElement = document.getElementById('reviewer-search-result');
+const reviewerSearchListElement = document.getElementById('reviewer-search-list');
+const reviewerSearchKeyWord = document.getElementById('reviewer-input');
+const reviewerPeopleList = document.getElementById('reviewer-people-list');
+const teamSearchBtn = document.getElementById('team-search');
+const teamSearchContainerElement = document.getElementById('team-search-result');
+const teamSearchListElement = document.getElementById('team-search-list');
+const teamSearchKeyWord = document.getElementById('team-input');
+const teamList = document.getElementById('team-list');
 const viewmoreBtn = document.getElementById('project-viewmore');
 const statusSelect = document.getElementById('project-status-value');
 const editProjectBtn = document.getElementById('edit-project');
@@ -6,7 +21,7 @@ const darkBackgrountElement = document.querySelector('.dark-background');
 const editProjectAreaElement = document.querySelector('.edit-project-area');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
-let associate = {owner:{}, reviewer:{}, team:{}};
+let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
 
 async function initProjectId() {
@@ -31,13 +46,13 @@ async function getProjectContent() {
 	if(response.ok) {
 		projectData = result;
 		projectData['owner'].forEach(userData => {
-			associate.owner[userData['id']] = true;
+			originalAssociate.owner[userData['id']] = true;
 		});
 		projectData['reviewer'].forEach(userData => {
-			associate.reviewer[userData['id']] = true;
+			originalAssociate.reviewer[userData['id']] = true;
 		});
 		projectData['team'].forEach(userData => {
-			associate.team[userData['id']] = true;
+			originalAssociate.team[userData['id']] = true;
 		});
 		setProjectContent(result);
 	}
@@ -46,7 +61,7 @@ async function getProjectContent() {
 	}
 }
 
-function addClickEffect(imgUrl, userName, id, peopleListElement, associateRole) {
+function addEditDefaultRoles(imgUrl, userName, id, peopleListElement, associateRole) {
 	if(editAssociate[associateRole][id]) {
 		return;
 	}
@@ -106,14 +121,13 @@ function setEditProjectContent() {
 	editAssociate = {owner:{}, reviewer:{}, team:{}};
 
 	// set owner
-	peopleListElement = document.getElementById('owner-people-list');
-	peopleListElement.innerHTML = '';
+	ownerPeopleList.innerHTML = '';
 	for(let i = 0; i < projectData['owner'].length; i++) {
 		imgUrl = null;
 		if(projectData['owner'][i]['image_filename'] != null) {
 			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${projectData['owner'][i]['image_filename']}`;
 		}
-		addClickEffect(imgUrl, projectData['owner'][i]['name'], projectData['owner'][i]['id'], peopleListElement, 'owner');
+		addEditDefaultRoles(imgUrl, projectData['owner'][i]['name'], projectData['owner'][i]['id'], ownerPeopleList, 'owner');
 	}
 
 	// set reviewer
@@ -124,14 +138,14 @@ function setEditProjectContent() {
 		if(projectData['reviewer'][i]['image_filename'] != null) {
 			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${projectData['reviewer'][i]['image_filename']}`;
 		}
-		addClickEffect(imgUrl, projectData['reviewer'][i]['name'], projectData['reviewer'][i]['id'], peopleListElement, 'reviewer');
+		addEditDefaultRoles(imgUrl, projectData['reviewer'][i]['name'], projectData['reviewer'][i]['id'], peopleListElement, 'reviewer');
 	}
 
 	// set team
 	peopleListElement = document.getElementById('team-list');
 	peopleListElement.innerHTML = '';
 	for(let i = 0; i < projectData['team'].length; i++) {
-		addClickEffect(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
+		addEditDefaultRoles(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
 	}
 }
 
@@ -216,38 +230,20 @@ function setProjectContent(data) {
 }
 
 function setPeople(imgUrl, name, peopleListElement) {
-	let element;
-	let elementContainer;
-
-	elementContainer = document.createElement('div');
+	let elementContainer = document.createElement('div');
 	elementContainer.className = 'project-people-container';
 	peopleListElement.appendChild(elementContainer);
 
-	element = document.createElement('div');
-	element.className = 'people-img';
-	if(imgUrl != null) {
-		element.style.backgroundImage = `url(${imgUrl})`;
-	}
-	elementContainer.appendChild(element);
-
-	element = document.createElement('div');
-	element.className = 'people-text';
-	element.textContent = name;
-	elementContainer.appendChild(element);
+	addImgToContainer(imgUrl, elementContainer);
+	addNameToContainer(name, elementContainer);
 }
 
 function setTeam(name, teamListElement) {
-	let element;
-	let elementContainer;
-
-	elementContainer = document.createElement('div');
+	let elementContainer = document.createElement('div');
 	elementContainer.className = 'project-team-container';
 	teamListElement.appendChild(elementContainer);
 
-	element = document.createElement('div');
-	element.className = 'people-text';
-	element.textContent = name;
-	elementContainer.appendChild(element);
+	addNameToContainer(name, elementContainer);
 }
 
 function changeStatusColor() {
@@ -267,6 +263,7 @@ function changeStatusColor() {
 	}
 }
 
+// Click events
 viewmoreBtn.addEventListener('click', () => {
 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
 	if(viewmoreDialogueElement.classList.contains('unseen')) {
@@ -288,4 +285,40 @@ editProjectBtn.addEventListener('click', () => {
 cancelEditBtn.addEventListener('click', () => {
 	darkBackgrountElement.classList.add('unseen');
 	editProjectAreaElement.classList.add('unseen');
+});
+
+ownerSearchBtn.addEventListener('click', async() => {
+	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
+	let searchResult = await searchMethod(ownerSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner', editAssociate);
 })
+
+reviewerSearchBtn.addEventListener('click', async() => {
+	searchMethod = document.getElementById('select-id-reviewer').checked ? searchId : searchName;
+	let searchResult = await searchMethod(reviewerSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer', editAssociate);
+})
+
+teamSearchBtn.addEventListener('click', async() => {
+	searchMethod = searchTeam;
+	let searchResult = await searchMethod(teamSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', editAssociate);
+})
+
+window.addEventListener('click', () => {
+	if(!ownerSearchContainerElement.classList.contains('unseen')) {
+		ownerSearchContainerElement.classList.add('unseen');
+	}
+	if(!reviewerSearchContainerElement.classList.contains('unseen')) {
+		reviewerSearchContainerElement.classList.add('unseen');
+	}
+	if(!teamSearchContainerElement.classList.contains('unseen')) {
+		teamSearchContainerElement.classList.add('unseen');
+	}
+});
+
+// Enter events
+addEnterEffect([ownerSearchKeyWord, reviewerSearchKeyWord, teamSearchKeyWord], [ownerSearchBtn, reviewerSearchBtn, teamSearchBtn]);
