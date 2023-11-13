@@ -35,28 +35,18 @@ function addSearchResult(resultData, listContainer, listElement, peopleListEleme
 	else {
 		let resultList = resultData['result'];
 		for(let resultIdx = 0; resultIdx < resultList.length; resultIdx++) {
+			let imageFilename = resultList[resultIdx]['image_filename'];
+			let imgUrl = (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
+			let name = resultList[resultIdx]['name'];
 			let elementContainer = document.createElement('div');
 			elementContainer.className = 'search-people-container mouseover';
 			listElement.appendChild(elementContainer);
 
-			let imgUrl = null;
 			if(associateRole != 'team') {
-				let element = document.createElement('div');
-				element.className = 'people-img';
-				if(resultList[resultIdx]['image_filename'] != null) {
-					imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${resultList[resultIdx]['image_filename']}`;
-					element.style.backgroundImage = `url(${imgUrl})`;
-				}
-				elementContainer.appendChild(element);
+				addImgToContainer(imgUrl, elementContainer);
 			}
-
-			let userName = resultList[resultIdx]['name'];
-			element = document.createElement('div');
-			element.className = 'people-text';
-			element.textContent = userName;
-			elementContainer.appendChild(element);
-
-			addClickEffect(elementContainer, imgUrl, userName, resultList[resultIdx]['id'], peopleListElement, associateRole, associate);
+			addNameToContainer(name, elementContainer);
+			addClickEffect(elementContainer, imgUrl, name, resultList[resultIdx]['id'], peopleListElement, associateRole, associate);
 		}
 	}
 }
@@ -76,22 +66,28 @@ function addToList(imgUrl, userName, id, peopleListElement, associateRole, assoc
 	peopleListElement.appendChild(elementContainer);
 
 	if(associateRole != 'team') {
-		let element = document.createElement('div');
-		element.className = 'people-img';
-		elementContainer.appendChild(element);
-		if(imgUrl != null) {
-			element.style.backgroundImage = `url(${imgUrl})`;
-		}
+		addImgToContainer(imgUrl, elementContainer);
 	}
 
-	element = document.createElement('div');
-	element.className = 'people-text';
-	element.textContent = userName;
-	elementContainer.appendChild(element);
-
-	associate[associateRole][id] = true;
-
+	addNameToContainer(userName, elementContainer);
 	addRemoveOption(elementContainer, peopleListElement, associate, associateRole, id);
+	associate[associateRole][id] = true;
+}
+
+function addImgToContainer(imgUrl, elementContainer) {
+	let element = document.createElement('div');
+	element.className = 'people-img';
+	elementContainer.appendChild(element);
+	if(imgUrl != null) {
+		element.style.backgroundImage = `url(${imgUrl})`;
+	}
+}
+
+function addNameToContainer(name, elementContainer) {
+	let element = document.createElement('div');
+	element.className = 'people-text';
+	element.textContent = name;
+	elementContainer.appendChild(element);
 }
 
 function addRemoveOption(elementContainer, elementContainerList, associate, associateRole, id) {
