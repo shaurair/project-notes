@@ -35,21 +35,6 @@ async function initCreateProject() {
 	}
 }
 
-async function searchName(name) {
-	let response = await fetch(`/search?name=${name}`);
-	return await response.json();
-}
-
-async function searchId(id) {
-	let response = await fetch(`/search?id=${id}`);
-	return await response.json();
-}
-
-async function searchTeam(team) {
-	let response = await fetch(`/search?team=${team}`);
-	return await response.json();
-}
-
 function addSearchResult(resultData, listContainer, listElement, peopleListElement, associateRole) {
 	listContainer.classList.remove('unseen');
 	isSearchResultShowing = true;
@@ -89,44 +74,50 @@ function addSearchResult(resultData, listContainer, listElement, peopleListEleme
 	}
 }
 
+function addToList(imgUrl, userName, id, peopleListElement, associateRole, associate) {
+	if(associate[associateRole][id]) {
+		return;
+	}
+	let elementContainer = document.createElement('div');
+	elementContainer.className = 'people-container';
+	peopleListElement.appendChild(elementContainer);
+
+	if(associateRole != 'team') {
+		let element = document.createElement('div');
+		element.className = 'people-img';
+		elementContainer.appendChild(element);
+		if(imgUrl != null) {
+			element.style.backgroundImage = `url(${imgUrl})`;
+		}
+	}
+
+	element = document.createElement('div');
+	element.className = 'people-text';
+	element.textContent = userName;
+	elementContainer.appendChild(element);
+
+	associate[associateRole][id] = true;
+
+	addRemoveOption(elementContainer, peopleListElement, associate, associateRole, id);
+}
+
+function addRemoveOption(elementContainer, elementContainerList, associate, associateRole, id) {
+	let closeElement = document.createElement('div');
+	closeElement.className = 'close mouseover';
+	closeElement.addEventListener('click', () => {
+		delete associate[associateRole][id];
+		elementContainerList.removeChild(elementContainer);
+	})
+	elementContainer.appendChild(closeElement);
+
+	let closeIconElement = document.createElement('div');
+	closeIconElement.className = 'close-icon';
+	closeElement.appendChild(closeIconElement);
+}
+
 function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, associateRole) {
 	resultElement.addEventListener('click', () => {
-		if(associate[associateRole][id]) {
-			return;
-		}
-
-		let elementContainer = document.createElement('div');
-		elementContainer.className = 'people-container';
-		peopleListElement.appendChild(elementContainer);
-
-		if(associateRole != 'team') {
-			let element = document.createElement('div');
-			element.className = 'people-img';
-			elementContainer.appendChild(element);
-			if(imgUrl != null) {
-				element.style.backgroundImage = `url(${imgUrl})`;
-			}
-		}
-
-		element = document.createElement('div');
-		element.className = 'people-text';
-		element.textContent = userName;
-		elementContainer.appendChild(element);
-
-		let closeElement = document.createElement('div');
-		closeElement.className = 'close mouseover';
-		closeElement.addEventListener('click', () => {
-			delete associate[associateRole][id];
-			peopleListElement.removeChild(elementContainer);
-		})
-
-		let closeIconElement = document.createElement('div');
-		closeIconElement.className = 'close-icon';
-
-		closeElement.appendChild(closeIconElement);
-		elementContainer.appendChild(closeElement);
-
-		associate[associateRole][id] = true;
+		addToList(imgUrl, userName, id, peopleListElement, associateRole, associate)
 	})
 }
 
@@ -191,6 +182,7 @@ async function createNewProject() {
 	}
 }
 
+// Click events
 ownerSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
 	let searchResult = await searchMethod(ownerSearchKeyWord.value);
@@ -217,30 +209,6 @@ teamSearchBtn.addEventListener('click', async() => {
 	let searchResult = await searchMethod(teamSearchKeyWord.value);
 
 	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team');
-})
-
-ownerSearchKeyWord.addEventListener('keypress', (event) => {
-	if(event.key === 'Enter') {
-		ownerSearchBtn.click();
-	}
-})
-
-reviewerSearchKeyWord.addEventListener('keypress', (event) => {
-	if(event.key === 'Enter') {
-		reviewerSearchBtn.click();
-	}
-})
-
-followerSearchKeyWord.addEventListener('keypress', (event) => {
-	if(event.key === 'Enter') {
-		followerSearchBtn.click();
-	}
-})
-
-teamSearchKeyWord.addEventListener('keypress', (event) => {
-	if(event.key === 'Enter') {
-		teamSearchBtn.click();
-	}
 })
 
 window.addEventListener('click', (event) => {
@@ -271,3 +239,6 @@ addProjectBtn.addEventListener('click', () => {
 		alert(checkContentResult);
 	}
 })
+
+// Enter events
+addEnterEffect([ownerSearchKeyWord, reviewerSearchKeyWord, teamSearchKeyWord], [ownerSearchBtn, reviewerSearchBtn, teamSearchBtn]);
