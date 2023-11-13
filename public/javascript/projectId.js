@@ -17,8 +17,11 @@ const viewmoreBtn = document.getElementById('project-viewmore');
 const statusSelect = document.getElementById('project-status-value');
 const editProjectBtn = document.getElementById('edit-project');
 const cancelEditBtn = document.getElementById('cancel-edit-project');
+const saveBtn = document.getElementById('save-project');
 const darkBackgrountElement = document.querySelector('.dark-background');
 const editProjectAreaElement = document.querySelector('.edit-project-area');
+const summaryElement = document.getElementById('summary-input-content');
+const descriptionElement = document.getElementById('description-input');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
@@ -257,6 +260,42 @@ function changeStatusColor() {
 	}
 }
 
+function checkContent() {
+	if(summaryElement.value == '') {
+		summaryElement.classList.add('highlight-block');
+		return 'Summary should not be empty'
+	}
+	else if(summaryElement.value.length > 100) {
+		summaryElement.classList.add('highlight-block');
+		return 'A total of ' + summaryElement.value.length + ' characters in summary exceeds the limit of 100 characters'
+	}
+	else {
+		summaryElement.classList.remove('highlight-block');
+	}
+
+	if(descriptionElement.value.length > 5000) {
+		descriptionElement.classList.add('highlight-block');
+		return 'A total of ' + descriptionElement.value.length + ' characters in summary exceeds the limit of 5000 characters'
+	}
+	else {
+		descriptionElement.classList.remove('highlight-block');
+	}
+
+	if(Object.keys(editAssociate['owner']).length == 0) {
+		ownerSearchKeyWord.classList.add('highlight-block');
+		return 'Owner should not be empty'
+	}
+	else {
+		ownerSearchKeyWord.classList.remove('highlight-block');
+	}
+
+	return 'ok';
+}
+
+function saveProject() {
+	// TODO
+}
+
 // Click events
 viewmoreBtn.addEventListener('click', () => {
 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
@@ -280,6 +319,16 @@ cancelEditBtn.addEventListener('click', () => {
 	darkBackgrountElement.classList.add('unseen');
 	editProjectAreaElement.classList.add('unseen');
 });
+
+saveBtn.addEventListener('click', () => {
+	let checkContentResult = checkContent();
+	if(checkContentResult == 'ok') {
+		saveProject();
+	}
+	else {
+		alert(checkContentResult);
+	}
+})
 
 ownerSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
