@@ -60,7 +60,27 @@ const getContent = async (req, res) => {
 	res.status(result.statusCode).send(result.data);
 }
 
+const update = async (req, res) => {
+	let projectId = req.body.projectId;
+	let content = req.body.content;
+	let changedItemList = Object.keys(content);
+	let changedValueList;
+	let result;
+
+	if(changedItemList.length != 0) {
+		changedValueList = changedItemList.map(itemKey => content[itemKey]);
+		result = await projectModel.updateProject(projectId, changedItemList, changedValueList);
+		if(result.data.message != 'ok') {
+			res.status(result.statusCode).send(result.data);
+			return;
+		}
+	}
+
+	res.send(req.body);
+}
+
 module.exports = {
 	create,
-	getContent
+	getContent,
+	update
 }

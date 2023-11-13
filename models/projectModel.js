@@ -105,8 +105,38 @@ async function getProjectContent(projectId) {
 	}
 }
 
+async function updateProject(projectId, changedItemList, changedValueList) {
+	let sql = 'UPDATE project set ';
+	changedItemList.forEach(item => {
+		sql = sql + item + '=?,';
+	});
+	sql = sql.replace(/,$/g, ' ') + 'WHERE id = ?;'
+	changedValueList.push(projectId);
+	try {
+		await database.databasePool.query(sql, changedValueList);
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
-	getProjectContent
+	getProjectContent,
+	updateProject
 }

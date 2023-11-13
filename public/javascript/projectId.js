@@ -26,7 +26,7 @@ let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
-let editContent = {content:{}};
+let editContent;
 
 async function initProjectId() {
 	await getUser();
@@ -299,7 +299,7 @@ function checkContent() {
 }
 
 function checkDifferentNumber() {
-	editContent = {content:{}};
+	editContent = {projectId: projectId, content:{}};
 	let contentChangeLength = checkProjectContent();
 	let ownerChangeLengh = checkAssociateList('owner');
 	let reviewerChangeLengh = checkAssociateList('reviewer');
@@ -336,6 +336,23 @@ function checkAssociateList(associateRole) {
 	return Object.keys(editContent[associateRole]['delete']).length + editContent[associateRole]['add'];
 }
 
+async function updateProject() {
+	let response = await fetch("/api_project/", {
+		method: "PATCH",
+		body: JSON.stringify(editContent),
+		headers: {'Content-Type':'application/json'}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		alert('Successfully updated!');
+		location.reload();
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 // Click events
 viewmoreBtn.addEventListener('click', () => {
 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
@@ -363,7 +380,7 @@ cancelEditBtn.addEventListener('click', () => {
 saveBtn.addEventListener('click', () => {
 	let checkContentResult = checkContent();
 	if(checkContentResult == 'ok') {
-		// saveProject();
+		updateProject();
 	}
 	else {
 		alert(checkContentResult);
