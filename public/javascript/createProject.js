@@ -21,8 +21,7 @@ const teamList = document.getElementById('team-list');
 const addProjectBtn = document.getElementById('add-project');
 const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
-let isSearchResultShowing = false;
-let associate = {owner:{}, reviewer:{}, follower:{}, team:{}};
+let createAssociate = {owner:{}, reviewer:{}, follower:{}, team:{}};
 
 async function initCreateProject() {
 	await getUser();
@@ -33,92 +32,6 @@ async function initCreateProject() {
 	else {
 		showMemberNav();
 	}
-}
-
-function addSearchResult(resultData, listContainer, listElement, peopleListElement, associateRole) {
-	listContainer.classList.remove('unseen');
-	isSearchResultShowing = true;
-	listElement.innerHTML = '';
-
-	if(resultData['message'] == 'No results') {
-		element = document.createElement('div');
-		element.textContent = 'No result';
-		listElement.appendChild(element);
-	}
-	else {
-		let resultList = resultData['result'];
-		for(let resultIdx = 0; resultIdx < resultList.length; resultIdx++) {
-			let elementContainer = document.createElement('div');
-			elementContainer.className = 'search-people-container mouseover';
-			listElement.appendChild(elementContainer);
-
-			let imgUrl = null;
-			if(associateRole != 'team') {
-				let element = document.createElement('div');
-				element.className = 'people-img';
-				if(resultList[resultIdx]['image_filename'] != null) {
-					imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${resultList[resultIdx]['image_filename']}`;
-					element.style.backgroundImage = `url(${imgUrl})`;
-				}
-				elementContainer.appendChild(element);
-			}
-
-			let userName = resultList[resultIdx]['name'];
-			element = document.createElement('div');
-			element.className = 'people-text';
-			element.textContent = userName;
-			elementContainer.appendChild(element);
-
-			addClickEffect(elementContainer, imgUrl, userName, resultList[resultIdx]['id'], peopleListElement, associateRole);
-		}
-	}
-}
-
-function addToList(imgUrl, userName, id, peopleListElement, associateRole, associate) {
-	if(associate[associateRole][id]) {
-		return;
-	}
-	let elementContainer = document.createElement('div');
-	elementContainer.className = 'people-container';
-	peopleListElement.appendChild(elementContainer);
-
-	if(associateRole != 'team') {
-		let element = document.createElement('div');
-		element.className = 'people-img';
-		elementContainer.appendChild(element);
-		if(imgUrl != null) {
-			element.style.backgroundImage = `url(${imgUrl})`;
-		}
-	}
-
-	element = document.createElement('div');
-	element.className = 'people-text';
-	element.textContent = userName;
-	elementContainer.appendChild(element);
-
-	associate[associateRole][id] = true;
-
-	addRemoveOption(elementContainer, peopleListElement, associate, associateRole, id);
-}
-
-function addRemoveOption(elementContainer, elementContainerList, associate, associateRole, id) {
-	let closeElement = document.createElement('div');
-	closeElement.className = 'close mouseover';
-	closeElement.addEventListener('click', () => {
-		delete associate[associateRole][id];
-		elementContainerList.removeChild(elementContainer);
-	})
-	elementContainer.appendChild(closeElement);
-
-	let closeIconElement = document.createElement('div');
-	closeIconElement.className = 'close-icon';
-	closeElement.appendChild(closeIconElement);
-}
-
-function addClickEffect(resultElement, imgUrl, userName, id, peopleListElement, associateRole) {
-	resultElement.addEventListener('click', () => {
-		addToList(imgUrl, userName, id, peopleListElement, associateRole, associate)
-	})
 }
 
 function checkContent() {
@@ -142,7 +55,7 @@ function checkContent() {
 		descriptionElement.classList.remove('highlight-block');
 	}
 
-	if(Object.keys(associate['owner']).length == 0) {
+	if(Object.keys(createAssociate['owner']).length == 0) {
 		ownerSearchKeyWord.classList.add('highlight-block');
 		return 'Owner should not be empty'
 	}
@@ -167,7 +80,7 @@ async function createNewProject() {
 							   'priority': priority,
 							   'deadline': deadline,
 							   'creator': creator,
-							   'associate': associate
+							   'associate': createAssociate
 		}),
 		headers: {'Content-Type':'application/json'}
 	});
@@ -187,46 +100,42 @@ ownerSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
 	let searchResult = await searchMethod(ownerSearchKeyWord.value);
 
-	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner');
+	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner', createAssociate);
 })
 
 reviewerSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-reviewer').checked ? searchId : searchName;
 	let searchResult = await searchMethod(reviewerSearchKeyWord.value);
 
-	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer');
+	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer', createAssociate);
 })
 
 followerSearchBtn.addEventListener('click', async() => {
 	searchMethod = document.getElementById('select-id-follower').checked ? searchId : searchName;
 	let searchResult = await searchMethod(followerSearchKeyWord.value);
 
-	addSearchResult(searchResult['data'], followerSearchContainerElement, followerSearchListElement, followerPeopleList, 'follower');
+	addSearchResult(searchResult['data'], followerSearchContainerElement, followerSearchListElement, followerPeopleList, 'follower', createAssociate);
 })
 
 teamSearchBtn.addEventListener('click', async() => {
 	searchMethod = searchTeam;
 	let searchResult = await searchMethod(teamSearchKeyWord.value);
 
-	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team');
+	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', createAssociate);
 })
 
 window.addEventListener('click', (event) => {
-	if(isSearchResultShowing) {
-		if(!ownerSearchContainerElement.classList.contains('unseen')) {
-			ownerSearchContainerElement.classList.add('unseen');
-		}
-		if(!reviewerSearchContainerElement.classList.contains('unseen')) {
-			reviewerSearchContainerElement.classList.add('unseen');
-		}
-		if(!followerSearchContainerElement.classList.contains('unseen')) {
-			followerSearchContainerElement.classList.add('unseen');
-		}
-		if(!teamSearchContainerElement.classList.contains('unseen')) {
-			teamSearchContainerElement.classList.add('unseen');
-		}
-		
-		isSearchResultShowing = false;
+	if(!ownerSearchContainerElement.classList.contains('unseen')) {
+		ownerSearchContainerElement.classList.add('unseen');
+	}
+	if(!reviewerSearchContainerElement.classList.contains('unseen')) {
+		reviewerSearchContainerElement.classList.add('unseen');
+	}
+	if(!followerSearchContainerElement.classList.contains('unseen')) {
+		followerSearchContainerElement.classList.add('unseen');
+	}
+	if(!teamSearchContainerElement.classList.contains('unseen')) {
+		teamSearchContainerElement.classList.add('unseen');
 	}
 });
 
