@@ -26,6 +26,7 @@ let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
+let editContent = {content:{}};
 
 async function initProjectId() {
 	await getUser();
@@ -62,115 +63,6 @@ async function getProjectContent() {
 	else {
 		alert('something went wrong, please redirect and try again');
 	}
-}
-
-function addEditDefaultRoles(imgUrl, userName, id, peopleListElement, associateRole) {
-	if(editAssociate[associateRole][id]) {
-		return;
-	}
-	let elementContainer = document.createElement('div');
-	elementContainer.className = 'people-container';
-	peopleListElement.appendChild(elementContainer);
-
-	if(associateRole != 'team') {
-		let element = document.createElement('div');
-		element.className = 'people-img';
-		elementContainer.appendChild(element);
-		if(imgUrl != null) {
-			element.style.backgroundImage = `url(${imgUrl})`;
-		}
-	}
-
-	element = document.createElement('div');
-	element.className = 'people-text';
-	element.textContent = userName;
-	elementContainer.appendChild(element);
-
-	let closeElement = document.createElement('div');
-	closeElement.className = 'close mouseover';
-	closeElement.addEventListener('click', () => {
-		delete editAssociate[associateRole][id];
-		peopleListElement.removeChild(elementContainer);
-	})
-
-	let closeIconElement = document.createElement('div');
-	closeIconElement.className = 'close-icon';
-
-	closeElement.appendChild(closeIconElement);
-	elementContainer.appendChild(closeElement);
-
-	editAssociate[associateRole][id] = true;
-}
-
-function setEditProjectContent() {
-	let element;
-	let peopleListElement;
-	let imgUrl;
-
-	element = document.getElementById('summary-input-content');
-	element.value = projectData['summary'];
-
-	element = document.getElementById('description-input');
-	element.value = projectData['description'];
-
-	element = document.getElementById('create-priority');
-	element.value = projectData['priority'];
-
-	if(projectData['deadline'] != null) {
-		element = document.getElementById('deadline-input');
-		element.textContent = projectData['deadline'];
-	}
-
-	editAssociate = {owner:{}, reviewer:{}, team:{}};
-
-	// set owner
-	ownerPeopleList.innerHTML = '';
-	for(let i = 0; i < projectData['owner'].length; i++) {
-		imgUrl = null;
-		if(projectData['owner'][i]['image_filename'] != null) {
-			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${projectData['owner'][i]['image_filename']}`;
-		}
-		addEditDefaultRoles(imgUrl, projectData['owner'][i]['name'], projectData['owner'][i]['id'], ownerPeopleList, 'owner');
-	}
-
-	// set reviewer
-	peopleListElement = document.getElementById('reviewer-people-list');
-	peopleListElement.innerHTML = '';
-	for(let i = 0; i < projectData['reviewer'].length; i++) {
-		imgUrl = null;
-		if(projectData['reviewer'][i]['image_filename'] != null) {
-			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${projectData['reviewer'][i]['image_filename']}`;
-		}
-		addEditDefaultRoles(imgUrl, projectData['reviewer'][i]['name'], projectData['reviewer'][i]['id'], peopleListElement, 'reviewer');
-	}
-
-	// set team
-	peopleListElement = document.getElementById('team-list');
-	peopleListElement.innerHTML = '';
-	for(let i = 0; i < projectData['team'].length; i++) {
-		addEditDefaultRoles(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
-	}
-}
-
-function setPeopleForEditProject(imgUrl, name, peopleListElement) {
-	let element;
-	let elementContainer;
-
-	elementContainer = document.createElement('div');
-	elementContainer.className = 'project-people-container';
-	peopleListElement.appendChild(elementContainer);
-
-	element = document.createElement('div');
-	element.className = 'people-img';
-	if(imgUrl != null) {
-		element.style.backgroundImage = `url(${imgUrl})`;
-	}
-	elementContainer.appendChild(element);
-
-	element = document.createElement('div');
-	element.className = 'people-text';
-	element.textContent = name;
-	elementContainer.appendChild(element);
 }
 
 function setProjectContent(data) {
@@ -243,6 +135,116 @@ function setTeam(name, teamListElement) {
 	addNameToContainer(name, elementContainer);
 }
 
+function addEditDefaultRoles(imgUrl, userName, id, peopleListElement, associateRole) {
+	if(editAssociate[associateRole][id]) {
+		return;
+	}
+	let elementContainer = document.createElement('div');
+	elementContainer.className = 'people-container';
+	peopleListElement.appendChild(elementContainer);
+
+	if(associateRole != 'team') {
+		let element = document.createElement('div');
+		element.className = 'people-img';
+		elementContainer.appendChild(element);
+		if(imgUrl != null) {
+			element.style.backgroundImage = `url(${imgUrl})`;
+		}
+	}
+
+	element = document.createElement('div');
+	element.className = 'people-text';
+	element.textContent = userName;
+	elementContainer.appendChild(element);
+
+	let closeElement = document.createElement('div');
+	closeElement.className = 'close mouseover';
+	closeElement.addEventListener('click', () => {
+		delete editAssociate[associateRole][id];
+		peopleListElement.removeChild(elementContainer);
+	})
+
+	let closeIconElement = document.createElement('div');
+	closeIconElement.className = 'close-icon';
+
+	closeElement.appendChild(closeIconElement);
+	elementContainer.appendChild(closeElement);
+
+	editAssociate[associateRole][id] = true;
+}
+
+function setEditProjectContent() {
+	let element;
+	let peopleListElement;
+	let imgUrl;
+
+	element = document.getElementById('summary-input-content');
+	element.value = projectData['summary'];
+
+	element = document.getElementById('description-input');
+	element.value = projectData['description'];
+
+	element = document.getElementById('create-priority');
+	element.value = projectData['priority'];
+
+	if(projectData['deadline'] != null) {
+		element = document.getElementById('deadline-input');
+		projectData['deadline'] = projectData['deadline'].replace(/\//g, '-');
+		element.value = projectData['deadline'];
+	}
+
+	editAssociate = {owner:{}, reviewer:{}, team:{}};
+
+	// set owner
+	ownerPeopleList.innerHTML = '';
+	for(let i = 0; i < projectData['owner'].length; i++) {
+		imgUrl = null;
+		if(projectData['owner'][i]['image_filename'] != null) {
+			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${projectData['owner'][i]['image_filename']}`;
+		}
+		addEditDefaultRoles(imgUrl, projectData['owner'][i]['name'], projectData['owner'][i]['id'], ownerPeopleList, 'owner');
+	}
+
+	// set reviewer
+	peopleListElement = document.getElementById('reviewer-people-list');
+	peopleListElement.innerHTML = '';
+	for(let i = 0; i < projectData['reviewer'].length; i++) {
+		imgUrl = null;
+		if(projectData['reviewer'][i]['image_filename'] != null) {
+			imgUrl = `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${projectData['reviewer'][i]['image_filename']}`;
+		}
+		addEditDefaultRoles(imgUrl, projectData['reviewer'][i]['name'], projectData['reviewer'][i]['id'], peopleListElement, 'reviewer');
+	}
+
+	// set team
+	peopleListElement = document.getElementById('team-list');
+	peopleListElement.innerHTML = '';
+	for(let i = 0; i < projectData['team'].length; i++) {
+		addEditDefaultRoles(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
+	}
+}
+
+function setPeopleForEditProject(imgUrl, name, peopleListElement) {
+	let element;
+	let elementContainer;
+
+	elementContainer = document.createElement('div');
+	elementContainer.className = 'project-people-container';
+	peopleListElement.appendChild(elementContainer);
+
+	element = document.createElement('div');
+	element.className = 'people-img';
+	if(imgUrl != null) {
+		element.style.backgroundImage = `url(${imgUrl})`;
+	}
+	elementContainer.appendChild(element);
+
+	element = document.createElement('div');
+	element.className = 'people-text';
+	element.textContent = name;
+	elementContainer.appendChild(element);
+}
+
 function changeStatusColor() {
 	const selectedValue = statusSelect.value;
 
@@ -289,11 +291,49 @@ function checkContent() {
 		ownerSearchKeyWord.classList.remove('highlight-block');
 	}
 
+	if(checkDifferentNumber() == 0) {
+		return 'nothing is changed'
+	}
+
 	return 'ok';
 }
 
-function saveProject() {
-	// TODO
+function checkDifferentNumber() {
+	editContent = {content:{}};
+	let contentChangeLength = checkProjectContent();
+	let ownerChangeLengh = checkAssociateList('owner');
+	let reviewerChangeLengh = checkAssociateList('reviewer');
+	let teamChangeLengh = checkAssociateList('team');
+
+	return contentChangeLength + ownerChangeLengh + reviewerChangeLengh + teamChangeLengh;
+}
+
+function checkProjectContent() {
+	let priority = document.getElementById('create-priority').value;
+	let deadline = document.getElementById('deadline-input').value == '' ? null : document.getElementById('deadline-input').value;
+
+	if(projectData['summary'] != summaryElement.value) {
+		editContent.content['summary'] = summaryElement.value;
+	}
+	if(projectData['description'] != descriptionElement.value) {
+		editContent.content['description'] = descriptionElement.value;
+	}
+	if(projectData['priority'] != priority) {
+		editContent.content['priority'] = priority;
+	}
+	if(projectData['deadline'] != deadline) {
+		editContent.content['deadline'] = deadline;
+	}
+
+	return Object.keys(editContent.content).length;
+}
+
+function checkAssociateList(associateRole) {
+	editContent[associateRole] = {};
+	editContent[associateRole]['delete'] = Object.keys(originalAssociate[associateRole]).filter(key => !editAssociate[associateRole].hasOwnProperty(key));
+	editContent[associateRole]['add'] = Object.keys(editAssociate[associateRole]).filter(key => !originalAssociate[associateRole].hasOwnProperty(key));
+
+	return Object.keys(editContent[associateRole]['delete']).length + editContent[associateRole]['add'];
 }
 
 // Click events
@@ -323,7 +363,7 @@ cancelEditBtn.addEventListener('click', () => {
 saveBtn.addEventListener('click', () => {
 	let checkContentResult = checkContent();
 	if(checkContentResult == 'ok') {
-		saveProject();
+		// saveProject();
 	}
 	else {
 		alert(checkContentResult);
