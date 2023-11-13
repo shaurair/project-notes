@@ -723,14 +723,20 @@ html,body {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
+	width: fit-content;
 }
 .add-comment-text {
-	width: 470px;
-    height: 50px;
+	width: 50vw;
+    height: 100px;
 }
-.add-comment-button {
-	height: 30px;
-	width: min-content;
+.add-comment-btn-container {
+	display: flex;
+	justify-content: end;
+}
+#add-comment {
+	width: fit-content;
+	background-color: var(--color-head-text);
+    color: white;
 }
 .note-title-project {
 	color: var(--color-personal);
