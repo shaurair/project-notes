@@ -725,7 +725,7 @@ html,body {
 	gap: 5px;
 	width: fit-content;
 }
-.add-comment-text {
+#add-comment-text {
 	width: 50vw;
     height: 100px;
 }
@@ -1221,7 +1221,7 @@ html,body {
 	.input-note {
 		width: calc(100% - 20px);
 	}
-	.add-comment-text {
+	#add-comment-text {
 		width: calc(100% - 40px);
 	}
 	.input-note-project {

@@ -100,8 +100,30 @@ const update = async (req, res) => {
 	res.send(req.body);
 }
 
+const addComment = async (req, res) => {
+	let projectId = req.body.projectId;
+	let comment = req.body.comment;
+	let datetime = req.body.datetime;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.addComment(projectId, memberInfo['id'], comment, datetime);
+	res.status(result.statusCode).send(result.data);
+}
+
 module.exports = {
 	create,
 	getContent,
-	update
+	update,
+	addComment
 }

@@ -22,6 +22,8 @@ const darkBackgrountElement = document.querySelector('.dark-background');
 const editProjectAreaElement = document.querySelector('.edit-project-area');
 const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
+const commentInputElement = document.getElementById('add-comment-text');
+const addCommentBtn = document.getElementById('add-comment');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
@@ -353,6 +355,29 @@ async function updateProject() {
 	}
 }
 
+async function addComment(datetime) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/comment`, {
+		method: 'POST',
+		headers: {Authorization: `Bearer ${token}`,
+								'Content-Type':'application/json'
+				},
+		body: JSON.stringify( {
+			projectId: projectId,
+			datetime: datetime,
+			comment: commentInputElement.value
+		})
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		alert('Successfully updated!');
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 // Select change events
 statusSelect.addEventListener('change', changeStatusColor);
 
@@ -407,6 +432,26 @@ teamSearchBtn.addEventListener('click', async() => {
 	let searchResult = await searchMethod(teamSearchKeyWord.value);
 
 	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', editAssociate);
+})
+
+addCommentBtn.addEventListener('click', () => {
+	if(commentInputElement.value == '') {
+		alert('Comment should not be empty.');
+		return;
+	}
+	else if(commentInputElement.value.length > 2000) {
+		alert('A total of ' + commentInputElement.value.length + ' characters in summary exceeds the limit of 2000 characters');
+		return;
+	}
+
+	const now = new Date();
+	const options = {
+		year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', 
+	};
+	const localTime = now.toLocaleString('en-US', options);
+	const formattedDate = localTime.split(', ').join(' ');
+
+	addComment(formattedDate);
 })
 
 window.addEventListener('click', () => {
