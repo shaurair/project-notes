@@ -24,6 +24,7 @@ const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
 const commentInputElement = document.getElementById('add-comment-text');
 const addCommentBtn = document.getElementById('add-comment');
+const commentContainer = document.querySelector('.comment-container');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
@@ -158,14 +159,14 @@ function setComment(commentList) {
 		document.getElementById('no-comment').classList.remove('unseen');
 	}
 	else {
-		let commentContainer = document.querySelector('.comment-container');
+		
 		for(let i = 0; i < commentList.length; i++) {
-			addCommentBlock(commentContainer, commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment'])
+			addCommentBlock(commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment']);
 		}
 	}
 }
 
-function addCommentBlock(commentContainer, imageFilename, userName, userId, datetime, comment) {
+function addCommentBlock(imageFilename, userName, userId, datetime, comment) {
 	let commentBlock = document.createElement('div');
 	commentBlock.className = 'comment-block';
 	commentContainer.appendChild(commentBlock);
@@ -451,7 +452,8 @@ async function addComment(datetime) {
 	let result = await response.json();
 
 	if(response.ok) {
-		alert('Successfully updated!');
+		addCommentBlock(userInfo['image_filename'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value);
+		commentInputElement.value = '';
 	}
 	else {
 		alert(result["message"] + " Please redirect this page and try again.");
