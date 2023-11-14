@@ -7,5 +7,6 @@ router.get('/content', projectController.getContent);
 router.get('/comment', projectController.getComment);
 router.patch('/', projectController.update);
 router.post('/comment', projectController.addComment);
+router.delete('/comment', projectController.deleteComment);
 
 module.exports = router;

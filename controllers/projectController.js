@@ -61,7 +61,7 @@ const getContent = async (req, res) => {
 }
 
 const getComment = async (req, res) => {
-	let projectId = req.query.id;
+	let projectId = req.query.projectId;
 	let userToken;
 	let memberInfo;
 	let result;
@@ -140,10 +140,30 @@ const addComment = async (req, res) => {
 	res.status(result.statusCode).send(result.data);
 }
 
+const deleteComment = async (req, res) => {
+	let commentId = req.query.commentId;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.deleteComment(commentId);
+	res.status(result.statusCode).send(result.data);
+}
+
 module.exports = {
 	create,
 	getContent,
 	update,
 	addComment,
-	getComment
+	getComment,
+	deleteComment
 }

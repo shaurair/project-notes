@@ -339,6 +339,10 @@ html,body {
     justify-content: center;
     align-items: center;
 }
+.action-opt:hover {
+	font-weight: 600;
+    color: black;
+}
 .action-image {
 	width: 25px;
 	height: 25px;
@@ -574,7 +578,7 @@ html,body {
 .project-minor {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 20px;
 	box-sizing: border-box;
     padding-right: 30px;
 	max-width: 300px;
@@ -631,6 +635,7 @@ html,body {
     font-weight: 700;
     border-style: none;
     height: 35px;
+	margin-bottom: 10px;
 }
 #project-summary {
 	width: 600px;
@@ -713,6 +718,7 @@ html,body {
 	color: #555;
 	font-size: 16px;
 	font-weight: 400;
+	white-space: pre;
 }
 .actions-container {
 	display: flex;
@@ -1184,9 +1190,6 @@ html,body {
 	}
 	.main-create-project > .all-content {
 		width: calc(100% - 30px);
-	}
-	.status-select {
-		margin-bottom: 10px;
 	}
 	#project-summary {
 		width: calc(100vw - 250px);

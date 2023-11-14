@@ -71,7 +71,7 @@ async function getProjectContent() {
 
 async function getProjectComment() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment?id=${projectId}`, {
+	let response = await fetch(`/api_project/comment?projectId=${projectId}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
@@ -80,7 +80,7 @@ async function getProjectComment() {
 		setComment(result['comment']);
 	}
 	else {
-		alert('something went wrong while acquiring comment, please redirect and try again');
+		alert('something went wrong while loading comment, please redirect and try again');
 	}
 }
 
@@ -159,14 +159,13 @@ function setComment(commentList) {
 		document.getElementById('no-comment').classList.remove('unseen');
 	}
 	else {
-		
 		for(let i = 0; i < commentList.length; i++) {
-			addCommentBlock(commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment']);
+			addCommentBlock(commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment'], commentList[i]['id']);
 		}
 	}
 }
 
-function addCommentBlock(imageFilename, userName, userId, datetime, comment) {
+function addCommentBlock(imageFilename, userName, userId, datetime, comment, commentId) {
 	let commentBlock = document.createElement('div');
 	commentBlock.className = 'comment-block';
 	commentContainer.appendChild(commentBlock);
@@ -207,14 +206,35 @@ function addCommentBlock(imageFilename, userName, userId, datetime, comment) {
 		commentContent.appendChild(commentAction);
 
 		let actionElement = document.createElement('div');
-		actionElement.className = 'action-opt';
+		actionElement.className = 'action-opt mouseover';
 		actionElement.textContent = 'Edit';
 		commentAction.appendChild(actionElement);
 
 		actionElement = document.createElement('div');
-		actionElement.className = 'action-opt';
+		actionElement.className = 'action-opt mouseover';
 		actionElement.textContent = 'Delete';
+		actionElement.addEventListener('click', () => {
+			let userConfirm = confirm('Are you sure to delete this comment?');
+			if(userConfirm) {
+				deleteComment(commentId, commentBlock);
+			}
+		});
 		commentAction.appendChild(actionElement);
+	}
+}
+
+async function deleteComment(commentId, commentBlock) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/comment?commentId=${commentId}`, {
+		method: 'DELETE',
+		headers: {Authorization: `Bearer ${token}`}
+	});
+	
+	if(response.ok) {
+		commentContainer.removeChild(commentBlock);
+	}
+	else {
+		alert('something went wrong while deleting comment, please redirect and try again');
 	}
 }
 
