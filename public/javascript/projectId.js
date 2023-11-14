@@ -39,6 +39,7 @@ async function initProjectId() {
 	else {
 		showMemberNav();
 		getProjectContent();
+		getProjectComment();
 	}
 }
 
@@ -64,6 +65,21 @@ async function getProjectContent() {
 	}
 	else {
 		alert('something went wrong, please redirect and try again');
+	}
+}
+
+async function getProjectComment() {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/comment?id=${projectId}`, {
+								headers: {Authorization: `Bearer ${token}`}
+							});
+	let result = await response.json();
+
+	if(response.ok) {
+		setComment(result['comment']);
+	}
+	else {
+		alert('something went wrong while acquiring comment, please redirect and try again');
 	}
 }
 
@@ -135,6 +151,70 @@ function setTeam(name, teamListElement) {
 	teamListElement.appendChild(elementContainer);
 
 	addNameToContainer(name, elementContainer);
+}
+
+function setComment(commentList) {
+	if(commentList.length == 0) {
+		document.getElementById('no-comment').classList.remove('unseen');
+	}
+	else {
+		let commentContainer = document.querySelector('.comment-container');
+		for(let i = 0; i < commentList.length; i++) {
+			addCommentBlock(commentContainer, commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment'])
+		}
+	}
+}
+
+function addCommentBlock(commentContainer, imageFilename, userName, userId, datetime, comment) {
+	let commentBlock = document.createElement('div');
+	commentBlock.className = 'comment-block';
+	commentContainer.appendChild(commentBlock);
+
+	let commentImg = document.createElement('div');
+	commentImg.className = 'comment-img';
+	if(imageFilename!= null) {
+		commentImg.style.backgroundImage = `url(https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename})`;
+	}
+	commentBlock.appendChild(commentImg);
+
+	let commentContent = document.createElement('div');
+	commentContent.className = 'comment-content';
+	commentBlock.appendChild(commentContent);
+
+	let commentInfo = document.createElement('div');
+	commentInfo.className = 'comment-info';
+	commentContent.appendChild(commentInfo);
+
+	let commentInfoUser = document.createElement('div');
+	commentInfoUser.className = 'comment-info-user';
+	commentInfoUser.textContent = userName;
+	commentInfo.appendChild(commentInfoUser);
+
+	let commentInfoDatetime = document.createElement('div');
+	commentInfoDatetime.className = 'comment-info-datetime';
+	commentInfoDatetime.textContent = datetime;
+	commentInfo.appendChild(commentInfoDatetime);
+
+	let commentText = document.createElement('div');
+	commentText.className = 'comment-text';
+	commentText.textContent = comment;
+	commentContent.appendChild(commentText);
+
+	if(userId == userInfo['id']) {
+		let commentAction = document.createElement('div');
+		commentAction.className = 'actions-container';
+		commentContent.appendChild(commentAction);
+
+		let actionElement = document.createElement('div');
+		actionElement.className = 'action-opt';
+		actionElement.textContent = 'Edit';
+		commentAction.appendChild(actionElement);
+
+		actionElement = document.createElement('div');
+		actionElement.className = 'action-opt';
+		actionElement.textContent = 'Delete';
+		commentAction.appendChild(actionElement);
+	}
 }
 
 function addEditDefaultRoles(imgUrl, userName, id, peopleListElement, associateRole) {
