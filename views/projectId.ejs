@@ -23,16 +23,6 @@
 			</div>
 			<div class="project-title project-text"><div class="project-id"><div>Project-<%= id%></div></div><div class="project-summary-container"><div id="project-summary"></div></div></div>
 		</div>
-		<div class="project-status">
-			<div class="main-block-vertical">
-				<select id="project-status-value" class="dropdown-select status-select">
-					<option value = 'OPEN'>OPEN</option>
-					<option value = 'IN PROGRESS'>IN PROGRESS</option>
-					<option value = 'REVIEWING'>REVIEWING</option>
-					<option value = 'DONE'>DONE</option>
-				</select>
-			</div>
-		</div>
 	</div>
 	<div class="project-content sight-fit">
 		<div class="project-main">
@@ -42,41 +32,8 @@
 			</div>
 			<div class="comment-block-vertical">
 				<div class="block-title project-text">Comment</div>
-				<div class="block-content normal-text unseen">
-					No comment yet.
-				</div>
-				<div class="comment-container">
-					<div class="comment-block">
-						<div class="comment-img"></div>
-						<div class="comment-content">
-							<div class="comment-info">
-								<div class="comment-info-user">Amy</div><div class="comment-info-datetime">11/May/23 11:50 AM.</div>
-							</div>
-							<div class="comment-text">
-								This is good.
-							</div>
-							<div class="actions-container unseen">
-								<div class="action-opt">Edit</div>
-								<div class="action-opt">Delete</div>
-							</div>
-						</div>
-					</div>
-					<div class="comment-block">
-						<div class="comment-img"></div>
-						<div class="comment-content">
-							<div class="comment-info">
-								<div class="comment-info-user">Mike</div><div class="comment-info-datetime">12/May/23 11:55 AM.</div>
-							</div>
-							<div class="comment-text">
-								OK.pass
-							</div>
-							<div class="actions-container">
-								<div class="action-opt">Edit</div>
-								<div class="action-opt">Delete</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<div id="no-comment" class="block-content normal-text unseen">No comment yet.</div>
+				<div class="comment-container"></div>
 				<div class="add-comment-container normal-text">
 					<textarea id="add-comment-text" type="text" placeholder="Leave a comment"></textarea>
 					<div class="add-comment-btn-container">
@@ -100,6 +57,16 @@
 			</div>
 		</div>
 		<div class="project-minor">
+			<div class="project-status">
+				<div class="main-block-vertical">
+					<select id="project-status-value" class="dropdown-select status-select">
+						<option value = 'OPEN'>OPEN</option>
+						<option value = 'IN PROGRESS'>IN PROGRESS</option>
+						<option value = 'REVIEWING'>REVIEWING</option>
+						<option value = 'DONE'>DONE</option>
+					</select>
+				</div>
+			</div>
 			<div class="minor-block">
 				<div class="minor-block-title normal-text">Priority</div>
 				<div id="project-priority" class="block-content"></div>

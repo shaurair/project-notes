@@ -622,9 +622,7 @@ html,body {
 }
 .project-status {
 	display: flex;
-	justify-content: end;
 	box-sizing: border-box;
-    padding-right: 50px;
 }
 .status-select {
 	background-color: white;
@@ -690,6 +688,9 @@ html,body {
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 50%;
+}
+#no-comment {
+	width: auto;
 }
 .comment-content {
 	display: flex;
@@ -1185,7 +1186,6 @@ html,body {
 		width: calc(100% - 30px);
 	}
 	.status-select {
-		margin-left: 40px;
 		margin-bottom: 10px;
 	}
 	#project-summary {
