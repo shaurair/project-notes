@@ -272,6 +272,30 @@ async function deleteComment(commentId) {
 	}
 }
 
+async function updateComment(commentId, comment) {
+	let sql = 'UPDATE comment set comment = ? WHERE id = ?;';
+	try {
+		await database.databasePool.query(sql, [comment, commentId]);
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
@@ -281,5 +305,6 @@ module.exports = {
 	updateAssociateGroup,
 	addComment,
 	getComment,
-	deleteComment
+	deleteComment,
+	updateComment
 }

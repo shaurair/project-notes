@@ -732,13 +732,18 @@ html,body {
 	gap: 5px;
 	width: fit-content;
 }
+.edit-comment-text {
+	width: calc(50vw - 45px);
+    height: 100px;
+}
 #add-comment-text {
-	width: 50vw;
+	width: calc(50vw - 45px);
     height: 100px;
 }
 .add-comment-btn-container {
 	display: flex;
 	justify-content: end;
+	gap: 10px;
 }
 #add-comment {
 	width: fit-content;

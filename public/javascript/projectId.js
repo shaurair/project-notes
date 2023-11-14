@@ -41,6 +41,7 @@ async function initProjectId() {
 		showMemberNav();
 		getProjectContent();
 		getProjectComment();
+		setCommentImage();
 	}
 }
 
@@ -165,6 +166,12 @@ function setComment(commentList) {
 	}
 }
 
+function setCommentImage() {
+	if(userInfo['file_name'] != null) {
+		document.getElementById('add-comment-img').style.backgroundImage = `url(https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${userInfo['file_name']})`;;
+	}
+}
+
 function addCommentBlock(imageFilename, userName, userId, datetime, comment, commentId) {
 	let commentBlock = document.createElement('div');
 	commentBlock.className = 'comment-block';
@@ -208,6 +215,53 @@ function addCommentBlock(imageFilename, userName, userId, datetime, comment, com
 		let actionElement = document.createElement('div');
 		actionElement.className = 'action-opt mouseover';
 		actionElement.textContent = 'Edit';
+		actionElement.addEventListener('click', () => {
+			commentText.classList.add('unseen');
+			commentAction.classList.add('unseen');
+			let commentEditInput = document.createElement('textarea');
+			commentEditInput.type = 'text';
+			commentEditInput.value = commentText.textContent;
+			commentEditInput.className = 'edit-comment-text';
+			commentContent.appendChild(commentEditInput);
+
+			let buttonGroupContainer = document.createElement('div');
+			buttonGroupContainer.className = 'add-comment-btn-container';
+			commentContent.appendChild(buttonGroupContainer);
+
+			let buttonElement = document.createElement('div');
+			buttonElement.className = 'create-button project-text mouseover';
+			buttonElement.textContent = 'Cancel';
+			buttonElement.addEventListener('click', () => {
+				commentText.classList.remove('unseen');
+				commentAction.classList.remove('unseen');
+				commentContent.removeChild(commentEditInput);
+				commentContent.removeChild(buttonGroupContainer);
+			});
+			buttonGroupContainer.appendChild(buttonElement);
+
+			buttonElement = document.createElement('div');
+			buttonElement.className = 'create-button highlight-text mouseover';
+			buttonElement.textContent = 'Save';
+			buttonElement.addEventListener('click', async () => {
+				if(commentEditInput.value === comment) {
+					commentText.classList.remove('unseen');
+					commentAction.classList.remove('unseen');
+					commentContent.removeChild(commentEditInput);
+					commentContent.removeChild(buttonGroupContainer);
+				}
+				else {
+					let updateResult = await updateComment(commentId, commentEditInput.value);
+					if(updateResult == 'ok') {
+						commentText.textContent = commentEditInput.value;
+						commentText.classList.remove('unseen');
+						commentAction.classList.remove('unseen');
+						commentContent.removeChild(commentEditInput);
+						commentContent.removeChild(buttonGroupContainer);
+					}
+				}
+			});
+			buttonGroupContainer.appendChild(buttonElement);
+		})
 		commentAction.appendChild(actionElement);
 
 		actionElement = document.createElement('div');
@@ -472,8 +526,30 @@ async function addComment(datetime) {
 	let result = await response.json();
 
 	if(response.ok) {
-		addCommentBlock(userInfo['image_filename'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value);
+		addCommentBlock(userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value);
 		commentInputElement.value = '';
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
+async function updateComment(commentId, comment) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/comment`, {
+		method: 'PATCH',
+		headers: {Authorization: `Bearer ${token}`,
+								'Content-Type':'application/json'
+				},
+		body: JSON.stringify( {
+			commentId: commentId,
+			comment: comment
+		})
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		return 'ok'
 	}
 	else {
 		alert(result["message"] + " Please redirect this page and try again.");
