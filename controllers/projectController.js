@@ -60,6 +60,25 @@ const getContent = async (req, res) => {
 	res.status(result.statusCode).send(result.data);
 }
 
+const getComment = async (req, res) => {
+	let projectId = req.query.id;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.getComment(projectId);
+	res.status(result.statusCode).send(result.data);
+}
+
 const update = async (req, res) => {
 	let projectId = req.body.projectId;
 	let content = req.body.content;
@@ -125,5 +144,6 @@ module.exports = {
 	create,
 	getContent,
 	update,
-	addComment
+	addComment,
+	getComment
 }

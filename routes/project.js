@@ -4,6 +4,7 @@ const projectController = require('../controllers/projectController');
 
 router.post('/', projectController.create);
 router.get('/content', projectController.getContent);
+router.get('/comment', projectController.getComment);
 router.patch('/', projectController.update);
 router.post('/comment', projectController.addComment);
 

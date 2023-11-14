@@ -105,6 +105,32 @@ async function getProjectContent(projectId) {
 	}
 }
 
+async function getComment(projectId) {
+	let sqlComment = 'SELECT comment.*, member.image_filename, member.name FROM comment INNER JOIN member ON comment.member_id = member.id  WHERE project_id = ?;'
+
+	try {
+		let commentResult = await database.databasePool.query(sqlComment, [projectId]);
+
+		return {
+			data: {
+				message: 'ok',
+				comment: commentResult
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 async function updateProject(projectId, changedItemList, changedValueList) {
 	let sql = 'UPDATE project set ';
 	changedItemList.forEach(item => {
@@ -229,5 +255,6 @@ module.exports = {
 	updateProject,
 	updateAssociatePeople,
 	updateAssociateGroup,
-	addComment
+	addComment,
+	getComment
 }
