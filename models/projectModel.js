@@ -117,7 +117,7 @@ async function getComment(projectId, page) {
 		return {
 			data: {
 				message: 'ok',
-				comment: commentResult.slice(0, 5),
+				comment: commentResult.slice(0, limit),
 				nextPage: nextPage
 			},
 			statusCode: 200
@@ -324,16 +324,46 @@ async function updateComment(commentId, comment) {
 	}
 }
 
-async function getProjectMain(memberId, status) {
-	let sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT 5 OFFSET 0;';
+async function getProjectMain(memberId, status, page) {
+	let limit = 5;
+	let offset = page * limit;
+	let sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
 
 	try {
-		let contentResult = await database.databasePool.query(sql, [memberId, status]);
+		let contentResult = await database.databasePool.query(sql, [memberId, status, (limit + 1), offset]);
+		let nextPage = contentResult.length == (limit + 1) ? page + 1 : null;
 
 		return {
 			data: {
 				message: 'ok',
-				content: contentResult,
+				content: contentResult.slice(0, limit),
+				nextPage: nextPage
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
+async function getProjectRole(projectIdList) {
+	let sql = 'SELECT project_id, member.image_filename, member.name, role FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_id in (?);'
+
+	try {
+		let result = await database.databasePool.query(sql, [projectIdList]);
+
+		return {
+			data: {
+				message: 'ok',
+				roles: result
 			},
 			statusCode: 200
 		};
@@ -362,5 +392,6 @@ module.exports = {
 	getComment,
 	deleteComment,
 	updateComment,
-	getProjectMain
+	getProjectMain,
+	getProjectRole
 }

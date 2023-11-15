@@ -192,9 +192,13 @@ const updateComment = async (req, res) => {
 const getProjectMainAndRole = async (req, res) => {
 	let memberId = req.query.memberId;
 	let status = req.query.status;
+	let page = req.query.page;
 	let userToken;
 	let memberInfo;
 	let result;
+	let roleResult;
+	let projectIdList = [];
+	let roles = {};
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
@@ -204,16 +208,32 @@ const getProjectMainAndRole = async (req, res) => {
 		res.status(403).send({data: {"message" : "User not log in"}});
 		return;
 	}
+	result = await projectModel.getProjectMain(memberId, status, page);
+	if(result.data.message != 'ok') {
+		res.status(result.statusCode).send(result.data);
+		return;
+	}
 
-	result = await projectModel.getProjectMain(memberId, status);
 	result.data.content.forEach(content => {
 		if(content.deadline != null) {
 			let date = new Date(content.deadline);
 			content.deadline = format(date, 'yyyy/MM/dd');
 		}
+		projectIdList.push(content.project_id)
+		roles[content.project_id] = {owner:[], reviewer:[]}
 	});
 
-	res.status(result.statusCode).send(result.data);
+	roleResult = await projectModel.getProjectRole(projectIdList);
+	if(roleResult.data.message != 'ok') {
+		res.status(roleResult.statusCode).send(roleResult.data);
+		return;
+	}
+
+	roleResult.data.roles.forEach(role => {
+		roles[role.project_id][role.role].push({name:role.name, image:role.image_filename})
+	})
+
+	res.status(result.statusCode).send({content: result.data.content, roles:roles})
 }
 
 module.exports = {
