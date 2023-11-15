@@ -12,32 +12,15 @@
 	<div class="search-container sight-fit">
 		<div class="dropdown-container">
 			<div class="dropdown">
-				<label class="dropdown-label">I am a</label>
-				<select class="dropdown-select">
-					<option>project assignee</option>
-					<option>project follower</option>
-					<option>Not specify</option>
-				</select>
-			</div>
-			<div class="dropdown">
-				<label class="dropdown-label">Project Status</label>
-				<select class="dropdown-select">
-					<option>In progress / Reviewing</option>
-					<option>Open</option>
-					<option>Done</option>
-					<option>Not specify</option>
-				</select>
-			</div>
-			<div class="dropdown">
-				<label class="dropdown-label">Sorted by</label>
-				<select class="dropdown-select">
-					<option>Priority(critical → minor)</option>
-					<option>Status(open → done)</option>
+				<label class="dropdown-label">I am</label>
+				<select id='role-select' class="dropdown-select">
+					<option value="duty">owner / reviewer</option>
+					<option value="relate">belong to related people / team</option>
 				</select>
 			</div>
 			<div class="search">
-				<label class="dropdown-label">Keyword</label>
-				<input class="keyword-input" type="text" placeholder="project id / summery">
+				<label class="dropdown-label">Keyword in summary</label>
+				<input class="keyword-input" type="text">
 			</div>
 		</div>
 		<div class="search-button-container">
@@ -45,27 +28,28 @@
 		</div>
 	</div>
 	<hr class="separator-sight-fit"/>
+	<div class="tag-container sight-fit">
+		<div class="projects-tag"># I am owner / reviewer</div>
+		<div class="projects-tag"># Summary includes ''</div>
+		<div class="projects-tag"># Deadline(near → far)</div>
+	</div>
+	<div class="sight-fit"><div class="status-block status-open">OPEN</div></div>
+	<div id="no-open" class="normal-text unseen">No result.</div>
 	<div class="project-list">
 		<table class="project-table sight-fit">
 			<thead>
 				<tr>
-					<th class="table-action-col"></th><th>Project</th><th>Assignee</th><th>Status</th><th>Priority</th>
+					<th>Project</th><th>Owner</th><th>Reviewer</th><th>Priority</th><th>Deadline</th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr>
-					<td><div class="action-container mouseover"><img class="action-image" src="/images/viewmore.png"/></div></td><td class="project-summery"><a class="hyperlink project-text" href="/project/123" target="_blank">P-Id 123 solve xxx problem</a></td><td>member a</td><td>in progress</td><td>major</td>
-				</tr>
-				<tr>
-					<td><div class="action-container mouseover"><img class="action-image" src="/images/viewmore.png"/><div style="position: absolute;"><dialog open class="viewmore-dialogue">Add to my notes</dialog></div></div></td><td class="project-summery"><a class="hyperlink project-text" href="/project/125" target="_blank">P-Id 125 solve xxx problem</a></td><td>member a</td><td>in progress</td><td>major</td>
-				</tr>
-			</tbody>
+			<tbody id="open-result-tbody"></tbody>
 		</table>
 	</div>
 </div>
 <%- include('footer') -%>
 </body>
 <script src="/javascript/auth.js"></script>
+<script src="/javascript/commonFunction.js"></script>
 <script src="/javascript/project.js"></script>
 <script>initProject();</script>
 </html>

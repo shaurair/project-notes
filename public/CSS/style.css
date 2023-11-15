@@ -357,6 +357,16 @@ td.tb-project-summary {
 	text-align: start;
 	font-weight: 500;
 }
+td.tb-project-people {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.tb-project-people-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+} 
 .project-table tr{
 	border-bottom: 1px solid #dddddd;
 }
