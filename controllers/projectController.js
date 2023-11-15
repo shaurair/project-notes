@@ -62,6 +62,7 @@ const getContent = async (req, res) => {
 
 const getComment = async (req, res) => {
 	let projectId = req.query.projectId;
+	let nextPage = req.query.nextPage;
 	let userToken;
 	let memberInfo;
 	let result;
@@ -75,7 +76,7 @@ const getComment = async (req, res) => {
 		return;
 	}
 
-	result = await projectModel.getComment(projectId);
+	result = await projectModel.getComment(projectId, nextPage);
 	res.status(result.statusCode).send(result.data);
 }
 

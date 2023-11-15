@@ -25,11 +25,13 @@ const descriptionElement = document.getElementById('description-input');
 const commentInputElement = document.getElementById('add-comment-text');
 const addCommentBtn = document.getElementById('add-comment');
 const commentContainer = document.querySelector('.comment-container');
+const commentLoadMoreBtn = document.getElementById('loadmore-comment-button');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
 let editContent;
+let nextCommentPage = 0;
 
 async function initProjectId() {
 	await getUser();
@@ -72,13 +74,17 @@ async function getProjectContent() {
 
 async function getProjectComment() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment?projectId=${projectId}`, {
+	let response = await fetch(`/api_project/comment?projectId=${projectId}&nextPage=${nextCommentPage}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
 
 	if(response.ok) {
 		setComment(result['comment']);
+		nextCommentPage = result['nextPage'];
+		if(nextCommentPage == null) {
+			commentLoadMoreBtn.classList.add('unseen');
+		}
 	}
 	else {
 		alert('something went wrong while loading comment, please redirect and try again');
@@ -630,6 +636,10 @@ addCommentBtn.addEventListener('click', () => {
 	const formattedDate = localTime.split(', ').join(' ');
 
 	addComment(formattedDate);
+})
+
+commentLoadMoreBtn.addEventListener('click', () => {
+	getProjectComment();
 })
 
 window.addEventListener('click', () => {

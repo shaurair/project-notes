@@ -291,10 +291,13 @@ html,body {
 	font-size: 16px;
     padding: 5px 0;
 }
+#role-select {
+	width: 250px;
+}
 .keyword-input {
 	font-size: 16px;
     padding: 5px 0;
-	width: 300px;
+	width: 200px;
 }
 .dropdown, .search {
 	display: flex;
@@ -512,6 +515,9 @@ html,body {
 }
 .move-note {
 	padding: 3px;
+}
+.move-note:hover {
+	font-weight: 500;
 }
 .input-note {
 	font-size: 16px;
@@ -739,6 +745,20 @@ html,body {
 #add-comment-text {
 	width: calc(50vw - 45px);
     height: 100px;
+}
+.loadmore-comment {
+	display: flex;
+	justify-content: center;
+}
+#loadmore-comment-button {
+	background-color: var(--color-head-text);
+	color: white;
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 5px;
+}
+#loadmore-comment-button:hover {
+	opacity: 0.8;
 }
 .add-comment-btn-container {
 	display: flex;
