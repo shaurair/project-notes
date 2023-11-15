@@ -425,6 +425,22 @@ function changeStatusColor() {
 	}
 }
 
+async function updateProjectStatus(status) {
+	let response = await fetch('/api_project/status', {
+		method: 'PATCH',
+		body: JSON.stringify({
+			projectId: projectId,
+			status: status
+		}),
+		headers: {'Content-Type':'application/json'}
+	})
+	let result = await response.json();
+
+	if(!response.ok) {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 function checkContent() {
 	if(summaryElement.value == '') {
 		summaryElement.classList.add('highlight-block');
@@ -563,7 +579,10 @@ async function updateComment(commentId, comment) {
 }
 
 // Select change events
-statusSelect.addEventListener('change', changeStatusColor);
+statusSelect.addEventListener('change', () => {
+	changeStatusColor();
+	updateProjectStatus(statusSelect.value);
+});
 
 // Click events
 viewmoreBtn.addEventListener('click', () => {

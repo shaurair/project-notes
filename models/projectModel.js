@@ -164,6 +164,30 @@ async function updateProject(projectId, changedItemList, changedValueList) {
 	}
 }
 
+async function updateProjectStatus(projectId, status) {
+	let sql = 'UPDATE project set status = ? WHERE id = ?;';
+	try {
+		await database.databasePool.query(sql, [status, projectId]);
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 async function updateAssociatePeople(projectId, associateRole, changeMemberList) {
 	let sqlRemoveMember = 'DELETE FROM project_member WHERE project_id = ? AND member_id = ? AND role = ?;';
 	let sqlAddMember = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
@@ -305,6 +329,7 @@ module.exports = {
 	setAssociate,
 	getProjectContent,
 	updateProject,
+	updateProjectStatus,
 	updateAssociatePeople,
 	updateAssociateGroup,
 	addComment,

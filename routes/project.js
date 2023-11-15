@@ -9,5 +9,6 @@ router.patch('/', projectController.update);
 router.post('/comment', projectController.addComment);
 router.delete('/comment', projectController.deleteComment);
 router.patch('/comment', projectController.updateComment);
+router.patch('/status', projectController.updateStatus);
 
 module.exports = router;

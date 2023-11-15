@@ -120,6 +120,15 @@ const update = async (req, res) => {
 	res.send(req.body);
 }
 
+const updateStatus = async (req, res) => {
+	let projectId = req.body.projectId;
+	let status = req.body.status;
+	let result;
+
+	result = await projectModel.updateProjectStatus(projectId, status);
+	res.status(result.statusCode).send(result.data);
+}
+
 const addComment = async (req, res) => {
 	let projectId = req.body.projectId;
 	let comment = req.body.comment;
@@ -187,5 +196,6 @@ module.exports = {
 	addComment,
 	getComment,
 	deleteComment,
-	updateComment
+	updateComment,
+	updateStatus
 }
