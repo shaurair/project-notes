@@ -189,6 +189,33 @@ const updateComment = async (req, res) => {
 	res.status(result.statusCode).send(result.data);
 }
 
+const getProjectMainAndRole = async (req, res) => {
+	let memberId = req.query.memberId;
+	let status = req.query.status;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.getProjectMain(memberId, status);
+	result.data.content.forEach(content => {
+		if(content.deadline != null) {
+			let date = new Date(content.deadline);
+			content.deadline = format(date, 'yyyy/MM/dd');
+		}
+	});
+
+	res.status(result.statusCode).send(result.data);
+}
+
 module.exports = {
 	create,
 	getContent,
@@ -197,5 +224,6 @@ module.exports = {
 	getComment,
 	deleteComment,
 	updateComment,
-	updateStatus
+	updateStatus,
+	getProjectMainAndRole
 }

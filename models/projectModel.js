@@ -324,6 +324,32 @@ async function updateComment(commentId, comment) {
 	}
 }
 
+async function getProjectMain(memberId, status) {
+	let sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT 5 OFFSET 0;';
+
+	try {
+		let contentResult = await database.databasePool.query(sql, [memberId, status]);
+
+		return {
+			data: {
+				message: 'ok',
+				content: contentResult,
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		console.error(error)
+
+		return {
+			data: {
+				message: 'Something wrong while operating database, please refresh and try again',
+			},
+			statusCode: 500
+		}
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
@@ -335,5 +361,6 @@ module.exports = {
 	addComment,
 	getComment,
 	deleteComment,
-	updateComment
+	updateComment,
+	getProjectMain
 }
