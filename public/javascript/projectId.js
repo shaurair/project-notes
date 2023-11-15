@@ -412,16 +412,16 @@ function changeStatusColor() {
 	const selectedValue = statusSelect.value;
 
 	if(selectedValue == 'OPEN') {
-		statusSelect.style.backgroundColor = 'grey';
+		statusSelect.style.backgroundColor = 'var(--color-status-open)';
 	}
 	else if(selectedValue == 'IN PROGRESS') {
-		statusSelect.style.backgroundColor = 'darkblue';
+		statusSelect.style.backgroundColor = 'var(--color-status-progress)';
 	}
 	else if(selectedValue == 'REVIEWING') {
-		statusSelect.style.backgroundColor = 'blueviolet';
+		statusSelect.style.backgroundColor = 'var(--color-status-reviewing)';
 	}
 	else if(selectedValue == 'DONE') {
-		statusSelect.style.backgroundColor = 'teal';
+		statusSelect.style.backgroundColor = 'var(--color-status-done)';
 	}
 }
 

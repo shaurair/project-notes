@@ -4,8 +4,11 @@
 	--color-personal: #F5CB5C;
 	--color-text: #595959;
     --color-highlight: #CC2936;
-    --color-4: #595959;
 	--color-head-text: #2E7866;
+	--color-status-open: #888;
+	--color-status-progress: #0c0a90;
+	--color-status-reviewing: #7310d6;
+	--color-status-done: #008080;
 }
 html,body {
 	display: flex;
@@ -258,6 +261,28 @@ html,body {
 /* ================== */
 /*  projects usage    */
 /* ================== */
+.tag-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+.projects-tag {
+	color: var(--color-project);
+    font-weight: 500;
+}
+.status-block {
+	width: fit-content;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 5px;
+}
+.status-open {
+	background-color: var(--color-status-open);
+	color: white;
+}
 .project-list {
 	display: flex;
 	flex-direction: column;
@@ -328,6 +353,10 @@ html,body {
 	line-height: 2;
 	text-align:center;
 } 
+td.tb-project-summary {
+	text-align: start;
+	font-weight: 500;
+}
 .project-table tr{
 	border-bottom: 1px solid #dddddd;
 }
