@@ -26,6 +26,7 @@ const commentInputElement = document.getElementById('add-comment-text');
 const addCommentBtn = document.getElementById('add-comment');
 const commentContainer = document.querySelector('.comment-container');
 const commentLoadMoreBtn = document.getElementById('loadmore-comment-button');
+const noCommentElement = document.getElementById('no-comment');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
@@ -166,7 +167,7 @@ function setTeam(name, teamListElement) {
 
 function setComment(commentList) {
 	if(commentList.length == 0) {
-		document.getElementById('no-comment').classList.remove('unseen');
+		noCommentElement.classList.remove('unseen');
 	}
 	else {
 		for(let i = 0; i < commentList.length; i++) {
@@ -295,6 +296,9 @@ async function deleteComment(commentId, commentBlock) {
 	
 	if(response.ok) {
 		commentContainer.removeChild(commentBlock);
+		if(commentContainer.innerHTML == '') {
+			noCommentElement.classList.remove('unseen');
+		}
 	}
 	else {
 		alert('something went wrong while deleting comment, please redirect and try again');
@@ -551,6 +555,9 @@ async function addComment(datetime) {
 	let result = await response.json();
 
 	if(response.ok) {
+		if(commentContainer.innerHTML == '') {
+			noCommentElement.classList.add('unseen');
+		}
 		addCommentBlock(userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value);
 		commentInputElement.value = '';
 	}
