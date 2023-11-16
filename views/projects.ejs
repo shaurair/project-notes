@@ -33,18 +33,61 @@
 		<div class="projects-tag"># Summary includes ''</div>
 		<div class="projects-tag"># Deadline(near → far)</div>
 	</div>
+
+	<div class="sight-fit"><div class="status-block status-progress">IN PROGRESS</div></div>
+	<div id="no-progress" class="normal-text unseen">No result.</div>
+	<div id='progress-project-list' class="project-list unseen">
+		<table class="project-table sight-fit">
+			<thead>
+				<tr>
+					<th class="tb-title">Project</th><th class="tb-people">Owner</th><th class="tb-people">Reviewer</th><th>Priority</th><th>Deadline</th>
+				</tr>
+			</thead>
+			<tbody id="progress-result-tbody"></tbody>
+		</table>
+		<div class="loadmore-status"><div id="loadmore-progress-button" class="loadmore-status-button mouseover">Load more</div></div>
+	</div>
+
+	<div class="sight-fit"><div class="status-block status-reviewing">REVIEWING</div></div>
+	<div id="no-reviewing" class="normal-text unseen">No result.</div>
+	<div id='reviewing-project-list' class="project-list unseen">
+		<table class="project-table sight-fit">
+			<thead>
+				<tr>
+					<th class="tb-title">Project</th><th class="tb-people">Owner</th><th class="tb-people">Reviewer</th><th>Priority</th><th>Deadline</th>
+				</tr>
+			</thead>
+			<tbody id="reviewing-result-tbody"></tbody>
+		</table>
+		<div class="loadmore-status"><div id="loadmore-reviewing-button" class="loadmore-status-button mouseover">Load more</div></div>
+	</div>
+
 	<div class="sight-fit"><div class="status-block status-open">OPEN</div></div>
 	<div id="no-open" class="normal-text unseen">No result.</div>
 	<div id='open-project-list' class="project-list unseen">
 		<table class="project-table sight-fit">
 			<thead>
 				<tr>
-					<th>Project</th><th>Owner</th><th>Reviewer</th><th>Priority</th><th>Deadline</th>
+					<th class="tb-title">Project</th><th class="tb-people">Owner</th><th class="tb-people">Reviewer</th><th>Priority</th><th>Deadline</th>
 				</tr>
 			</thead>
 			<tbody id="open-result-tbody"></tbody>
 		</table>
-		<div class="loadmore-status"><div id="loadmore-open-button" class="mouseover">Load more</div></div>
+		<div class="loadmore-status"><div id="loadmore-open-button" class="loadmore-status-button mouseover">Load more</div></div>
+	</div>
+
+	<div class="sight-fit"><div class="status-block status-done">DONE</div></div>
+	<div id="no-done" class="normal-text unseen">No result.</div>
+	<div id='done-project-list' class="project-list unseen">
+		<table class="project-table sight-fit">
+			<thead>
+				<tr>
+					<th class="tb-title">Project</th><th class="tb-people">Owner</th><th class="tb-people">Reviewer</th><th>Priority</th><th>Deadline</th>
+				</tr>
+			</thead>
+			<tbody id="done-result-tbody"></tbody>
+		</table>
+		<div class="loadmore-status"><div id="loadmore-done-button" class="loadmore-status-button mouseover">Load more</div></div>
 	</div>
 </div>
 <%- include('footer') -%>

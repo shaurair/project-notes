@@ -283,6 +283,18 @@ html,body {
 	background-color: var(--color-status-open);
 	color: white;
 }
+.status-progress {
+	background-color: var(--color-status-progress);
+	color: white;
+}
+.status-reviewing {
+	background-color: var(--color-status-reviewing);
+	color: white;
+}
+.status-done {
+	background-color: var(--color-status-done);
+	color: white;
+}
 .project-list {
 	display: flex;
 	flex-direction: column;
@@ -290,6 +302,12 @@ html,body {
 }
 .project-list>th {
 	border-bottom: #595959;
+}
+.tb-title {
+	width: 400px;
+}
+.tb-people {
+	width: 300px;
 }
 .search-container {
 	display: flex;
@@ -412,12 +430,13 @@ td.tb-project-people {
 	display: flex;
 	justify-content: center;
 }
-#loadmore-open-button {
+.loadmore-status-button {
 	background-color: var(--color-project);
 	color: white;
 	border-radius: 5px;
 	box-sizing: border-box;
 	padding: 5px;
+	margin-top: 20px;
 }
 /* ================== */
 /*  personal usage    */

@@ -414,7 +414,7 @@ function changeStatusColor() {
 	if(selectedValue == 'OPEN') {
 		statusSelect.style.backgroundColor = 'var(--color-status-open)';
 	}
-	else if(selectedValue == 'IN PROGRESS') {
+	else if(selectedValue == 'INPROGRESS') {
 		statusSelect.style.backgroundColor = 'var(--color-status-progress)';
 	}
 	else if(selectedValue == 'REVIEWING') {
