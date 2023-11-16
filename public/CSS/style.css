@@ -442,6 +442,9 @@ td.tb-project-people {
 	padding: 5px;
 	margin-top: 20px;
 }
+.loadmore-status-button:hover {
+	opacity: 0.75;
+}
 /* ================== */
 /*  personal usage    */
 /* ================== */
@@ -962,6 +965,7 @@ td.tb-project-people {
 	background-image: url(https://d2o8k69neolkqv.cloudfront.net/user.png);
     width: 35px;
     height: 35px;
+	background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 50%;
@@ -1169,6 +1173,12 @@ td.tb-project-people {
 }
 #update-stop-txt, #update-password-stop-txt {
 	color: rgb(150, 30, 30)
+}
+#team-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1rem;
 }
 /* ================== */
 /*  footer usage      */

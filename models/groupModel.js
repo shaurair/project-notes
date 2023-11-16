@@ -27,11 +27,11 @@ async function checkExistTeam(name) {
 
 async function addTeam(name, memberId) {
 	let sql = 'INSERT INTO group_table(name) VALUES(?);';
-	let sqlGroup = 'INSERT INTO group_member(group_id, member_id, role) VALUES (?, ?, ?);'
+	let sqlGroup = 'INSERT INTO group_member(group_id, member_id) VALUES (?, ?);'
 	try {
 		let result = await database.databasePool.query(sql, [name]);
 		let groupId = result.insertId;
-		await database.databasePool.query(sqlGroup, [groupId, memberId, 'manager']);
+		await database.databasePool.query(sqlGroup, [groupId, memberId]);
 
 		return {
 			data: {
@@ -45,7 +45,27 @@ async function addTeam(name, memberId) {
 	}
 }
 
+async function getMyGroup(memberId) {
+	let sql = 'SELECT group_id, group_table.name FROM group_member INNER JOIN group_table ON group_member.group_id = group_table.id WHERE member_id = ?;';
+
+	try {
+		let result = await database.databasePool.query(sql, [memberId]);
+
+		return {
+			data: {
+				message: 'ok',
+				myGroup: result
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	checkExistTeam,
-	addTeam
+	addTeam,
+	getMyGroup
 }

@@ -31,6 +31,25 @@ const createGroup = async (req, res) => {
 	res.status(result.statusCode).send(result);
 }
 
+const getMyGroup = async (req, res) => {
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await groupModel.getMyGroup(memberInfo['id']);
+	res.status(result.statusCode).send(result);
+}
+
 module.exports = {
-	createGroup
+	createGroup,
+	getMyGroup
 }

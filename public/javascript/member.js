@@ -18,6 +18,7 @@ const addTeamBtn = document.getElementById('add-team-submit');
 const newTeamNameInput = document.getElementById('new-team-name');
 const addTeamSuccessElement = document.getElementById("add-team-success");
 const addTeamWaitingElement = document.getElementById("add-team-waiting");
+const teamListElement = document.getElementById('team-list');
 let isAllowImageSubmit = false;
 let isAllowDataSubmit = true;
 let isAllowGroupSubmit = true;
@@ -32,6 +33,7 @@ async function initMember() {
 		memberOptBtn.classList.add('in-member');
 		showMemberNav();
 		setMemberInfo();
+		getTeam();
 	}
 }
 
@@ -160,12 +162,48 @@ async function createTeam(name) {
 		addTeamWaitingElement.classList.add("unseen");
 		addTeamSuccessElement.classList.remove("unseen");
 		alert("Successfully created! This page will automatically redirect");
-		location.reload();
+		teamListElement.innerHTML = '';
+		getTeam();
 	}
 	else {
-		alert(result['data']["message"] + ( response.status >= 500 ? " Please redirect this page and try again." : ''));
+		alert(result['data']["message"] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''));
 		addTeamWaitingElement.classList.add("unseen");
 		enableAddTeamButton();
+	}
+}
+
+async function getTeam() {
+	let token = localStorage.getItem('token');
+	let response = await fetch('/api/group/get-my-group', {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		setGroupList(result['data']['myGroup']);
+	}
+	else {
+		alert(result['data']['message'] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''))
+	}
+}
+
+function setGroupList(groupList) {
+	if(groupList.length == 0) {
+		teamListElement.textContent = 'No result';
+	}
+	else {
+		groupList.forEach(group => {
+			let element = document.createElement('div');
+			element.className = 'project-team-container mouseover';
+			element.textContent = group.name;
+			teamListElement.appendChild(element);
+			element.addEventListener('click', ()=>{
+				// TODO
+				console.log(group.group_id)
+			})
+		})
 	}
 }
 

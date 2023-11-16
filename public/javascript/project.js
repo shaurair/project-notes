@@ -247,3 +247,6 @@ searchBtn.addEventListener('click', () => {
 	getMainAndRole('REVIEWING');
 	getMainAndRole('DONE');
 })
+
+// Enter events
+addEnterEffect([keywordInput], [searchBtn]);
