@@ -4,7 +4,8 @@ const sharp = require('sharp');
 const imageStorage = multer.memoryStorage();
 const upload = multer({storage: imageStorage});
 const operateStorage = require('../utilities/conn-aws-S3');
-const memberModel = require('../models/memberModel')
+const memberModel = require('../models/memberModel');
+const logModel = require('../models/logModel');
 
 const updateImage = async (req, res) => {
 	let userToken;
@@ -70,6 +71,12 @@ const updateName = async (req, res) => {
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await logModel.checkExistName(newName);
+	if(result.data.message != 'ok') {
+		res.status(result.statusCode).send(result);
 		return;
 	}
 
