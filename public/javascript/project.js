@@ -111,6 +111,7 @@ function setStatusResult(status, dataList, roleInfo) {
 
 		// owner
 		td = document.createElement('td');
+		td.className = 'tb-people';
 		tr.appendChild(td);
 
 		let peopleListElement = document.createElement('div');
@@ -136,6 +137,7 @@ function setStatusResult(status, dataList, roleInfo) {
 
 		// reviewer
 		td = document.createElement('td');
+		td.className = 'tb-people';
 		tr.appendChild(td);
 
 		peopleListElement = document.createElement('div');

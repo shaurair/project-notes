@@ -1331,4 +1331,7 @@ td.tb-project-people {
 	.project-status {
 		padding: 0;
 	}
+	.tb-people {
+		display: none;
+	}
 }
