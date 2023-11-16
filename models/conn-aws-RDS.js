@@ -16,6 +16,17 @@ pool.getConnection((err, conn) => {
 })
 pool.query = util.promisify(pool.query);
 
+function ErrorProcess(error) {
+	console.error(error);
+	return  {
+		data: {
+			message: 'Something wrong while operating database, please refresh and try again',
+		},
+		statusCode: 500
+	}
+}
+
 module.exports = {
-    databasePool:pool
+    databasePool:pool,
+    ErrorProcess
 }

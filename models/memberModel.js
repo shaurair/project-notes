@@ -12,14 +12,7 @@ async function updateUserImage(memberId, filename) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -35,14 +28,7 @@ async function updateUserName(memberId, name) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 

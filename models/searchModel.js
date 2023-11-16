@@ -25,14 +25,7 @@ async function searchName(name) {
 
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -61,14 +54,7 @@ async function searchId(id) {
 
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -97,14 +83,7 @@ async function searchTeam(team) {
 
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 

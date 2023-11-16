@@ -27,14 +27,7 @@ async function checkUserSignIn(email, password) {
 
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -59,14 +52,7 @@ async function checkExistEmail(email) {
 		}
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -91,14 +77,7 @@ async function checkExistName(name) {
 		}
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -115,14 +94,7 @@ async function signUpUserData(name, email, password) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 

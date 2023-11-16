@@ -14,14 +14,7 @@ async function createProject(summary, description, priority, deadline, creator) 
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -54,14 +47,7 @@ async function setAssociate(associate, projectId) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -94,14 +80,7 @@ async function getProjectContent(projectId) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -124,14 +103,7 @@ async function getComment(projectId, page) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -153,14 +125,7 @@ async function updateProject(projectId, changedItemList, changedValueList) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -177,14 +142,7 @@ async function updateProjectStatus(projectId, status) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -209,14 +167,7 @@ async function updateAssociatePeople(projectId, associateRole, changeMemberList)
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -241,14 +192,7 @@ async function updateAssociateGroup(projectId, changeGroupList) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -265,14 +209,7 @@ async function addComment(projectId, memberId, comment, datetime) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -289,14 +226,7 @@ async function deleteComment(commentId) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -313,14 +243,7 @@ async function updateComment(commentId, comment) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -352,14 +275,7 @@ async function getProjectMain(memberId, status, page, keyword) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
@@ -378,14 +294,7 @@ async function getProjectRole(projectIdList) {
 		};
 	}
 	catch(error) {
-		console.error(error)
-
-		return {
-			data: {
-				message: 'Something wrong while operating database, please refresh and try again',
-			},
-			statusCode: 500
-		}
+		return database.ErrorProcess(error);
 	}
 }
 
