@@ -193,6 +193,8 @@ const getProjectMainAndRole = async (req, res) => {
 	let memberId = req.query.memberId;
 	let status = req.query.status;
 	let page = req.query.page;
+	let myRole = req.query.myRole;
+	let keyword = req.query.keyword;
 	let userToken;
 	let memberInfo;
 	let result;
@@ -208,7 +210,7 @@ const getProjectMainAndRole = async (req, res) => {
 		res.status(403).send({data: {"message" : "User not log in"}});
 		return;
 	}
-	result = await projectModel.getProjectMain(memberId, status, page);
+	result = await projectModel.getProjectMain(memberId, status, page, keyword);
 	if(result.data.message != 'ok') {
 		res.status(result.statusCode).send(result.data);
 		return;

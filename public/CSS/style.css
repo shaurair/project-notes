@@ -344,8 +344,8 @@ html,body {
 }
 .dropdown, .search {
 	display: flex;
-	flex-direction: column;
 	gap: 10px;
+	align-items: center;
 }
 .search-btn {
 	width: fit-content;
@@ -389,6 +389,9 @@ td.tb-project-people {
 	border-bottom: 1px solid #dddddd;
 }
 .project-table tr:nth-of-type(even) td{
+	background-color:#e7f2f7;
+}
+.project-table tr:nth-of-type(odd) td{
 	background-color:#f3f3f3;
 }
 .table-action-col {

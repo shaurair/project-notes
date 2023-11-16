@@ -1,8 +1,25 @@
+const noResultOpenElement = document.getElementById('no-open');
+const noResultProgressElement = document.getElementById('no-progress');
+const noResultReviewingElement = document.getElementById('no-reviewing');
+const noResultDoneElement = document.getElementById('no-done');
+const resultOpenContainer = document.getElementById('open-project-list');
+const resultProgressContainer = document.getElementById('progress-project-list');
+const resultReviewingContainer = document.getElementById('reviewing-project-list');
+const resultDoneContainer = document.getElementById('done-project-list');
+const resultOpenElement = document.getElementById('open-result-tbody');
+const resultProgressElement = document.getElementById('progress-result-tbody');
+const resultReviewingElement = document.getElementById('reviewing-result-tbody');
+const resultDoneElement = document.getElementById('done-result-tbody');
 const loadmoreOpenBtn = document.getElementById('loadmore-open-button');
 const loadmoreProgressBtn = document.getElementById('loadmore-progress-button');
 const loadmoreReviewingBtn = document.getElementById('loadmore-reviewing-button');
 const loadmoreDoneBtn = document.getElementById('loadmore-done-button');
-let nextPage = {'OPEN': 0, 'INPROGRESS': 0, 'REVIEWING': 0, 'DONE': 0,}
+const searchBtn = document.getElementById('project-search');
+const myRoleSelect = document.getElementById('role-select');
+const keywordInput = document.getElementById('search-input');
+let myRole = 0;
+let keyword = '';
+let nextPage = {'OPEN': 0, 'INPROGRESS': 0, 'REVIEWING': 0, 'DONE': 0,};
 
 async function initProject() {
 	await getUser();
@@ -22,7 +39,7 @@ async function initProject() {
 
 async function getMainAndRole(status) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/main-info?memberId=${userInfo['id']}&status=${status}&page=${nextPage[status]}`, {
+	let response = await fetch(`/api_project/main-info?memberId=${userInfo['id']}&status=${status}&page=${nextPage[status]}&myRole=${myRole}&keyword=${keyword}`, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
@@ -43,50 +60,50 @@ async function getMainAndRole(status) {
 function setStatusResult(status, dataList, roleInfo) {
 	let tbodyElement;
 	if(status == 'OPEN') {
-		tbodyElement = document.getElementById('open-result-tbody');
+		tbodyElement = resultOpenElement;
 		if(nextPage[status] == 0) {
 			if(dataList.length == 0 ) {
-				document.getElementById('no-open').classList.remove('unseen');
+				noResultOpenElement.classList.remove('unseen');
 				return;
 			}
 			else {
-				document.getElementById('open-project-list').classList.remove('unseen')
+				resultOpenContainer.classList.remove('unseen')
 			}
 		}
 	}
 	else if(status == 'INPROGRESS') {
-		tbodyElement = document.getElementById('progress-result-tbody');
+		tbodyElement = resultProgressElement;
 		if(nextPage[status] == 0) {
 			if(dataList.length == 0 ) {
-				document.getElementById('no-progress').classList.remove('unseen');
+				noResultProgressElement.classList.remove('unseen');
 				return;
 			}
 			else {
-				document.getElementById('progress-project-list').classList.remove('unseen')
+				resultProgressContainer.classList.remove('unseen')
 			}
 		}
 	}
 	else if(status == 'REVIEWING') {
-		tbodyElement = document.getElementById('reviewing-result-tbody');
+		tbodyElement = resultReviewingElement;
 		if(nextPage[status] == 0) {
 			if(dataList.length == 0 ) {
-				document.getElementById('no-reviewing').classList.remove('unseen');
+				noResultReviewingElement.classList.remove('unseen');
 				return;
 			}
 			else {
-				document.getElementById('reviewing-project-list').classList.remove('unseen')
+				resultReviewingContainer.classList.remove('unseen')
 			}
 		}
 	}
 	else if(status == 'DONE') {
-		tbodyElement = document.getElementById('done-result-tbody');
+		tbodyElement = resultDoneElement;
 		if(nextPage[status] == 0) {
 			if(dataList.length == 0 ) {
-				document.getElementById('no-done').classList.remove('unseen');
+				noResultDoneElement.classList.remove('unseen');
 				return;
 			}
 			else {
-				document.getElementById('done-project-list').classList.remove('unseen')
+				resultDoneContainer.classList.remove('unseen')
 			}
 		}
 	}
@@ -204,5 +221,29 @@ loadmoreReviewingBtn.addEventListener('click', () => {
 })
 
 loadmoreDoneBtn.addEventListener('click', () => {
+	getMainAndRole('DONE');
+})
+
+searchBtn.addEventListener('click', () => {
+	resultOpenContainer.classList.add('unseen');
+	resultProgressContainer.classList.add('unseen');
+	resultReviewingContainer.classList.add('unseen');
+	resultDoneContainer.classList.add('unseen');
+	resultOpenElement.innerHTML = '';
+	resultProgressElement.innerHTML = '';
+	resultReviewingElement.innerHTML = '';
+	resultDoneElement.innerHTML = '';
+	noResultOpenElement.classList.add('unseen');
+	noResultProgressElement.classList.add('unseen');
+	noResultReviewingElement.classList.add('unseen');
+	noResultDoneElement.classList.add('unseen');
+
+	myRole = myRoleSelect.value;
+	keyword = keywordInput.value;
+	nextPage = {'OPEN': 0, 'INPROGRESS': 0, 'REVIEWING': 0, 'DONE': 0,};
+
+	getMainAndRole('OPEN');
+	getMainAndRole('INPROGRESS');
+	getMainAndRole('REVIEWING');
 	getMainAndRole('DONE');
 })

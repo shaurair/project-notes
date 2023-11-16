@@ -324,13 +324,22 @@ async function updateComment(commentId, comment) {
 	}
 }
 
-async function getProjectMain(memberId, status, page) {
+async function getProjectMain(memberId, status, page, keyword) {
 	let limit = 5;
 	let offset = page * limit;
-	let sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+	let sql;
+	let sqlParam;
+	if(keyword == '') {
+		sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+		sqlParam = [memberId, status, (limit + 1), offset];
+	}
+	else {
+		sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? AND project.summary like ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+		sqlParam = [memberId, status, `%${keyword}%`, (limit + 1), offset];
+	}
 
 	try {
-		let contentResult = await database.databasePool.query(sql, [memberId, status, (limit + 1), offset]);
+		let contentResult = await database.databasePool.query(sql, sqlParam);
 		let nextPage = contentResult.length == (limit + 1) ? page + 1 : null;
 
 		return {

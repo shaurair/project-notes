@@ -13,26 +13,21 @@
 		<div class="dropdown-container">
 			<div class="dropdown">
 				<label class="dropdown-label">I am</label>
-				<select id='role-select' class="dropdown-select">
-					<option value="duty">owner / reviewer</option>
-					<option value="relate">belong to related people / team</option>
+				<select id='role-select' class="dropdown-select" disabled>
+					<option value='0'>owner / reviewer</option>
+					<option value='1'>belong to related people / team</option>
 				</select>
 			</div>
 			<div class="search">
-				<label class="dropdown-label">Keyword in summary</label>
-				<input class="keyword-input" type="text">
+				<label class="dropdown-label">Keyword</label>
+				<input id="search-input" class="keyword-input" type="text" placeholder="keyword in summary">
 			</div>
 		</div>
 		<div class="search-button-container">
-			<button class="search-btn mouseover">Search</button>
+			<button id='project-search' class="search-btn mouseover">Search</button>
 		</div>
 	</div>
 	<hr class="separator-sight-fit"/>
-	<div class="tag-container sight-fit">
-		<div class="projects-tag"># I am owner / reviewer</div>
-		<div class="projects-tag"># Summary includes ''</div>
-		<div class="projects-tag"># Deadline(near → far)</div>
-	</div>
 
 	<div class="sight-fit"><div class="status-block status-progress">IN PROGRESS</div></div>
 	<div id="no-progress" class="normal-text unseen">No result.</div>
