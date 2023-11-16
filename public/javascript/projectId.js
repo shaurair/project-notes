@@ -85,6 +85,9 @@ async function getProjectComment() {
 		if(nextCommentPage == null) {
 			commentLoadMoreBtn.classList.add('unseen');
 		}
+		else {
+			commentLoadMoreBtn.classList.remove('unseen');
+		}
 	}
 	else {
 		alert('something went wrong while loading comment, please redirect and try again');
