@@ -408,6 +408,17 @@ td.tb-project-people {
 .project-summery{
 	font-weight: 600;
 }
+.loadmore-status {
+	display: flex;
+	justify-content: center;
+}
+#loadmore-open-button {
+	background-color: var(--color-project);
+	color: white;
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 5px;
+}
 /* ================== */
 /*  personal usage    */
 /* ================== */

@@ -233,7 +233,7 @@ const getProjectMainAndRole = async (req, res) => {
 		roles[role.project_id][role.role].push({name:role.name, image:role.image_filename})
 	})
 
-	res.status(result.statusCode).send({content: result.data.content, roles:roles})
+	res.status(result.statusCode).send({content: result.data.content, roles:roles, nextPage: result.data.nextPage})
 }
 
 module.exports = {

@@ -1,3 +1,4 @@
+const loadmoreOpenBtn = document.getElementById('loadmore-open-button');
 let nextPageOpen = 0;
 
 async function initProject() {
@@ -9,7 +10,7 @@ async function initProject() {
 	else {
 		projectsOptBtn.classList.add('in-project');
 		showMemberNav();
-		getMainAndRole('OPEN')
+		getMainAndRole('OPEN');
 	}
 }
 
@@ -25,6 +26,10 @@ async function getMainAndRole(status) {
 
 	if(response.ok) {
 		setStatusResult(status, result['content'], result['roles']);
+		nextPageOpen = result['nextPage'];
+		if( nextPageOpen == null) {
+			loadmoreOpenBtn.classList.add('unseen');
+		}
 	}
 	else {
 		alert('something went wrong, please redirect and try again');
@@ -108,3 +113,7 @@ function setStatusResult(status, dataList, roleInfo) {
 		}
 	}
 }
+
+loadmoreOpenBtn.addEventListener('click', () => {
+	getMainAndRole('OPEN');
+})
