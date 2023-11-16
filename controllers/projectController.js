@@ -223,15 +223,19 @@ const getProjectMainAndRole = async (req, res) => {
 		roles[content.project_id] = {owner:[], reviewer:[]}
 	});
 
-	roleResult = await projectModel.getProjectRole(projectIdList);
-	if(roleResult.data.message != 'ok') {
-		res.status(roleResult.statusCode).send(roleResult.data);
-		return;
+	if(result.data.content.length != 0 ) {
+			roleResult = await projectModel.getProjectRole(projectIdList);
+		if(roleResult.data.message != 'ok') {
+			res.status(roleResult.statusCode).send(roleResult.data);
+			return;
+		}
+
+		roleResult.data.roles.forEach(role => {
+			roles[role.project_id][role.role].push({name:role.name, image:role.image_filename})
+		})
 	}
 
-	roleResult.data.roles.forEach(role => {
-		roles[role.project_id][role.role].push({name:role.name, image:role.image_filename})
-	})
+
 
 	res.status(result.statusCode).send({content: result.data.content, roles:roles, nextPage: result.data.nextPage})
 }

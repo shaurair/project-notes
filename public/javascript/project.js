@@ -38,6 +38,16 @@ async function getMainAndRole(status) {
 
 function setStatusResult(status, dataList, roleInfo) {
 	if(status == 'OPEN') {
+		if(nextPageOpen == 0) {
+			if(dataList.length == 0 ) {
+				document.getElementById('no-open').classList.remove('unseen');
+				return;
+			}
+			else {
+				document.getElementById('open-project-list').classList.remove('unseen')
+			}
+		}
+
 		for(let i = 0; i < dataList.length; i++) {
 			let projectId = dataList[i]['project_id'];
 			let summary = dataList[i]['summary'];
