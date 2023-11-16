@@ -12,8 +12,15 @@ const submitImageWaitingElement = document.getElementById("submit-waiting");
 const submitDataBtn = document.getElementById("upload-member-data-submit");
 const submitDataSuccessElement = document.getElementById("update-success");
 const submitDataWaitingElement = document.getElementById("update-waiting");
+const createTeamBtn = document.getElementById('create-team');
+const createTeamEditElement = document.getElementById('create-team-input-area');
+const addTeamBtn = document.getElementById('add-team-submit');
+const newTeamNameInput = document.getElementById('new-team-name');
+const addTeamSuccessElement = document.getElementById("add-team-success");
+const addTeamWaitingElement = document.getElementById("add-team-waiting");
 let isAllowImageSubmit = false;
 let isAllowDataSubmit = true;
+let isAllowGroupSubmit = true;
 
 async function initMember() {
 	await getUser();
@@ -68,6 +75,18 @@ function enableDataButton() {
 	isAllowDataSubmit = true;
 }
 
+function disableAddTeamButton() {
+	addTeamBtn.style.cursor = "not-allowed";
+	addTeamBtn.classList.remove("mouseover");
+	isAllowGroupSubmit = false;
+}
+
+function enableAddTeamButton() {
+	addTeamBtn.style.cursor = "pointer";
+	addTeamBtn.classList.add("mouseover");
+	isAllowGroupSubmit = true;
+}
+
 async function sendImageFile() {
 	let token = localStorage.getItem('token');
 	let formData = new FormData();
@@ -89,7 +108,7 @@ async function sendImageFile() {
 		location.href = '/member';
 	}
 	else {
-		alert(result['data']["message"] + " Please redirect this page and try again.");
+		alert(result['data']["message"] + ( response.status >= 500 ? " Please redirect this page and try again." : ''));
 		submitImageWaitingElement.classList.add("unseen");
 		disableButton();
 	}
@@ -117,9 +136,36 @@ async function updateData(name) {
 		location.href = '/member';
 	}
 	else {
-		alert(result['data']["message"] + " Please redirect this page and try again.");
+		alert(result['data']["message"] + ( response.status >= 500 ? " Please redirect this page and try again." : ''));
 		submitDataWaitingElement.classList.add("unseen");
 		enableDataButton();
+	}
+}
+
+async function createTeam(name) {
+	let token = localStorage.getItem('token');
+	let response = await fetch("/api/group/create", {
+			method: "POST",
+			body: JSON.stringify({
+				"name":name
+			}),
+			headers: {
+				'Authorization':`Bearer ${token}`,
+				'Content-Type':'application/json'
+			}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		addTeamWaitingElement.classList.add("unseen");
+		addTeamSuccessElement.classList.remove("unseen");
+		alert("Successfully created! This page will automatically redirect");
+		location.reload();
+	}
+	else {
+		alert(result['data']["message"] + ( response.status >= 500 ? " Please redirect this page and try again." : ''));
+		addTeamWaitingElement.classList.add("unseen");
+		enableAddTeamButton();
 	}
 }
 
@@ -176,8 +222,43 @@ submitImageBtn.addEventListener('click', ()=>{
 
 submitDataBtn.addEventListener('click', ()=>{
 	if(isAllowDataSubmit == true) {
+		if(userInfo['name'] == newNameInputElement.value) {
+			alert('The input name is the same as current name')
+			return;
+		}
+		if(newNameInputElement.value == '') {
+			alert('Please enter a name')
+			return;
+		}
+
 		submitImageWaitingElement.classList.remove("unseen");
 		disableDataButton();
 		updateData(newNameInputElement.value);
+	}
+})
+
+createTeamBtn.addEventListener('click', ()=>{
+	createTeamEditElement.classList.remove('unseen');
+
+	if(createTeamBtn.textContent == "Cancel") {
+		createTeamEditElement.classList.add("unseen");
+		createTeamBtn.textContent = "Create a new team";
+	}
+	else {
+		createTeamEditElement.classList.remove("unseen");
+		createTeamBtn.textContent = "Cancel";
+	}
+})
+
+addTeamBtn.addEventListener('click', ()=>{
+	if(isAllowGroupSubmit == true) {
+		if(newTeamNameInput.value == '') {
+			alert('Please enter a team name')
+			return;
+		}
+
+		addTeamWaitingElement.classList.remove("unseen");
+		disableAddTeamButton();
+		createTeam(newTeamNameInput.value);
 	}
 })

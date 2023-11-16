@@ -92,19 +92,54 @@
 		</div>
 		<div id="edit-image-area" class="edit-area member-order-info member-change-area unseen">
 			<div class="profile-image-place">
-				<div class="form-headline txt-lg">更新大頭照：</div>
+				<div class="form-headline txt-lg">Update profile photo</div>
 				<img id="change-image" class="unseen"></img>
 				<div class="upload-image">
 					<input type="file" id="fileInput" class="mouseover">
 				</div>
-				<div id="upload-submit" class="upload-submit">提交</div>
+				<div id="upload-submit" class="upload-submit">Submit</div>
 				<div id="submit-waiting" class="submit-status-place unseen">
-					<span>上傳中</span>
+					<span>Uploading</span>
 					<img class="submit-status" src="/images/waiting.gif"></img>
 				</div>
 				<div id="submit-success" class="submit-status-place unseen">
 					<img class="submit-status" src="/images/checked.png"></img>
-					<span>上傳成功，請重新整理</span>
+					<span>Successfully updated.</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr class="separator-sight-fit"/>
+
+	<div class="member-data">
+		<div class="member-headline">
+			<div class="head-title">Team Management</div>
+			<div class="card-place">
+				<div id="create-team" class="card mouseover"><div>Create a new team</div></div>
+			</div>
+		</div>
+		<div id="create-team-input-area" class="create-team-input-area member-change-area member-order-info unseen">
+			<div class="form-headline txt-lg">Create a new team</div>
+			<img id="change-image" class="unseen"></img>
+			<div class="upload-image">
+				<input type="text" id="new-team-name" class="sign-input-text" placeholder="Enter a team name">
+			</div>
+			<div id="add-team-submit" class="upload-submit mouseover">Submit</div>
+			<div id="add-team-waiting" class="submit-status-place unseen">
+				<span>Uploading</span>
+				<img class="submit-status" src="/images/waiting.gif"></img>
+			</div>
+			<div id="add-team-success" class="submit-status-place unseen">
+				<img class="submit-status" src="/images/checked.png"></img>
+				<span>Successfully updated.</span>
+			</div>
+		</div>
+		<div id="member-info-area">
+			<div class="member-order-info">
+				<div class="member-info-item">
+					<div class="form-headline">The team I belong to</div>
+					<div id="member-name" class="form-description"></div>
 				</div>
 			</div>
 		</div>
