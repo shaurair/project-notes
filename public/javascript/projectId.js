@@ -19,6 +19,7 @@ const editProjectBtn = document.getElementById('edit-project');
 const cancelEditBtn = document.getElementById('cancel-edit-project');
 const saveBtn = document.getElementById('save-project');
 const darkBackgrountElement = document.querySelector('.dark-background');
+const darkBackgroundTeamContentElement = document.querySelector('.team-content-dark-background');
 const editProjectAreaElement = document.querySelector('.edit-project-area');
 const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
@@ -183,7 +184,7 @@ function addTeamNameLinkToContainer(name, elementContainer, groupId) {
 	element.addEventListener('click', async() => {
 		let result = await getGroupMembers(groupId);
 		teamContainer.classList.remove('unseen');
-		darkBackgrountElement.classList.remove('unseen');
+		darkBackgroundTeamContentElement.classList.remove('unseen');
 		document.getElementById('team-name-title').textContent = name;
 
 		memberList = result['data']['groupMember'];
@@ -391,6 +392,65 @@ function addEditDefaultRoles(imgUrl, userName, id, peopleListElement, associateR
 	editAssociate[associateRole][id] = true;
 }
 
+function addEditDefaultTeam(imgUrl, userName, id, peopleListElement, associateRole) {
+	if(editAssociate[associateRole][id]) {
+		return;
+	}
+	let elementContainer = document.createElement('div');
+	elementContainer.className = 'people-container';
+	peopleListElement.appendChild(elementContainer);
+
+	element = document.createElement('div');
+	element.className = 'people-text mouseover';
+	element.textContent = userName;
+	elementContainer.appendChild(element);
+	element.addEventListener('click', async() => {
+		let result = await getGroupMembers(id);
+		teamContainer.classList.remove('unseen');
+		darkBackgroundTeamContentElement.classList.remove('unseen');
+		document.getElementById('team-name-title').textContent = userName;
+
+		memberList = result['data']['groupMember'];
+		memberPeopleList.innerHTML = '';
+		memberList.forEach(memberData => {
+			let imageFilename = memberData['image_filename'];
+			let imgUrl = (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
+			let memberId = memberData['member_id'];
+			let memberName = memberData['name'];
+
+			let elementContainer = document.createElement('div');
+			elementContainer.className = 'people-container';
+			memberPeopleList.appendChild(elementContainer);
+		
+			let element = document.createElement('div');
+			element.className = 'people-img';
+			elementContainer.appendChild(element);
+			if(imgUrl != null) {
+				element.style.backgroundImage = `url(${imgUrl})`;
+			}
+			element = document.createElement('div');
+			element.className = 'people-text';
+			element.textContent = memberName;
+			elementContainer.appendChild(element);
+		});
+	})
+
+	let closeElement = document.createElement('div');
+	closeElement.className = 'close mouseover';
+	closeElement.addEventListener('click', () => {
+		delete editAssociate[associateRole][id];
+		peopleListElement.removeChild(elementContainer);
+	})
+
+	let closeIconElement = document.createElement('div');
+	closeIconElement.className = 'close-icon';
+
+	closeElement.appendChild(closeIconElement);
+	elementContainer.appendChild(closeElement);
+
+	editAssociate[associateRole][id] = true;
+}
+
 function setEditProjectContent() {
 	let element;
 	let peopleListElement;
@@ -438,7 +498,7 @@ function setEditProjectContent() {
 	peopleListElement = document.getElementById('team-list');
 	peopleListElement.innerHTML = '';
 	for(let i = 0; i < projectData['team'].length; i++) {
-		addEditDefaultRoles(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
+		addEditDefaultTeam(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
 	}
 }
 
@@ -721,7 +781,7 @@ commentLoadMoreBtn.addEventListener('click', () => {
 
 closeTeamContainerBtn.addEventListener('click', ()=>{
 	teamContainer.classList.add('unseen');
-	darkBackgrountElement.classList.add('unseen');
+	darkBackgroundTeamContentElement.classList.add('unseen');
 })
 
 window.addEventListener('click', () => {

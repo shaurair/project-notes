@@ -775,6 +775,7 @@ td.tb-project-people {
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 50%;
+	background-position: center;
 }
 #no-comment {
 	width: auto;
@@ -867,7 +868,7 @@ td.tb-project-people {
     z-index: 4;
     top: 200px;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px;
     width: 100vw;
 }
@@ -879,7 +880,8 @@ td.tb-project-people {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 1000px;
+	width: 900px;
+    min-height: 300px;
 }
 /* ============= */
 /*  edit project */
@@ -1215,11 +1217,23 @@ td.tb-project-people {
 .team:hover {
 	opacity: 0.75;
 }
+.team-content-dark-background {
+	position: fixed;
+    background-color: #ccc;
+    filter: opacity(0.8) brightness(0.5);
+    height: 100vmax;
+    width: 100vw;
+    z-index: 4;
+	display: flex;
+	justify-content: center;
+    box-sizing: border-box;
+	padding-top: 100px;
+}
 .team-content-area {
 	display: flex;
     justify-content: center;
     position: absolute;
-    z-index: 4;
+    z-index: 5;
     top: 80px;
     box-sizing: border-box;
     padding: 20px;
