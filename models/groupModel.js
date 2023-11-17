@@ -83,9 +83,35 @@ async function getGroupMember(groupId) {
 	}
 }
 
+async function updateMember(groupId, changeMemberList) {
+	let sqlRemoveMember = 'DELETE FROM group_member WHERE group_id = ? AND member_id = ?;';
+	let sqlAddMember = 'INSERT INTO group_member(group_id, member_id) VALUES(?, ?);';
+
+	try {
+		for( let i = 0; i < changeMemberList.add.length; i++) {
+			await database.databasePool.query(sqlAddMember, [groupId, changeMemberList.add[i]]);
+		}
+
+		for( let i = 0; i < changeMemberList.delete.length; i++) {
+			await database.databasePool.query(sqlRemoveMember, [groupId, changeMemberList.delete[i]]);
+		}
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	checkExistTeam,
 	addTeam,
 	getMyGroup,
-	getGroupMember
+	getGroupMember,
+	updateMember
 }

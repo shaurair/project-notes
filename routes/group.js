@@ -5,5 +5,6 @@ const groupController = require('../controllers/groupController');
 router.post('/create', groupController.createGroup);
 router.get('/get-my-group', groupController.getMyGroup);
 router.get('/get-group-member', groupController.getGroupMember);
+router.put('/update-member', groupController.updateMember);
 
 module.exports = router;

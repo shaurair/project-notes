@@ -21,6 +21,7 @@ const addTeamWaitingElement = document.getElementById("add-team-waiting");
 const teamContentElement = document.querySelector('.team-content-area');
 const teamContentBackgroundElement = document.querySelector('.dark-background');
 const teamListElement = document.getElementById('team-list');
+const teamNameTitleElement = document.getElementById('team-name-title');
 const updateTeamNameInput = document.getElementById('team-name-update-input');
 const closeTeamContentBtn = document.getElementById('close-team-content');
 const teamMemberBtn = document.getElementById('team-member');
@@ -32,6 +33,7 @@ const memberSearchContainerElement = document.getElementById('member-search-resu
 const memberSearchListElement = document.getElementById('member-search-list');
 const memberSearchKeyWord = document.getElementById('member-input');
 const memberPeopleList = document.getElementById('member-people-list');
+const updateMemberBtn = document.getElementById('update-group');
 let isAllowImageSubmit = false;
 let isAllowDataSubmit = true;
 let isAllowGroupSubmit = true;
@@ -221,7 +223,8 @@ function setGroupList(groupList) {
 				teamContentElement.classList.remove('unseen');
 				teamContentBackgroundElement.classList.remove('unseen');
 				updateTeamNameInput.value = groupName;
-				document.getElementById('team-name-title').textContent = groupName;
+				teamNameTitleElement.textContent = groupName;
+				teamNameTitleElement.value = groupId;
 				getGroupMembers(groupId);
 			})
 		})
@@ -246,7 +249,6 @@ async function getGroupMembers(groupId) {
 }
 
 function setMemberList(memberList) {
-	originalMember = {member:{}};
 	memberList.forEach(memberData => {
 		originalMember.member[memberData['member_id']] = true;
 		let imageFilename = memberData['image_filename'];
@@ -274,28 +276,47 @@ function setMemberList(memberList) {
 		element.textContent = memberName;
 		elementContainer.appendChild(element);
 	
-		let closeElement = document.createElement('div');
-		closeElement.className = 'close mouseover';
-		closeElement.addEventListener('click', () => {
-			if(memberId == userInfo['id']) {
-				let userConfirm = confirm('Are you sure to remove yourself?')
-				if(!userConfirm) {
-					return;
-				}
-			}
-			
-			delete editMember['member'][memberId];
-			memberPeopleList.removeChild(elementContainer);
-		})
+		if(memberId != userInfo['id']) {
+			let closeElement = document.createElement('div');
+			closeElement.className = 'close mouseover';
+			closeElement.addEventListener('click', () => {
+				delete editMember['member'][memberId];
+				memberPeopleList.removeChild(elementContainer);
+			})
 	
-		let closeIconElement = document.createElement('div');
-		closeIconElement.className = 'close-icon';
-	
-		closeElement.appendChild(closeIconElement);
-		elementContainer.appendChild(closeElement);
+			let closeIconElement = document.createElement('div');
+			closeIconElement.className = 'close-icon';
+			closeElement.appendChild(closeIconElement);
+			elementContainer.appendChild(closeElement);
+		}
 	
 		editMember['member'][memberId] = true;
 	});
+}
+
+async function updateTeamMember(memberDiff) {
+	let groupId = teamNameTitleElement.value;
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/group/update-member?groupId=${groupId}`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				memberDiff
+			}),
+			headers: {
+				'Authorization':`Bearer ${token}`,
+				'Content-Type':'application/json'
+			}
+	})
+
+	let result = await response.json();
+
+	if(response.ok) {
+		alert("Successfully updated team member!");
+		editMember.member = originalMember.member;
+	}
+	else {
+		alert(result['data']["message"] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''));
+	}
 }
 
 editImageBtn.addEventListener('click', ()=>{
@@ -395,6 +416,9 @@ addTeamBtn.addEventListener('click', ()=>{
 closeTeamContentBtn.addEventListener('click', ()=>{
 	teamContentElement.classList.add('unseen');
 	teamContentBackgroundElement.classList.add('unseen');
+	editMember = {member:{}};
+	originalMember = {member:{}};
+	memberPeopleList.innerHTML = '';
 })
 
 teamMemberBtn.addEventListener('click', ()=>{
@@ -416,6 +440,17 @@ memberSearchBtn.addEventListener('click', async() => {
 	let searchResult = await searchMethod(memberSearchKeyWord.value);
 
 	addSearchResult(searchResult['data'], memberSearchContainerElement, memberSearchListElement, memberPeopleList, 'member', editMember);
+})
+
+updateMemberBtn.addEventListener('click', ()=>{
+	let memberDiff = {};
+	memberDiff['delete'] = Object.keys(originalMember['member']).filter(MemberIdKey => !editMember['member'].hasOwnProperty(MemberIdKey));
+	memberDiff['add'] = Object.keys(editMember['member']).filter(MemberIdKey => !originalMember['member'].hasOwnProperty(MemberIdKey));
+	if(memberDiff['delete'].length == 0 && memberDiff['add'].length == 0) {
+		alert('team member is same as before');
+		return;
+	}
+	updateTeamMember(memberDiff);
 })
 
 window.addEventListener('click', () => {
