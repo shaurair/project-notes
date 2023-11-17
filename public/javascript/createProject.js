@@ -21,6 +21,10 @@ const teamList = document.getElementById('team-list');
 const addProjectBtn = document.getElementById('add-project');
 const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
+const darkBackgroundTeamContentElement = document.querySelector('.team-content-dark-background');
+const teamContainer = document.querySelector('.project-team-content-area');
+const closeTeamContainerBtn = document.getElementById('close-team-content');
+const memberPeopleList = document.getElementById('member-people-list');
 let createAssociate = {owner:{}, reviewer:{}, follower:{}, team:{}};
 
 async function initCreateProject() {
@@ -122,6 +126,11 @@ teamSearchBtn.addEventListener('click', async() => {
 	let searchResult = await searchMethod(teamSearchKeyWord.value);
 
 	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', createAssociate);
+})
+
+closeTeamContainerBtn.addEventListener('click', ()=>{
+	teamContainer.classList.add('unseen');
+	darkBackgroundTeamContentElement.classList.add('unseen');
 })
 
 window.addEventListener('click', (event) => {

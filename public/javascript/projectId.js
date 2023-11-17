@@ -172,46 +172,7 @@ function setTeam(name, teamListElement, groupId) {
 	elementContainer.className = 'project-team-container';
 	teamListElement.appendChild(elementContainer);
 
-	addTeamNameLinkToContainer(name, elementContainer, groupId);
-}
-
-function addTeamNameLinkToContainer(name, elementContainer, groupId) {
-	let element = document.createElement('div');
-	element.className = 'people-text mouseover';
-	element.textContent = name;
-	elementContainer.appendChild(element);
-
-	element.addEventListener('click', async() => {
-		let result = await getGroupMembers(groupId);
-		teamContainer.classList.remove('unseen');
-		darkBackgroundTeamContentElement.classList.remove('unseen');
-		document.getElementById('team-name-title').textContent = name;
-
-		memberList = result['data']['groupMember'];
-		memberPeopleList.innerHTML = '';
-		memberList.forEach(memberData => {
-			let imageFilename = memberData['image_filename'];
-			let imgUrl = (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
-			let memberId = memberData['member_id'];
-			let memberName = memberData['name'];
-
-			let elementContainer = document.createElement('div');
-			elementContainer.className = 'people-container';
-			memberPeopleList.appendChild(elementContainer);
-		
-			let element = document.createElement('div');
-			element.className = 'people-img';
-			elementContainer.appendChild(element);
-			if(imgUrl != null) {
-				element.style.backgroundImage = `url(${imgUrl})`;
-			}
-
-			element = document.createElement('div');
-			element.className = 'people-text';
-			element.textContent = memberName;
-			elementContainer.appendChild(element);
-		});
-	})
+	addNameAndLinkToContainer(name, elementContainer, groupId);
 }
 
 function setComment(commentList) {
@@ -392,7 +353,7 @@ function addEditDefaultRoles(imgUrl, userName, id, peopleListElement, associateR
 	editAssociate[associateRole][id] = true;
 }
 
-function addEditDefaultTeam(imgUrl, userName, id, peopleListElement, associateRole) {
+function addEditDefaultTeam(userName, id, peopleListElement, associateRole) {
 	if(editAssociate[associateRole][id]) {
 		return;
 	}
@@ -498,7 +459,7 @@ function setEditProjectContent() {
 	peopleListElement = document.getElementById('team-list');
 	peopleListElement.innerHTML = '';
 	for(let i = 0; i < projectData['team'].length; i++) {
-		addEditDefaultTeam(null, projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
+		addEditDefaultTeam(projectData['team'][i]['name'], projectData['team'][i]['id'], peopleListElement, 'team');
 	}
 }
 
