@@ -64,8 +64,28 @@ async function getMyGroup(memberId) {
 	}
 }
 
+async function getGroupMember(groupId) {
+	let sql = 'SELECT member.name, member_id, member.image_filename FROM group_member INNER JOIN member ON group_member.member_id = member.id WHERE group_id = ?;';
+
+	try {
+		let result = await database.databasePool.query(sql, [groupId]);
+
+		return {
+			data: {
+				message: 'ok',
+				groupMember: result
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	checkExistTeam,
 	addTeam,
-	getMyGroup
+	getMyGroup,
+	getGroupMember
 }
