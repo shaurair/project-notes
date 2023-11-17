@@ -42,7 +42,7 @@ async function initProjectId() {
 	}
 	else {
 		showMemberNav();
-		getProjectContent();
+		await getProjectContent();
 		getProjectComment();
 		setCommentImage();
 	}
@@ -56,6 +56,12 @@ async function getProjectContent() {
 	let result = await response.json();
 
 	if(response.ok) {
+		if(result['auth'] == 0) {
+			alert('You do not have the permission of this page! This page will automatically redirect to index page!');
+			location.href = '/';
+			return;
+		}
+
 		projectData = result;
 		projectData['owner'].forEach(userData => {
 			originalAssociate.owner[userData['id']] = true;

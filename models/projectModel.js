@@ -51,7 +51,28 @@ async function setAssociate(associate, projectId) {
 	}
 }
 
-async function getProjectContent(projectId) {
+async function getAuthorization(projectId, memberId) {
+	let sql = 'SELECT * FROM project_member LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id WHERE project_member.project_id = ? AND (project_member.member_id = ? OR group_member.member_id = ?);';
+	let sqlParam = [projectId, memberId, memberId];
+
+	try {
+		let result = await database.databasePool.query(sql, sqlParam);
+		let auth = result.length == 0 ? 0 : 1;
+
+		return {
+			data: {
+				message: 'ok',
+				auth: auth
+			},
+			statusCode: 200
+		}
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
+async function getProjectContent(projectId, auth) {
 	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creater_id = member.id WHERE project.id = ?;';
 	let sqlRole = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
 	let sqlTeam = 'SELECT group_table.name, group_table.id FROM project_team INNER JOIN group_table ON project_team.group_id = group_table.id WHERE project_team.project_id = ?;';
@@ -74,7 +95,8 @@ async function getProjectContent(projectId) {
 				creatorImage: contentResult[0].image_filename,
 				owner: ownerResult,
 				reviewer: reviewerResult,
-				team: teamResult
+				team: teamResult,
+				auth: auth
 			},
 			statusCode: 200
 		};
@@ -311,5 +333,6 @@ module.exports = {
 	deleteComment,
 	updateComment,
 	getProjectMain,
-	getProjectRole
+	getProjectRole,
+	getAuthorization
 }

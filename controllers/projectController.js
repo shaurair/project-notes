@@ -40,6 +40,7 @@ const getContent = async (req, res) => {
 	let userToken;
 	let memberInfo;
 	let result;
+	let auth;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
@@ -50,7 +51,14 @@ const getContent = async (req, res) => {
 		return;
 	}
 
-	result = await projectModel.getProjectContent(projectId);
+	result = await projectModel.getAuthorization(projectId, memberInfo['id']);
+	if(result.data.message != 'ok' || result.data.auth == 0) {
+		res.status(result.statusCode).send(result.data);
+		return
+	}
+	auth = result.data.auth;
+
+	result = await projectModel.getProjectContent(projectId, auth);
 
 	if(result.data.deadline != null) {
 		let date = new Date(result.data.deadline);
