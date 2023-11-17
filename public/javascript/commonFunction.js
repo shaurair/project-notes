@@ -13,6 +13,16 @@ async function searchTeam(team) {
 	return await response.json();
 }
 
+async function getGroupMembers(groupId) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/group/get-group-member?groupId=${groupId}`, {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+	});
+	return await response.json();
+}
+
 function addEnterEffect(inputElementList, buttonElementList) {
 	for(let i = 0; i < inputElementList.length; i++) {
 		inputElementList[i].addEventListener('keypress', (event) => {

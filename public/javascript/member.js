@@ -219,32 +219,16 @@ function setGroupList(groupList) {
 			element.className = 'team mouseover';
 			element.textContent = groupName;
 			teamListElement.appendChild(element);
-			element.addEventListener('click', ()=>{
+			element.addEventListener('click', async ()=>{
 				teamContentElement.classList.remove('unseen');
 				teamContentBackgroundElement.classList.remove('unseen');
 				updateTeamNameInput.value = groupName;
 				teamNameTitleElement.textContent = groupName;
 				teamNameTitleElement.value = groupId;
-				getGroupMembers(groupId);
+				let result = await getGroupMembers(groupId);
+				setMemberList(result['data']['groupMember']);
 			})
 		})
-	}
-}
-
-async function getGroupMembers(groupId) {
-	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/group/get-group-member?groupId=${groupId}`, {
-			headers: {
-				'Authorization': `Bearer ${token}`
-			}
-	});
-	let result = await response.json();
-
-	if(response.ok) {
-		setMemberList(result['data']['groupMember']);
-	}
-	else {
-		alert(result['data']['message'] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''))
 	}
 }
 

@@ -27,6 +27,9 @@ const addCommentBtn = document.getElementById('add-comment');
 const commentContainer = document.querySelector('.comment-container');
 const commentLoadMoreBtn = document.getElementById('loadmore-comment-button');
 const noCommentElement = document.getElementById('no-comment');
+const teamContainer = document.querySelector('.project-team-content-area');
+const closeTeamContainerBtn = document.getElementById('close-team-content');
+const memberPeopleList = document.getElementById('member-people-list');
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
@@ -150,7 +153,7 @@ function setProjectContent(data) {
 	// set team
 	peopleListContainer = document.getElementById('team-container');
 	for(let i = 0; i < data['team'].length; i++) {
-		setTeam(data['team'][i]['name'], peopleListContainer);
+		setTeam(data['team'][i]['name'], peopleListContainer, data['team'][i]['id']);
 	}
 }
 
@@ -163,12 +166,51 @@ function setPeople(imgUrl, name, peopleListElement) {
 	addNameToContainer(name, elementContainer);
 }
 
-function setTeam(name, teamListElement) {
+function setTeam(name, teamListElement, groupId) {
 	let elementContainer = document.createElement('div');
 	elementContainer.className = 'project-team-container';
 	teamListElement.appendChild(elementContainer);
 
-	addNameToContainer(name, elementContainer);
+	addTeamNameLinkToContainer(name, elementContainer, groupId);
+}
+
+function addTeamNameLinkToContainer(name, elementContainer, groupId) {
+	let element = document.createElement('div');
+	element.className = 'people-text mouseover';
+	element.textContent = name;
+	elementContainer.appendChild(element);
+
+	element.addEventListener('click', async() => {
+		let result = await getGroupMembers(groupId);
+		teamContainer.classList.remove('unseen');
+		darkBackgrountElement.classList.remove('unseen');
+		document.getElementById('team-name-title').textContent = name;
+
+		memberList = result['data']['groupMember'];
+		memberPeopleList.innerHTML = '';
+		memberList.forEach(memberData => {
+			let imageFilename = memberData['image_filename'];
+			let imgUrl = (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
+			let memberId = memberData['member_id'];
+			let memberName = memberData['name'];
+
+			let elementContainer = document.createElement('div');
+			elementContainer.className = 'people-container';
+			memberPeopleList.appendChild(elementContainer);
+		
+			let element = document.createElement('div');
+			element.className = 'people-img';
+			elementContainer.appendChild(element);
+			if(imgUrl != null) {
+				element.style.backgroundImage = `url(${imgUrl})`;
+			}
+
+			element = document.createElement('div');
+			element.className = 'people-text';
+			element.textContent = memberName;
+			elementContainer.appendChild(element);
+		});
+	})
 }
 
 function setComment(commentList) {
@@ -675,6 +717,11 @@ addCommentBtn.addEventListener('click', () => {
 
 commentLoadMoreBtn.addEventListener('click', () => {
 	getProjectComment();
+})
+
+closeTeamContainerBtn.addEventListener('click', ()=>{
+	teamContainer.classList.add('unseen');
+	darkBackgrountElement.classList.add('unseen');
 })
 
 window.addEventListener('click', () => {
