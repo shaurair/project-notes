@@ -121,10 +121,7 @@
 		</div>
 		<div id="create-team-input-area" class="create-team-input-area member-change-area member-order-info unseen">
 			<div class="form-headline txt-lg">Create a new team</div>
-			<img id="change-image" class="unseen"></img>
-			<div class="upload-image">
-				<input type="text" id="new-team-name" class="sign-input-text" placeholder="Enter a team name">
-			</div>
+			<input type="text" id="new-team-name" class="sign-input-text" placeholder="Enter a team name">
 			<div id="add-team-submit" class="upload-submit mouseover">Submit</div>
 			<div id="add-team-waiting" class="submit-status-place unseen">
 				<span>Uploading</span>
@@ -145,10 +142,66 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="team-content-area unseen">
+		<div class="team-content">
+			<div class="team-head-area">
+				<div id="team-name-title"></div>
+				<div id='close-team-content' class="close mouseover"><div class="close-icon"></div></div>
+			</div>
+
+			<div class="team-actions">
+				<div id="team-member" class="team-action-selected mouseover">Team member</div>
+				<div id="update-team-name" class="mouseover">Update team name</div>
+			</div>
+
+			<div class="update-team-area unseen">
+				<div class="update-team-input-area">
+					<div><input id="team-name-update-input" type="text"></div>
+				</div>
+				<div id="update-team-submit" class="upload-submit mouseover">Submit</div>
+				<div id="update-team-waiting" class="submit-status-place unseen">
+					<span>Uploading</span>
+					<img class="submit-status" src="/images/waiting.gif"></img>
+				</div>
+				<div id="update-team-success" class="submit-status-place unseen">
+					<img class="submit-status" src="/images/checked.png"></img>
+					<span>Successfully created.</span>
+				</div>
+			</div>
+
+			<div class="team-member-area">
+				<div class="form-headline txt-lg">Add team member</div>
+				<div>
+					<div class="people-area">
+						<div class="name-input-area">
+							<input type="text" id="member-input" name="owner">
+							<div class="icon-container">
+								<div id="member-search" class="search-icon mouseover"></div>
+							</div>
+						</div>
+						<div class="search-select">
+							<input type="radio" name="select-member" id="select-name-member" checked>User name
+							<input type="radio" name="select-member" id="select-id-member">Id
+						</div>
+						<div id="member-search-result" class="unseen">
+							<div id="member-search-list"></div>
+						</div>
+					</div>
+				</div>
+				<div id="member-people-list" class="people-list"></div>
+				<div class="button-container">
+					<div id='update-group' class="create-button highlight-text mouseover">Update team member</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<div class="dark-background unseen"></div>
 <%- include('footer') -%>
 </body>
 <script src="/javascript/auth.js"></script>
+<script src="/javascript/commonFunction.js"></script>
 <script src="/javascript/member.js"></script>
 <script>initMember();</script>
 </html>

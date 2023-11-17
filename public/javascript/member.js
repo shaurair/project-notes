@@ -18,10 +18,25 @@ const addTeamBtn = document.getElementById('add-team-submit');
 const newTeamNameInput = document.getElementById('new-team-name');
 const addTeamSuccessElement = document.getElementById("add-team-success");
 const addTeamWaitingElement = document.getElementById("add-team-waiting");
+const teamContentElement = document.querySelector('.team-content-area');
+const teamContentBackgroundElement = document.querySelector('.dark-background');
 const teamListElement = document.getElementById('team-list');
+const updateTeamNameInput = document.getElementById('team-name-update-input');
+const closeTeamContentBtn = document.getElementById('close-team-content');
+const teamMemberBtn = document.getElementById('team-member');
+const updateTeamNameBtn = document.getElementById('update-team-name');
+const teamMemberArea = document.querySelector('.team-member-area');
+const updateTeamNameArea = document.querySelector('.update-team-area');
+const memberSearchBtn = document.getElementById('member-search');
+const memberSearchContainerElement = document.getElementById('member-search-result');
+const memberSearchListElement = document.getElementById('member-search-list');
+const memberSearchKeyWord = document.getElementById('member-input');
+const memberPeopleList = document.getElementById('member-people-list');
 let isAllowImageSubmit = false;
 let isAllowDataSubmit = true;
 let isAllowGroupSubmit = true;
+let originalMember = {member:{}};
+let editMember = {member:{}};
 
 async function initMember() {
 	await getUser();
@@ -163,6 +178,7 @@ async function createTeam(name) {
 		addTeamSuccessElement.classList.remove("unseen");
 		alert("Successfully created! This page will automatically redirect");
 		teamListElement.innerHTML = '';
+		createTeamBtn.click();
 		getTeam();
 	}
 	else {
@@ -195,16 +211,91 @@ function setGroupList(groupList) {
 	}
 	else {
 		groupList.forEach(group => {
+			let groupName = group.name;
+			let groupId = group.group_id;
 			let element = document.createElement('div');
-			element.className = 'project-team-container mouseover';
-			element.textContent = group.name;
+			element.className = 'team mouseover';
+			element.textContent = groupName;
 			teamListElement.appendChild(element);
 			element.addEventListener('click', ()=>{
-				// TODO
-				console.log(group.group_id)
+				teamContentElement.classList.remove('unseen');
+				teamContentBackgroundElement.classList.remove('unseen');
+				updateTeamNameInput.value = groupName;
+				document.getElementById('team-name-title').textContent = groupName;
+				getGroupMembers(groupId);
 			})
 		})
 	}
+}
+
+async function getGroupMembers(groupId) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/group/get-group-member?groupId=${groupId}`, {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		setMemberList(result['data']['groupMember']);
+	}
+	else {
+		alert(result['data']['message'] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''))
+	}
+}
+
+function setMemberList(memberList) {
+	originalMember = {member:{}};
+	memberList.forEach(memberData => {
+		originalMember.member[memberData['member_id']] = true;
+		let imageFilename = memberData['image_filename'];
+		let imgUrl = (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
+		let memberId = memberData['member_id'];
+		let memberName = memberData['name'];
+
+		if(editMember['member'][memberId]) {
+			return;
+		}
+
+		let elementContainer = document.createElement('div');
+		elementContainer.className = 'people-container';
+		memberPeopleList.appendChild(elementContainer);
+	
+		let element = document.createElement('div');
+		element.className = 'people-img';
+		elementContainer.appendChild(element);
+		if(imgUrl != null) {
+			element.style.backgroundImage = `url(${imgUrl})`;
+		}
+	
+		element = document.createElement('div');
+		element.className = 'people-text';
+		element.textContent = memberName;
+		elementContainer.appendChild(element);
+	
+		let closeElement = document.createElement('div');
+		closeElement.className = 'close mouseover';
+		closeElement.addEventListener('click', () => {
+			if(memberId == userInfo['id']) {
+				let userConfirm = confirm('Are you sure to remove yourself?')
+				if(!userConfirm) {
+					return;
+				}
+			}
+			
+			delete editMember['member'][memberId];
+			memberPeopleList.removeChild(elementContainer);
+		})
+	
+		let closeIconElement = document.createElement('div');
+		closeIconElement.className = 'close-icon';
+	
+		closeElement.appendChild(closeIconElement);
+		elementContainer.appendChild(closeElement);
+	
+		editMember['member'][memberId] = true;
+	});
 }
 
 editImageBtn.addEventListener('click', ()=>{
@@ -300,3 +391,38 @@ addTeamBtn.addEventListener('click', ()=>{
 		createTeam(newTeamNameInput.value);
 	}
 })
+
+closeTeamContentBtn.addEventListener('click', ()=>{
+	teamContentElement.classList.add('unseen');
+	teamContentBackgroundElement.classList.add('unseen');
+})
+
+teamMemberBtn.addEventListener('click', ()=>{
+	teamMemberArea.classList.remove('unseen');
+	updateTeamNameArea.classList.add('unseen');
+	teamMemberBtn.classList.add('team-action-selected');
+	updateTeamNameBtn.classList.remove('team-action-selected');
+})
+
+updateTeamNameBtn.addEventListener('click', ()=>{
+	teamMemberArea.classList.add('unseen');
+	updateTeamNameArea.classList.remove('unseen');
+	teamMemberBtn.classList.remove('team-action-selected');
+	updateTeamNameBtn.classList.add('team-action-selected');
+})
+
+memberSearchBtn.addEventListener('click', async() => {
+	searchMethod = document.getElementById('select-id-member').checked ? searchId : searchName;
+	let searchResult = await searchMethod(memberSearchKeyWord.value);
+
+	addSearchResult(searchResult['data'], memberSearchContainerElement, memberSearchListElement, memberPeopleList, 'member', editMember);
+})
+
+window.addEventListener('click', () => {
+	if(!memberSearchContainerElement.classList.contains('unseen')) {
+		memberSearchContainerElement.classList.add('unseen');
+	}
+});
+
+// Enter events
+addEnterEffect([memberSearchKeyWord], [memberSearchBtn]);
