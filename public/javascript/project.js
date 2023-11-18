@@ -208,6 +208,13 @@ function setLoadmoreBtn(status) {
 	}
 }
 
+function resetLoadmoreBtn() {
+	loadmoreOpenBtn.classList.remove('unseen');
+	loadmoreProgressBtn.classList.remove('unseen');
+	loadmoreReviewingBtn.classList.remove('unseen');
+	loadmoreDoneBtn.classList.remove('unseen');
+}
+
 loadmoreOpenBtn.addEventListener('click', () => {
 	getMainAndRole('OPEN');
 })
@@ -237,6 +244,7 @@ searchBtn.addEventListener('click', () => {
 	noResultProgressElement.classList.add('unseen');
 	noResultReviewingElement.classList.add('unseen');
 	noResultDoneElement.classList.add('unseen');
+	resetLoadmoreBtn();
 
 	myRole = myRoleSelect.value;
 	keyword = keywordInput.value;
