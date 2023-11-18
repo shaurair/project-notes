@@ -218,7 +218,7 @@ const getProjectMainAndRole = async (req, res) => {
 		res.status(403).send({data: {"message" : "User not log in"}});
 		return;
 	}
-	result = await projectModel.getProjectMain(memberId, status, page, keyword);
+	result = await projectModel.getProjectMain(memberId, status, page, keyword, myRole);
 	if(result.data.message != 'ok') {
 		res.status(result.statusCode).send(result.data);
 		return;

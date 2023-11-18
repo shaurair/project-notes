@@ -269,18 +269,30 @@ async function updateComment(commentId, comment) {
 	}
 }
 
-async function getProjectMain(memberId, status, page, keyword) {
+async function getProjectMain(memberId, status, page, keyword, myRole) {
 	let limit = 5;
 	let offset = page * limit;
 	let sql;
 	let sqlParam;
-	if(keyword == '') {
-		sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
-		sqlParam = [memberId, status, (limit + 1), offset];
+	if(myRole == 0) {
+		if(keyword == '') {
+			sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+			sqlParam = [memberId, status, (limit + 1), offset];
+		}
+		else {
+			sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? AND project.summary like ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+			sqlParam = [memberId, status, `%${keyword}%`, (limit + 1), offset];
+		}
 	}
 	else {
-		sql = 'SELECT DISTINCT project_id, project.summary, project.priority, project.deadline FROM project_member INNER JOIN project ON project_member.project_id = project.id WHERE member_id = ? AND project.status = ? AND project.summary like ? ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
-		sqlParam = [memberId, status, `%${keyword}%`, (limit + 1), offset];
+		if(keyword == '') {
+			sql = 'SELECT DISTINCT project.id AS project_id, project.summary, project.priority, project.deadline FROM project LEFT JOIN project_member ON project_member.project_id = project.id LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id WHERE (project_member.member_id = ? OR group_member.member_id = ?) AND project.status = ? GROUP BY project.id ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+			sqlParam = [memberId, memberId, status, (limit + 1), offset];
+		}
+		else {
+			sql = 'SELECT DISTINCT project.id AS project_id, project.summary, project.priority, project.deadline FROM project LEFT JOIN project_member ON project_member.project_id = project.id LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id WHERE (project_member.member_id = ? OR group_member.member_id = ?) AND project.status = ?  AND project.summary like ? GROUP BY project.id ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+			sqlParam = [memberId, memberId, status, `%${keyword}%`, (limit + 1), offset];
+		}
 	}
 
 	try {
