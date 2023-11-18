@@ -627,7 +627,7 @@ async function addComment(datetime) {
 		if(commentContainer.innerHTML == '') {
 			noCommentElement.classList.add('unseen');
 		}
-		addCommentBlock(userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value);
+		addCommentBlock(userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value, result['commentId']);
 		commentInputElement.value = '';
 	}
 	else {

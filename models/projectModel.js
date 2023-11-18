@@ -221,11 +221,12 @@ async function updateAssociateGroup(projectId, changeGroupList) {
 async function addComment(projectId, memberId, comment, datetime) {
 	let sql = 'INSERT INTO comment(project_id, member_id, comment, datetime) VALUES(?, ?, ?, ?);';
 	try {
-		await database.databasePool.query(sql, [projectId, memberId, comment, datetime]);
+		let result = await database.databasePool.query(sql, [projectId, memberId, comment, datetime]);
 
 		return {
 			data: {
-				message: 'ok'
+				message: 'ok',
+				commentId: result.insertId
 			},
 			statusCode: 200
 		};
