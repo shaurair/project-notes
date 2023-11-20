@@ -52,8 +52,8 @@ async function setAssociate(associate, projectId) {
 }
 
 async function getAuthorization(projectId, memberId) {
-	let sql = 'SELECT * FROM project_member LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id WHERE project_member.project_id = ? AND (project_member.member_id = ? OR group_member.member_id = ?);';
-	let sqlParam = [projectId, memberId, memberId];
+	let sql = 'SELECT project_member.project_id FROM project_member LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id INNER JOIN project ON project_member.project_id = project.id WHERE project_member.project_id = ? AND (project_member.member_id = ? OR group_member.member_id = ? OR project.creater_id = ?);';
+	let sqlParam = [projectId, memberId, memberId, memberId];
 
 	try {
 		let result = await database.databasePool.query(sql, sqlParam);
