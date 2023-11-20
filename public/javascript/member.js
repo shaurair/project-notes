@@ -296,7 +296,7 @@ async function updateTeamMember(memberDiff) {
 
 	if(response.ok) {
 		alert("Successfully updated team member!");
-		editMember.member = originalMember.member;
+		originalMember.member = {...editMember.member};
 	}
 	else {
 		alert(result['data']["message"] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''));
