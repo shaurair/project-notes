@@ -489,7 +489,7 @@ td.tb-project-people {
 	filter: saturate(0.9);
 }
 .note-button:hover {
-	filter: brightness(1.1);
+	filter: brightness(1.01);
 }
 .personal-list {
 	display: flex;
@@ -604,16 +604,29 @@ td.tb-project-people {
 /*  project/id usage  */
 /* ================== */
 .project-head-container {
+	box-sizing: border-box;
+	padding: 0 30px;
+}
+.project-option {
 	display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
+	gap: 1rem;
+}
+.project-option-item {
+	font-size: 14px;
+    background-color: #eee;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+.project-option-item:hover {
+	font-weight: 500;
 }
 .project-head {
 	display: flex;
 	gap: 15px;
 	box-sizing: border-box;
 	padding: 0 30px;
-	margin-bottom: 40px;
+	margin-bottom: 1rem;
 }
 .project-title {
 	display: flex;
