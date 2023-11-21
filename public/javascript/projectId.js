@@ -13,7 +13,7 @@ const teamSearchContainerElement = document.getElementById('team-search-result')
 const teamSearchListElement = document.getElementById('team-search-list');
 const teamSearchKeyWord = document.getElementById('team-input');
 const teamList = document.getElementById('team-list');
-const viewmoreBtn = document.getElementById('project-viewmore');
+// const viewmoreBtn = document.getElementById('project-viewmore');
 const statusSelect = document.getElementById('project-status-value');
 const editProjectBtn = document.getElementById('edit-project');
 const cancelEditBtn = document.getElementById('cancel-edit-project');
@@ -46,9 +46,30 @@ async function initProjectId() {
 	}
 	else {
 		showMemberNav();
-		await getProjectContent();
+		await CheckAuthorization();
+		getProjectContent();
 		getProjectComment();
 		setCommentImage();
+	}
+}
+
+async function CheckAuthorization() {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/auth?id=${projectId}`, {
+								headers: {Authorization: `Bearer ${token}`}
+							});
+	let result = await response.json();
+
+	if(response.ok) {
+		if(result['auth'] == 0) {
+			document.querySelector('.main-project-lock').classList.remove('unseen');
+		}
+		else {
+			document.querySelector('.main-project-id').classList.remove('unseen');
+		}
+	}
+	else {
+		alert('something went wrong, please redirect and try again');
 	}
 }
 
@@ -60,12 +81,6 @@ async function getProjectContent() {
 	let result = await response.json();
 
 	if(response.ok) {
-		if(result['auth'] == 0) {
-			alert('You do not have the permission of this page! This page will automatically redirect to index page!');
-			location.href = '/';
-			return;
-		}
-
 		projectData = result;
 		projectData['owner'].forEach(userData => {
 			originalAssociate.owner[userData['id']] = true;
@@ -664,15 +679,15 @@ statusSelect.addEventListener('change', () => {
 });
 
 // Click events
-viewmoreBtn.addEventListener('click', () => {
-	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
-	if(viewmoreDialogueElement.classList.contains('unseen')) {
-		viewmoreDialogueElement.classList.remove('unseen');
-	}
-	else {
-		viewmoreDialogueElement.classList.add('unseen');
-	}
-})
+// viewmoreBtn.addEventListener('click', () => {
+// 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
+// 	if(viewmoreDialogueElement.classList.contains('unseen')) {
+// 		viewmoreDialogueElement.classList.remove('unseen');
+// 	}
+// 	else {
+// 		viewmoreDialogueElement.classList.add('unseen');
+// 	}
+// })
 
 editProjectBtn.addEventListener('click', () => {
 	darkBackgrountElement.classList.remove('unseen');

@@ -8,10 +8,15 @@
 </head>
 <body>
 <%- include('header') -%>
-<div class="main main-project-id">
+<div class="main main-project-lock unseen">
+	<img class="main-image" src="/images/lock.png"/>
+	<div>You do not have the permission of this page! Only project owner, reviewer, and related team member can access the project</div>
+</div>
+<div class="main main-project-id unseen">
 	<div class="project-head-container sight-fit">
 		<div class="project-head">
-			<div id="project-viewmore" class="note-action-container mouseover">
+			
+			<!-- <div id="project-viewmore" class="note-action-container mouseover">
 				<img class="note-action-image" src="/images/viewmore.png"/>
 				<div style="position: absolute;">
 					<div class="viewmore-dialogue-project unseen">
@@ -20,42 +25,48 @@
 						<div class="move-note">Add to my notes</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="project-title project-text"><div class="project-id"><div>Project-<%= id%></div></div><div class="project-summary-container"><div id="project-summary"></div></div></div>
 		</div>
 	</div>
 	<div class="project-content sight-fit">
-		<div class="project-main">
-			<div class="main-block-vertical">
-				<div class="block-title project-text">Description</div>
-				<div id="project-description" class="block-content normal-text"></div>
+		<div >
+			<div class="project-option">
+				<div id="edit-project" class="project-option-item mouseover">Edit</div>
+				<div class="project-option-item mouseover">Add to personal notes</div>
 			</div>
-			<div class="comment-block-vertical">
-				<div class="block-title project-text">Comment</div>
-				<div id="no-comment" class="block-content normal-text unseen">No comment yet.</div>
-				<div class="comment-container"></div>
-				<div class="loadmore-comment"><div id="loadmore-comment-button" class="mouseover unseen">Load more comments</div></div>
-				<div class="add-comment-container normal-text">
-					<div class="comment-block">
-						<div id="add-comment-img" class="comment-img"></div>
-						<textarea id="add-comment-text" type="text" placeholder="Leave a comment"></textarea>
-					</div>
-					<div class="add-comment-btn-container">
-						<div id='add-comment' class="create-button project-text mouseover">Add</div>
+			<div class="project-main">
+				<div class="main-block-vertical">
+					<div class="block-title project-text">Description</div>
+					<div id="project-description" class="block-content normal-text"></div>
+				</div>
+				<div class="comment-block-vertical">
+					<div class="block-title project-text title-comment">Comment</div>
+					<div id="no-comment" class="block-content normal-text unseen">No comment yet.</div>
+					<div class="comment-container"></div>
+					<div class="loadmore-comment"><div id="loadmore-comment-button" class="mouseover unseen">Load more comments</div></div>
+					<div class="add-comment-container normal-text">
+						<div class="comment-block">
+							<div id="add-comment-img" class="comment-img"></div>
+							<textarea id="add-comment-text" type="text" placeholder="Leave a comment"></textarea>
+						</div>
+						<div class="add-comment-btn-container">
+							<div id='add-comment' class="create-button project-text mouseover">Add</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="main-block-vertical unseen">
-				<div class="block-title note-title-project">My personal note</div>
-				<div class="block-content-note normal-text">
-					<div><textarea class="input-note-project" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
-						</textarea>
-					</div>
-					<div class="project-id-note-button-group">
-						<div class="note-text-button-container">
-							<button class="note-text-button">Save</button>
+				<div class="main-block-vertical unseen">
+					<div class="block-title note-title-project">My personal note</div>
+					<div class="block-content-note normal-text">
+						<div><textarea class="input-note-project" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
+							</textarea>
 						</div>
-						<div class="note-delete-icon mouseover"></div>
+						<div class="project-id-note-button-group">
+							<div class="note-text-button-container">
+								<button class="note-text-button">Save</button>
+							</div>
+							<div class="note-delete-icon mouseover"></div>
+						</div>
 					</div>
 				</div>
 			</div>

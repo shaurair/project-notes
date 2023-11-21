@@ -610,13 +610,14 @@ td.tb-project-people {
 .project-option {
 	display: flex;
 	gap: 1rem;
+	margin-bottom: 1rem;
 }
 .project-option-item {
 	font-size: 14px;
     background-color: #eee;
     box-sizing: border-box;
     padding: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
 }
 .project-option-item:hover {
 	font-weight: 500;
@@ -642,13 +643,14 @@ td.tb-project-people {
 }
 #project-description {
 	width: 50vw;
-	height: 300px;
+	min-height: 60px;
 	overflow: scroll;
 	white-space: pre-wrap;
-	border-style: ridge;
-    margin: 20px 40px 0 0;
+    margin: 15px 40px 0 10px;
+	box-sizing: border-box;
+    padding: 10px;
 }
-.viewmore-dialogue-project {
+/* .viewmore-dialogue-project {
 	position: absolute;
     top: 15px;
     left: 15px;
@@ -658,7 +660,7 @@ td.tb-project-people {
     border: 1px solid;
     padding: 5px;
     background-color: white;
-}
+} */
 .project-content {
 	display: flex;
 	justify-content: space-between;
@@ -702,8 +704,11 @@ td.tb-project-people {
 }
 .block-title {
 	width: max-content;
-	font-weight: 600;
-	font-size: x-large;
+    font-weight: 600;
+    font-size: x-large;
+    box-sizing: border-box;
+    padding: 0 0 1px 0;
+	border-bottom: solid;
 }
 .block-subtitle {
 	font-size: large;
@@ -712,6 +717,9 @@ td.tb-project-people {
 	font-size: 16px;
 	font-weight: 500;
 	width: min-content;
+}
+.title-comment {
+	margin-bottom: 10px;
 }
 .normal-text {
 	color: var(--color-text);
@@ -772,10 +780,14 @@ td.tb-project-people {
 .auth-drop {
 	width: 120px;
 }
+#no-comment {
+	margin: 0 0 0 10px;
+}
 .comment-container {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+	margin: 0 0 0 10px;
 }
 .comment-block {
 	display: flex;
@@ -827,13 +839,14 @@ td.tb-project-people {
 	flex-direction: column;
 	gap: 5px;
 	width: fit-content;
+	margin: 0 0 0 10px;
 }
 .edit-comment-text {
-	width: calc(50vw - 45px);
+	width: calc(50vw - 55px);
     height: 100px;
 }
 #add-comment-text {
-	width: calc(50vw - 45px);
+	width: calc(50vw - 55px);
     height: 100px;
 }
 .loadmore-comment {
@@ -1351,6 +1364,16 @@ td.tb-project-people {
 	align-items: center;
 	gap: 10px;
 }
+.main-project-lock {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	box-sizing: border-box;
+    padding: 0 40px;
+    color: var(--color-highlight);
+    font-weight: 500;
+}
 .main-personal {
 	display: flex;
 	flex-direction: column;
@@ -1403,7 +1426,11 @@ td.tb-project-people {
 .highlight-block {
 	border: 2px solid #f22;
 }
-
+.main-image {
+	width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
 /* ====================================== */
 /*  700 px ~ 1200 px screen               */
 /* ====================================== */

@@ -3,6 +3,7 @@ const router = express.Router();
 const projectController = require('../controllers/projectController');
 
 router.post('/', projectController.create);
+router.get('/auth', projectController.getAuthorization);
 router.get('/content', projectController.getContent);
 router.get('/comment', projectController.getComment);
 router.patch('/', projectController.update);

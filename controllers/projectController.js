@@ -35,12 +35,11 @@ const create = async (req, res) => {
 	}
 }
 
-const getContent = async (req, res) => {
+const getAuthorization = async (req, res) => {
 	let projectId = req.query.id;
 	let userToken;
 	let memberInfo;
 	let result;
-	let auth;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
@@ -52,13 +51,25 @@ const getContent = async (req, res) => {
 	}
 
 	result = await projectModel.getAuthorization(projectId, memberInfo['id']);
-	if(result.data.message != 'ok' || result.data.auth == 0) {
-		res.status(result.statusCode).send(result.data);
-		return
-	}
-	auth = result.data.auth;
+	res.status(result.statusCode).send(result.data);
+}
 
-	result = await projectModel.getProjectContent(projectId, auth);
+const getContent = async (req, res) => {
+	let projectId = req.query.id;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.getProjectContent(projectId);
 
 	if(result.data.deadline != null) {
 		let date = new Date(result.data.deadline);
@@ -259,5 +270,6 @@ module.exports = {
 	deleteComment,
 	updateComment,
 	updateStatus,
-	getProjectMainAndRole
+	getProjectMainAndRole,
+	getAuthorization
 }

@@ -72,7 +72,7 @@ async function getAuthorization(projectId, memberId) {
 	}
 }
 
-async function getProjectContent(projectId, auth) {
+async function getProjectContent(projectId) {
 	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creater_id = member.id WHERE project.id = ?;';
 	let sqlRole = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
 	let sqlTeam = 'SELECT group_table.name, group_table.id FROM project_team INNER JOIN group_table ON project_team.group_id = group_table.id WHERE project_team.project_id = ?;';
@@ -95,8 +95,7 @@ async function getProjectContent(projectId, auth) {
 				creatorImage: contentResult[0].image_filename,
 				owner: ownerResult,
 				reviewer: reviewerResult,
-				team: teamResult,
-				auth: auth
+				team: teamResult
 			},
 			statusCode: 200
 		};
