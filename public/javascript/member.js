@@ -337,6 +337,8 @@ async function updateTeamName() {
 		updateTeamNameSuccessElement.classList.remove('unseen');
 		teamNameTitleElement.textContent = newName;
 		enableUpdateTeamNameButton();
+		teamListElement.innerHTML = '';
+		getTeam();
 	}
 	else {
 		alert(result['data']["message"] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''));
