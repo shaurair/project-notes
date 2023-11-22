@@ -34,9 +34,13 @@ const memberSearchListElement = document.getElementById('member-search-list');
 const memberSearchKeyWord = document.getElementById('member-input');
 const memberPeopleList = document.getElementById('member-people-list');
 const updateMemberBtn = document.getElementById('update-group');
+const updateTeamNameSubmitBtn = document.getElementById('update-team-submit');
+const updateTeamNameSuccessElement = document.getElementById("update-team-success");
+const updateTeamNameWaitingElement = document.getElementById("update-team-waiting");
 let isAllowImageSubmit = false;
 let isAllowDataSubmit = true;
 let isAllowGroupSubmit = true;
+let isAllowUpdateTeamNameSubmit = true;
 let originalMember = {member:{}};
 let editMember = {member:{}};
 
@@ -104,6 +108,18 @@ function enableAddTeamButton() {
 	addTeamBtn.style.cursor = "pointer";
 	addTeamBtn.classList.add("mouseover");
 	isAllowGroupSubmit = true;
+}
+
+function disableUpdateTeamNameButton() {
+	updateTeamNameSubmitBtn.style.cursor = 'not-allowed';
+	updateTeamNameSubmitBtn.classList.remove('mouseover');
+	isAllowUpdateTeamNameSubmit = false;
+}
+
+function enableUpdateTeamNameButton() {
+	updateTeamNameSubmitBtn.style.cursor = "pointer";
+	updateTeamNameSubmitBtn.classList.add("mouseover");
+	isAllowUpdateTeamNameSubmit = true;
 }
 
 async function sendImageFile() {
@@ -303,6 +319,30 @@ async function updateTeamMember(memberDiff) {
 	}
 }
 
+async function updateTeamName() {
+	let groupId = teamNameTitleElement.value;
+	let newName = updateTeamNameInput.value;
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/group/update-name?groupId=${groupId}&name=${newName}`, {
+			method: 'PUT',
+			headers: {
+				'Authorization':`Bearer ${token}`
+			}
+	})
+
+	let result = await response.json();
+
+	updateTeamNameWaitingElement.classList.add('unseen');
+	if(response.ok) {
+		updateTeamNameSuccessElement.classList.remove('unseen');
+		teamNameTitleElement.textContent = newName;
+		enableUpdateTeamNameButton();
+	}
+	else {
+		alert(result['data']["message"] + (response.status >= 500 ? ' Please redirect this page and try again.' : ''));
+	}
+}
+
 editImageBtn.addEventListener('click', ()=>{
 	if(editImageBtn.textContent == "Cancel") {
 		editImageElement.classList.add("unseen");
@@ -435,6 +475,19 @@ updateMemberBtn.addEventListener('click', ()=>{
 		return;
 	}
 	updateTeamMember(memberDiff);
+})
+
+updateTeamNameSubmitBtn.addEventListener('click', ()=>{
+	if(isAllowUpdateTeamNameSubmit) {
+		if(teamNameTitleElement.textContent === updateTeamNameInput.value) {
+			alert('input team name has not changed!')
+			return;
+		}
+		disableUpdateTeamNameButton();
+		updateTeamNameSuccessElement.classList.add('unseen');
+		updateTeamNameWaitingElement.classList.remove('unseen');
+		updateTeamName();
+	}
 })
 
 window.addEventListener('click', () => {

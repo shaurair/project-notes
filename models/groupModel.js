@@ -1,7 +1,7 @@
 const database = require('./conn-aws-RDS');
 
 async function checkExistTeam(name) {
-	let sql = 'SELECT * FROM group_table WHERE name = ?;';
+	let sql = 'SELECT * FROM group_table WHERE name = ? COLLATE utf8mb4_bin;';
 	try {
 		let result = await database.databasePool.query(sql, [name]);
 		if(result.length == 0) {
@@ -108,10 +108,29 @@ async function updateMember(groupId, changeMemberList) {
 	}
 }
 
+async function updateTeamName(groupId, newName) {
+	let sql = 'UPDATE group_table set name = ? WHERE id = ?;';
+
+	try {
+		await database.databasePool.query(sql, [newName, groupId]);
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	checkExistTeam,
 	addTeam,
 	getMyGroup,
 	getGroupMember,
-	updateMember
+	updateMember,
+	updateTeamName
 }

@@ -23,11 +23,6 @@ const createGroup = async (req, res) => {
 	}
 
 	result = await groupModel.addTeam(name, memberInfo['id']);
-	if(result.data.message != 'ok') {
-		res.status(result.statusCode).send(result);
-		return;
-	}
-
 	res.status(result.statusCode).send(result);
 }
 
@@ -88,9 +83,36 @@ const updateMember = async (req, res) => {
 	res.status(result.statusCode).send(result);
 }
 
+const updateTeamName = async (req, res) => {
+	let userToken;
+	let memberInfo;
+	let groupId = req.query.groupId;
+	let newName = req.query.name;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await groupModel.checkExistTeam(newName);
+	if(result.data.message != 'ok') {
+		res.status(result.statusCode).send(result);
+		return;
+	}
+
+	result = await groupModel.updateTeamName(groupId, newName);
+	res.status(result.statusCode).send(result);
+}
+
 module.exports = {
 	createGroup,
 	getMyGroup,
 	getGroupMember,
-	updateMember
+	updateMember,
+	updateTeamName
 }
