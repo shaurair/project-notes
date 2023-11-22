@@ -38,7 +38,26 @@ async function getOneNote(projectId, memberId) {
 	}
 }
 
+async function deleteNote(projectId, memberId) {
+	let sql = 'DELETE FROM note WHERE project_id = ? AND member_id = ?;';
+
+	try {
+		await database.databasePool.query(sql, [projectId, memberId]);
+
+		return {
+			data: {
+				message: 'ok',
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	addNote,
-	getOneNote
+	getOneNote,
+	deleteNote
 }

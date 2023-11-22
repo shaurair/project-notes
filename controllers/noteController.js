@@ -53,7 +53,27 @@ const getOneNote = async (req, res) => {
 	res.status(result.statusCode).send(result['data']);
 }
 
+const deleteNote = async (req, res) => {
+	let projectId = req.body.projectId;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await noteModel.deleteNote(projectId, memberInfo['id']);
+	res.status(result.statusCode).send(result['data']);
+}
+
 module.exports = {
 	addNote,
-	getOneNote
+	getOneNote,
+	deleteNote
 }

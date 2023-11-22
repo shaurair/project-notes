@@ -35,6 +35,7 @@ const addToNoteBtn = document.getElementById('add-to-note');
 const personalNoteArea = document.querySelector('.personal-note-area');
 const personalNoteInput = document.getElementById('input-note-project');
 const saveNoteBtn = document.getElementById('save-note-project');
+const deleteNoteBtn = document.getElementById('delete-note-project');
 const updateNoteWait = document.getElementById('update-waiting');
 const updateNoteSuccess = document.getElementById('update-success');
 const AUTH = {
@@ -50,6 +51,7 @@ let editContent;
 let nextCommentPage = 0;
 let currentPersonalNote = '';
 let isAllowSaveNote = false;
+let isAllowDeleteNote = false;
 
 async function initProjectId() {
 	await getUser();
@@ -720,9 +722,35 @@ async function addPersonalNote() {
 
 	if(response.ok) {
 		currentPersonalNote = note;
+		saveNoteBtn.classList.remove('note-save-enable');
+		isAllowDeleteNote = true;
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
+async function updatePersonalNote() {
+	let note = personalNoteInput.value;
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note`, {
+		method: 'POST',
+		headers: {Authorization: `Bearer ${token}`,
+								'Content-Type':'application/json'
+				},
+		body: JSON.stringify( {
+			projectId: projectId,
+			note: note
+		})
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		currentPersonalNote = note;
 		updateNoteWait.classList.add('unseen');
 		updateNoteSuccess.classList.remove('unseen');
 		saveNoteBtn.classList.remove('note-save-enable');
+		isAllowDeleteNote = true;
 	}
 	else {
 		alert(result["message"] + " Please redirect this page and try again.");
@@ -740,7 +768,31 @@ async function getNote() {
 		if(result['note'] != null) {
 			currentPersonalNote = personalNoteInput.value = result['note'];
 			addToNoteBtn.textContent = 'See my personal notes';
+			isAllowDeleteNote = true;
 		}
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
+async function deleteNote() {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note`, {
+						method: 'DELETE',
+						headers: {Authorization: `Bearer ${token}`,
+												'Content-Type':'application/json'
+								},
+						body: JSON.stringify( {
+							projectId: projectId,
+						})
+					})
+	let result = await response.json();
+
+	if(response.ok) {
+		currentPersonalNote = personalNoteInput.value = '';
+		addToNoteBtn.textContent = 'Add to personal notes';
+		personalNoteArea.classList.add('unseen');
 	}
 	else {
 		alert(result["message"] + " Please redirect this page and try again.");
@@ -862,8 +914,21 @@ addToNoteBtn.addEventListener('click', ()=>{
 
 saveNoteBtn.addEventListener('click', ()=>{
 	if(isAllowSaveNote) {
-		addPersonalNote();
+		updatePersonalNote();
 		updateNoteWait.classList.remove('unseen')
+	}
+})
+
+deleteNoteBtn.addEventListener('click', ()=>{
+	if(isAllowDeleteNote) {
+		let userConfirm = confirm('Are you sure to delete this note?');
+		if(userConfirm) {
+			isAllowSaveNote = false;
+			isAllowDeleteNote = false;
+			saveNoteBtn.classList.remove('note-save-enable');
+			updateNoteSuccess.classList.add('unseen');
+			deleteNote();
+		}
 	}
 })
 
