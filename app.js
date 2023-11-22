@@ -41,11 +41,13 @@ const memberRouter = require('./routes/member');
 const searchRouter = require('./routes/search');
 const projectRouter = require('./routes/project');
 const groupRouter = require('./routes/group');
+const noteRouter = require('./routes/note');
 app.use('/log', logRouter);
 app.use('/auth', authRouter);
 app.use('/member', memberRouter);
 app.use('/search', searchRouter);
 app.use('/api_project', projectRouter);
-app.use('/api/group/', groupRouter);
+app.use('/api/group', groupRouter);
+app.use('/api/note', noteRouter);
 
 app.listen(port);
