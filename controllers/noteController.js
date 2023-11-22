@@ -72,8 +72,28 @@ const deleteNote = async (req, res) => {
 	res.status(result.statusCode).send(result['data']);
 }
 
+const getNotes = async (req, res) => {
+	let nextPage = req.query.nextPage;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await noteModel.getNotes(memberInfo['id'], nextPage);
+	res.status(result.statusCode).send(result['data']);
+}
+
 module.exports = {
 	addNote,
 	getOneNote,
-	deleteNote
+	deleteNote,
+	getNotes
 }
