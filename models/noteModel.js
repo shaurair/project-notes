@@ -41,7 +41,7 @@ async function getOneNote(projectId, memberId) {
 async function getNotes(memberId, page) {
 	let limit = 6;
 	let offset = page * limit;
-	let sql = 'SELECT project_id, project.summary, note FROM note INNER JOIN project ON project_id = project.id WHERE member_id = ? LIMIT ? OFFSET ?;';
+	let sql = 'SELECT project_id, project.summary, note FROM note INNER JOIN project ON project_id = project.id WHERE member_id = ? ORDER BY note.id DESC LIMIT ? OFFSET ?;';
 
 	try {
 		let result = await database.databasePool.query(sql, [memberId, (limit + 1), offset]);

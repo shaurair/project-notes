@@ -12,71 +12,27 @@
 	<div class="note-options-area">
 		<div class="note-options-container">
 			<div class="note-title-container">
-				<label class="note-title-label">Add a note connected to a project</label>
-				<input class="keyword-input" type="text" placeholder="Enter project id">
+				<label class="note-title-label">Search the note of a project</label>
+				<input id="search-note-id" class="keyword-input" type="text" placeholder="Enter project id">
 			</div>
 			<div class="note-option-button-container">
-				<button class="note-button mouseover">Add note</button>
+				<button id="search-note-project-id" class="note-button mouseover">Search</button>
 			</div>
 		</div>
 		<!-- <div class="note-options-container">
 			<div class="note-title-container">
-				<label class="note-title-label">Add a new note title</label>
-				<input class="keyword-input" type="text" placeholder="Enter title name">
+				<label class="note-title-label">Add a note connected to a project</label>
+				<input id="add-note-id" class="keyword-input" type="text" placeholder="Enter project id">
 			</div>
 			<div class="note-option-button-container">
-				<button class="note-button mouseover">Add note</button>
+				<button id="add-note-project-id" class="note-button mouseover">Add note</button>
 			</div>
 		</div> -->
 	</div>
 	<hr class="separator-sight-fit"/>
+	<div id="no-note" class="normal-text unseen">No result.</div>
 	<div class="personal-list sight-fit">
-		<div class="note">
-			<div class="note-head">
-				<div class="note-title"><a href="/project/1" target="_blank" class="hyperlink project-text">project 1: solve xxx problem</a></div>
-				<div class="note-action-container mouseover"><img class="note-action-image" src="/images/viewmore.png"/></div>
-			</div>	
-			<div><textarea id="note-text-1" class="input-note" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
-				</textarea>
-			</div>
-			<div class="note-button-group">
-				<div class="note-text-button-container">
-					<button class="note-text-button">Save</button>
-				</div>
-				<div class="note-delete-icon mouseover"></div>
-			</div>
-		</div>
-		<div class="note">
-			<div class="note-head">
-				<div class="note-title"><a href="/project/3" target="_blank" class="hyperlink project-text">project 3: solve 3xx problem</a></div>
-				<div class="note-action-container mouseover"><img class="note-action-image" src="/images/viewmore.png"/></div>
-			</div>	
-			<div><textarea id="note-text-1" class="input-note" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
-				</textarea>
-			</div>
-			<div class="note-button-group">
-				<div class="note-text-button-container">
-					<button class="note-text-button">Save</button>
-				</div>
-				<div class="note-delete-icon mouseover"></div>
-			</div>
-		</div>
-		<!-- <div class="note">
-			<div class="note-head">
-				<div class="note-title"><a class="new-title-text">regular work</a></div>
-				<div class="note-action-container mouseover"><img class="note-action-image" src="/images/viewmore.png"/></div>
-			</div>	
-			<div><textarea id="note-text-2" class="input-note" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
-				</textarea>
-			</div>
-			<div class="note-button-group">
-				<div class="note-text-button-container">
-					<button class="note-text-button">Save</button>
-				</div>
-				<div class="note-delete-icon mouseover"></div>
-			</div>
-		</div> -->
-		<div class="note note-selected">
+		<!-- <div class="note note-selected">
 			<div class="note-head">
 				<div class="note-title"><a href="/project/5" target="_blank" class="hyperlink project-text">project 5: solve no 5 problem</a></div>
 				<div class="note-action-container mouseover"><img class="note-action-image" src="/images/viewmore.png"/></div>
@@ -90,8 +46,8 @@
 				</div>
 				<div class="note-delete-icon mouseover"></div>
 			</div>
-		</div>
-		<div class="note">
+		</div> -->
+		<!-- <div class="note">
 			<div class="note-head">
 				<div class="note-title"><a href="/project/11" target="_blank" class="hyperlink project-text">project 11: solve no 200 problem</a></div>
 				<div class="note-action-container mouseover">
@@ -116,12 +72,14 @@
 				</div>
 				<div class="note-delete-icon mouseover"></div>
 			</div>
-		</div>
+		</div> -->
 	</div>
+	<div class="loadmore-status"><div id="loadmore-note-button" class="loadmore-note-button unseen mouseover">Load more</div></div>
 </div>
 <%- include('footer') -%>
 </body>
 <script src="/javascript/auth.js"></script>
+<script src="/javascript/commonFunction.js"></script>
 <script src="/javascript/personal.js"></script>
 <script>initPersonal();</script>
 </html>

@@ -530,6 +530,12 @@ td.tb-project-people {
 .highlight-text {
 	color: var(--color-highlight);
 }
+.waiting-text {
+	color: rgb(34 120 201);
+}
+.success-text {
+	color: rgb(19, 92, 19);
+}
 .note-button-group {
 	display: flex;
 	justify-content: end;
@@ -603,6 +609,17 @@ td.tb-project-people {
 	font-size: 16px;
 	width: 470px;
     height: 100px;
+}
+.loadmore-note-button {
+	background-color: var(--color-personal);
+	color: white;
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 5px;
+	margin-top: 20px;
+}
+.loadmore-note-button:hover {
+	opacity: 0.75;
 }
 /* ================== */
 /*  project/id usage  */
