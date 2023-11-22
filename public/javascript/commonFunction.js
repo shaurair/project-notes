@@ -153,3 +153,46 @@ function addRemoveOption(elementContainer, elementContainerList, associate, asso
 	closeIconElement.className = 'close-icon';
 	closeElement.appendChild(closeIconElement);
 }
+
+async function updateNote(projectId, note) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note`, {
+		method: 'POST',
+		headers: {Authorization: `Bearer ${token}`,
+								'Content-Type':'application/json'
+				},
+		body: JSON.stringify( {
+			projectId: projectId,
+			note: note
+		})
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		return 'ok'
+	}
+	else {
+		return result["message"];
+	}
+}
+
+async function deleteNote(projectId) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note`, {
+						method: 'DELETE',
+						headers: {Authorization: `Bearer ${token}`,
+												'Content-Type':'application/json'
+								},
+						body: JSON.stringify( {
+							projectId: projectId,
+						})
+					})
+	let result = await response.json();
+
+	if(response.ok) {
+		return 'ok'
+	}
+	else {
+		return result["message"];
+	}
+}

@@ -732,20 +732,9 @@ async function addPersonalNote() {
 
 async function updatePersonalNote() {
 	let note = personalNoteInput.value;
-	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/note`, {
-		method: 'POST',
-		headers: {Authorization: `Bearer ${token}`,
-								'Content-Type':'application/json'
-				},
-		body: JSON.stringify( {
-			projectId: projectId,
-			note: note
-		})
-	})
-	let result = await response.json();
+	let result = await updateNote(projectId, note);
 
-	if(response.ok) {
+	if(result === 'ok') {
 		currentPersonalNote = note;
 		updateNoteWait.classList.add('unseen');
 		updateNoteSuccess.classList.remove('unseen');
@@ -753,7 +742,7 @@ async function updatePersonalNote() {
 		isAllowDeleteNote = true;
 	}
 	else {
-		alert(result["message"] + " Please redirect this page and try again.");
+		alert(result + " Please redirect this page and try again.");
 	}
 }
 
@@ -776,26 +765,16 @@ async function getNote() {
 	}
 }
 
-async function deleteNote() {
-	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/note`, {
-						method: 'DELETE',
-						headers: {Authorization: `Bearer ${token}`,
-												'Content-Type':'application/json'
-								},
-						body: JSON.stringify( {
-							projectId: projectId,
-						})
-					})
-	let result = await response.json();
+async function deletePersonalNote() {
+	let result = await deleteNote(projectId);
 
-	if(response.ok) {
+	if(result === 'ok') {
 		currentPersonalNote = personalNoteInput.value = '';
 		addToNoteBtn.textContent = 'Add to personal notes';
 		personalNoteArea.classList.add('unseen');
 	}
 	else {
-		alert(result["message"] + " Please redirect this page and try again.");
+		alert(result + " Please redirect this page and try again.");
 	}
 }
 
@@ -927,7 +906,7 @@ deleteNoteBtn.addEventListener('click', ()=>{
 			isAllowDeleteNote = false;
 			saveNoteBtn.classList.remove('note-save-enable');
 			updateNoteSuccess.classList.add('unseen');
-			deleteNote();
+			deletePersonalNote();
 		}
 	}
 })
