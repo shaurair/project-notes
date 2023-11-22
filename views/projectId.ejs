@@ -34,7 +34,7 @@
 	</div>
 	<div class="project-content sight-fit">
 		<div >
-			<div class="project-option">
+			<div class="project-option unseen">
 				<div id="edit-project" class="project-option-item mouseover">Edit</div>
 				<div id="add-to-note" class="project-option-item mouseover">Add to personal notes</div>
 			</div>
@@ -62,6 +62,14 @@
 					<div class="block-title note-title-project">My personal note</div>
 					<div class="block-content-note normal-text">
 						<div><textarea id="input-note-project" dir="ltr"></textarea>
+						</div>
+						<div id="update-waiting" class="submit-status-place unseen">
+							<span>Updating</span>
+							<img class="submit-status" src="/images/waiting.gif"></img>
+						</div>
+						<div id="update-success" class="submit-status-place unseen">
+							<img class="submit-status" src="/images/checked.png"></img>
+							<span>Successfully updated.</span>
 						</div>
 						<div class="project-id-note-button-group">
 							<div class="note-text-button-container">

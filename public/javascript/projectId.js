@@ -35,6 +35,8 @@ const addToNoteBtn = document.getElementById('add-to-note');
 const personalNoteArea = document.querySelector('.personal-note-area');
 const personalNoteInput = document.getElementById('input-note-project');
 const saveNoteBtn = document.getElementById('save-note-project');
+const updateNoteWait = document.getElementById('update-waiting');
+const updateNoteSuccess = document.getElementById('update-success');
 const AUTH = {
 	PERMISSION_REJECT: 0,
 	SERVER_ERROR: 1,
@@ -47,6 +49,7 @@ let editAssociate = {owner:{}, reviewer:{}, team:{}};
 let editContent;
 let nextCommentPage = 0;
 let currentPersonalNote = '';
+let isAllowSaveNote = false;
 
 async function initProjectId() {
 	await getUser();
@@ -66,17 +69,23 @@ async function initProjectId() {
 			document.querySelector('.main-project-loading').classList.add('unseen');
 			return;
 		}
-		await Promise.all([	getProjectContent(), 
+		showContent();
+
+		await Promise.all([	getProjectContent(),
 							getProjectComment(), 
 							setCommentImage(), 
 							getNote()]);
-		showContent();
+		showOption();
 	}
 }
 
 function showContent() {
 	document.querySelector('.main-project-id').classList.remove('unseen');
 	document.querySelector('.main-project-loading').classList.add('unseen');
+}
+
+function showOption() {
+	document.querySelector('.project-option').classList.remove('unseen');
 }
 
 async function CheckAuthorization() {
@@ -711,6 +720,9 @@ async function addPersonalNote() {
 
 	if(response.ok) {
 		currentPersonalNote = note;
+		updateNoteWait.classList.add('unseen');
+		updateNoteSuccess.classList.remove('unseen');
+		saveNoteBtn.classList.remove('note-save-enable');
 	}
 	else {
 		alert(result["message"] + " Please redirect this page and try again.");
@@ -742,11 +754,15 @@ statusSelect.addEventListener('change', () => {
 });
 
 personalNoteInput.addEventListener('input', ()=>{
+	updateNoteWait.classList.add('unseen');
+	updateNoteSuccess.classList.add('unseen');
 	if(currentPersonalNote != personalNoteInput.value) {
 		saveNoteBtn.classList.add('note-save-enable');
+		isAllowSaveNote = true;
 	}
 	else {
 		saveNoteBtn.classList.remove('note-save-enable');
+		isAllowSaveNote = false;
 	}
 })
 
@@ -842,6 +858,13 @@ addToNoteBtn.addEventListener('click', ()=>{
 		top: personalNoteArea.offsetTop,
 		behavior: 'smooth'
 	})
+})
+
+saveNoteBtn.addEventListener('click', ()=>{
+	if(isAllowSaveNote) {
+		addPersonalNote();
+		updateNoteWait.classList.remove('unseen')
+	}
 })
 
 window.addEventListener('click', () => {
