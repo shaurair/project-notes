@@ -19,6 +19,26 @@ async function addNote(projectId, memberId, note) {
 	}
 }
 
+async function getOneNote(projectId, memberId) {
+	let sql = 'SELECT * FROM note WHERE project_id = ? AND member_id = ?;';
+
+	try {
+		let result = await database.databasePool.query(sql, [projectId, memberId]);
+
+		return {
+			data: {
+				message: 'ok',
+				note: (result.length == 0 ? null : result[0].note)
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
-	addNote
+	addNote,
+	getOneNote
 }

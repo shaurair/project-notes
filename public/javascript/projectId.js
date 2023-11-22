@@ -31,12 +31,22 @@ const noCommentElement = document.getElementById('no-comment');
 const teamContainer = document.querySelector('.project-team-content-area');
 const closeTeamContainerBtn = document.getElementById('close-team-content');
 const memberPeopleList = document.getElementById('member-people-list');
+const addToNoteBtn = document.getElementById('add-to-note');
+const personalNoteArea = document.querySelector('.personal-note-area');
+const personalNoteInput = document.getElementById('input-note-project');
+const saveNoteBtn = document.getElementById('save-note-project');
+const AUTH = {
+	PERMISSION_REJECT: 0,
+	SERVER_ERROR: 1,
+	PERMISSION_OK: 2
+}
 let projectId = location.href.match(/\/project\/(\d+)/)[1];
 let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
 let editContent;
 let nextCommentPage = 0;
+let currentPersonalNote = '';
 
 async function initProjectId() {
 	await getUser();
@@ -46,11 +56,27 @@ async function initProjectId() {
 	}
 	else {
 		showMemberNav();
-		await CheckAuthorization();
-		getProjectContent();
-		getProjectComment();
-		setCommentImage();
+		let authResult = await CheckAuthorization();
+		if(authResult == AUTH.PERMISSION_REJECT) {
+			document.querySelector('.main-project-lock').classList.remove('unseen');
+			document.querySelector('.main-project-loading').classList.add('unseen');
+			return;
+		}
+		else if(authResult == AUTH.SERVER_ERROR) {
+			document.querySelector('.main-project-loading').classList.add('unseen');
+			return;
+		}
+		await Promise.all([	getProjectContent(), 
+							getProjectComment(), 
+							setCommentImage(), 
+							getNote()]);
+		showContent();
 	}
+}
+
+function showContent() {
+	document.querySelector('.main-project-id').classList.remove('unseen');
+	document.querySelector('.main-project-loading').classList.add('unseen');
 }
 
 async function CheckAuthorization() {
@@ -61,15 +87,11 @@ async function CheckAuthorization() {
 	let result = await response.json();
 
 	if(response.ok) {
-		if(result['auth'] == 0) {
-			document.querySelector('.main-project-lock').classList.remove('unseen');
-		}
-		else {
-			document.querySelector('.main-project-id').classList.remove('unseen');
-		}
+		return result['auth'];
 	}
 	else {
 		alert('something went wrong, please redirect and try again');
+		return  AUTH.SERVER_ERROR;
 	}
 }
 
@@ -672,11 +694,61 @@ async function updateComment(commentId, comment) {
 	}
 }
 
+async function addPersonalNote() {
+	let note = personalNoteInput.value;
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note`, {
+		method: 'POST',
+		headers: {Authorization: `Bearer ${token}`,
+								'Content-Type':'application/json'
+				},
+		body: JSON.stringify( {
+			projectId: projectId,
+			note: note
+		})
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		currentPersonalNote = note;
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
+async function getNote() {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note/one-note?projectId=${projectId}`, {
+		headers: {Authorization: `Bearer ${token}`}
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		if(result['note'] != null) {
+			currentPersonalNote = personalNoteInput.value = result['note'];
+			addToNoteBtn.textContent = 'See my personal notes';
+		}
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 // Select change events
 statusSelect.addEventListener('change', () => {
 	changeStatusColor();
 	updateProjectStatus(statusSelect.value);
 });
+
+personalNoteInput.addEventListener('input', ()=>{
+	if(currentPersonalNote != personalNoteInput.value) {
+		saveNoteBtn.classList.add('note-save-enable');
+	}
+	else {
+		saveNoteBtn.classList.remove('note-save-enable');
+	}
+})
 
 // Click events
 // viewmoreBtn.addEventListener('click', () => {
@@ -758,6 +830,18 @@ commentLoadMoreBtn.addEventListener('click', () => {
 closeTeamContainerBtn.addEventListener('click', ()=>{
 	teamContainer.classList.add('unseen');
 	darkBackgroundTeamContentElement.classList.add('unseen');
+})
+
+addToNoteBtn.addEventListener('click', ()=>{
+	personalNoteArea.classList.remove('unseen');
+	if(addToNoteBtn.textContent === 'Add to personal notes') {
+		addToNoteBtn.textContent = 'See my personal notes';
+		addPersonalNote();
+	}
+	window.scrollTo({
+		top: personalNoteArea.offsetTop,
+		behavior: 'smooth'
+	})
 })
 
 window.addEventListener('click', () => {

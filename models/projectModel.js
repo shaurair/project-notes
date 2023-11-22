@@ -1,4 +1,9 @@
 const database = require('./conn-aws-RDS');
+const AUTH = {
+	PERMISSION_REJECT: 0,
+	SERVER_ERROR: 1,
+	PERMISSION_OK: 2
+}
 
 async function createProject(summary, description, priority, deadline, creator) {
 	let sql = 'INSERT INTO project(summary, description, priority, deadline, creater_id) VALUES(?, ?, ?, ?, ?);';
@@ -57,7 +62,7 @@ async function getAuthorization(projectId, memberId) {
 
 	try {
 		let result = await database.databasePool.query(sql, sqlParam);
-		let auth = result.length == 0 ? 0 : 1;
+		let auth = result.length == 0 ? AUTH.PERMISSION_REJECT : AUTH.PERMISSION_OK;
 
 		return {
 			data: {

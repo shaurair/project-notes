@@ -552,8 +552,12 @@ td.tb-project-people {
 	background-color: var(--color-highlight);
 	opacity: 0.5;
 }
+.note-text-button-enable {
+	opacity: 1;
+}
 .note-save-enable {
 	opacity: 1;
+	cursor: pointer;
 }
 .note-save-enable:hover {
 	filter: saturate(1.2);
@@ -876,9 +880,10 @@ td.tb-project-people {
 .note-title-project {
 	color: var(--color-personal);
 	filter: brightness(0.9);
-	padding: 10px 0 ;
+	padding: 0 0 5px 0 ;
+	margin: 0 0 10px 0;
 }
-.input-note-project {
+#input-note-project {
 	font-size: 16px;
 	width: 470px;
     height: 100px;
@@ -1374,6 +1379,14 @@ td.tb-project-people {
     color: var(--color-highlight);
     font-weight: 500;
 }
+.main-project-loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	box-sizing: border-box;
+    padding: 0 40px;
+}
 .main-personal {
 	display: flex;
 	flex-direction: column;
@@ -1429,6 +1442,11 @@ td.tb-project-people {
 .main-image {
 	width: 50px;
     height: 50px;
+    object-fit: contain;
+}
+.main-large-image {
+	width: 100px;
+    height: 100px;
     object-fit: contain;
 }
 /* ====================================== */
@@ -1489,7 +1507,7 @@ td.tb-project-people {
 	#add-comment-text {
 		width: calc(100% - 40px);
 	}
-	.input-note-project {
+	#input-note-project {
 		width: calc(100% - 40px);
 	}
 	.project-content {

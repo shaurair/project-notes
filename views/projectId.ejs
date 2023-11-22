@@ -8,9 +8,12 @@
 </head>
 <body>
 <%- include('header') -%>
+<div class="main main-project-loading">
+	<img class="main-large-image" src="/images/loading_rocket.gif"/>
+</div>
 <div class="main main-project-lock unseen">
 	<img class="main-image" src="/images/lock.png"/>
-	<div>You do not have the permission of this page! Only project owner, reviewer, and related team member can access the project</div>
+	<div>You do not have the permission of this page! Only project owner, reviewer, and related team member can access this project</div>
 </div>
 <div class="main main-project-id unseen">
 	<div class="project-head-container sight-fit">
@@ -33,7 +36,7 @@
 		<div >
 			<div class="project-option">
 				<div id="edit-project" class="project-option-item mouseover">Edit</div>
-				<div class="project-option-item mouseover">Add to personal notes</div>
+				<div id="add-to-note" class="project-option-item mouseover">Add to personal notes</div>
 			</div>
 			<div class="project-main">
 				<div class="main-block-vertical">
@@ -55,15 +58,14 @@
 						</div>
 					</div>
 				</div>
-				<div class="main-block-vertical unseen">
+				<div class="main-block-vertical personal-note-area unseen">
 					<div class="block-title note-title-project">My personal note</div>
 					<div class="block-content-note normal-text">
-						<div><textarea class="input-note-project" dir="ltr">Existing notes(example) &#10 1. do research &#10 2. check code
-							</textarea>
+						<div><textarea id="input-note-project" dir="ltr"></textarea>
 						</div>
 						<div class="project-id-note-button-group">
 							<div class="note-text-button-container">
-								<button class="note-text-button">Save</button>
+								<button id='save-note-project' class="note-text-button">Save</button>
 							</div>
 							<div class="note-delete-icon mouseover"></div>
 						</div>
