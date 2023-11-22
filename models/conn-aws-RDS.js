@@ -7,6 +7,7 @@ const pool = mysql.createPool({
     user: process.env.RDS_USER,
     password: process.env.RDS_PASSWORD,
     database: process.env.RDS_DB,
+    charset: 'UTF8MB4_BIN',
     waitForConnections: true,
     connectionLimit: 5
 })
