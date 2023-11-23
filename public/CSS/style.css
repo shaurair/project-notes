@@ -491,6 +491,11 @@ td.tb-project-people {
 .note-button:hover {
 	filter: brightness(1.01);
 }
+.hint-area {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+}
 .personal-list {
 	display: flex;
 	flex-wrap: wrap;
@@ -1481,6 +1486,11 @@ td.tb-project-people {
 .main-large-image {
 	width: 100px;
     height: 100px;
+    object-fit: contain;
+}
+.hint-image {
+	width: 20px;
+    height: 20px;
     object-fit: contain;
 }
 .text-overflow-hide {
