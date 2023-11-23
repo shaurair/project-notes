@@ -171,6 +171,7 @@ function setProjectContent(data) {
 
 	element = document.getElementById('project-priority');
 	element.textContent = data['priority'];
+	element.classList.add(PRIORITYTEXT[data['priority']], 'dark-text-filter');
 
 	if(data['deadline'] != null) {
 		element = document.getElementById('project-deadline');

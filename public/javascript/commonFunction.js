@@ -1,3 +1,8 @@
+const PRIORITYTEXT = {
+	'Critical': 'critical-text',
+	'Major': 'major-text',
+	'Minor': 'minor-text'
+}
 async function searchName(name) {
 	let response = await fetch(`/search?name=${name}`);
 	return await response.json();

@@ -181,6 +181,7 @@ function setStatusResult(status, dataList, roleInfo) {
 		// priority
 		td = document.createElement('td');
 		td.textContent = priority;
+		td.classList.add(PRIORITYTEXT[priority]);
 		tr.appendChild(td);
 
 		// deadline

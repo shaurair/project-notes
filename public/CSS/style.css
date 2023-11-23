@@ -1498,6 +1498,21 @@ td.tb-project-people {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+.critical-text {
+	color: red;
+	font-weight: 500;
+}
+.major-text {
+	color: rgb(255, 132, 0);
+	font-weight: 500;
+}
+.minor-text {
+	color: blue;
+	font-weight: 500;
+}
+.dark-text-filter {
+	filter: brightness(0.8);
+}
 /* ====================================== */
 /*  700 px ~ 1200 px screen               */
 /* ====================================== */
