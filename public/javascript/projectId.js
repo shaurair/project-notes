@@ -76,7 +76,7 @@ async function initProjectId() {
 		await Promise.all([	getProjectContent(),
 							getProjectComment(), 
 							setCommentImage(), 
-							getNote()]);
+							getPersonalNote()]);
 		showOption();
 	}
 }
@@ -746,16 +746,12 @@ async function updatePersonalNote() {
 	}
 }
 
-async function getNote() {
-	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/note/one-note?projectId=${projectId}`, {
-		headers: {Authorization: `Bearer ${token}`}
-	})
-	let result = await response.json();
+async function getPersonalNote() {
+	let result = await getNote(projectId);
 
-	if(response.ok) {
+	if(result['message'] == 'ok') {
 		if(result['note'] != null) {
-			currentPersonalNote = personalNoteInput.value = result['note'];
+			currentPersonalNote = personalNoteInput.value = result['note']['note'];
 			addToNoteBtn.textContent = 'See my personal notes';
 			isAllowDeleteNote = true;
 		}

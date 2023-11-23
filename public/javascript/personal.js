@@ -200,10 +200,26 @@ async function updatePersonalNote() {
 	}
 }
 
-searchNoteProjectIdBtn.addEventListener('click', ()=> {
+searchNoteProjectIdBtn.addEventListener('click', async ()=> {
 	let projectId = Number(searchNoteProjectIdInput.value);
 	if(Number.isInteger(projectId) && projectId > 0) {
-		// TODO
+		let result = await getNote(projectId);
+
+		if(result['message'] == 'ok') {
+			if(result['note'] != null) {
+				let noteList = [];
+				noteList.push(result['note']);
+				noteListContainer.innerHTML = '';
+				loadmoreBtn.classList.add('unseen');
+				setNote(noteList);
+			}
+			else {
+				alert("You don't have a note of this project id");
+			}
+		}
+		else {
+			alert(result["message"] + " Please redirect this page and try again.");
+		}
 	}
 	else {
 		alert('please input a project id');

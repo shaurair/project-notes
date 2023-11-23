@@ -196,3 +196,11 @@ async function deleteNote(projectId) {
 		return result["message"];
 	}
 }
+
+async function getNote(projectId) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note/one-note?projectId=${projectId}`, {
+		headers: {Authorization: `Bearer ${token}`}
+	})
+	return await response.json();
+}
