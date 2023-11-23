@@ -512,6 +512,11 @@ td.tb-project-people {
 	border-radius: 10px;
 	border-color: var(--color-personal);
 }
+.top-note-selected {
+	border-style: solid;
+	border-radius: 10px;
+	border-color: var(--color-highlight);
+}
 .note-head {
 	display: flex;
 	justify-content: space-between;
@@ -520,6 +525,7 @@ td.tb-project-people {
 	font-size: 20px;
 	font-weight: 600;
 	font-family: Noto Sans TC;
+	width: 370px;
 }
 .project-text {
 	color: var(--color-head-text);
@@ -603,6 +609,17 @@ td.tb-project-people {
 	padding: 3px;
 }
 .move-note:hover {
+	font-weight: 500;
+}
+.move-top {
+	padding: 0 0.5rem;
+    font-size: 16px;
+    background-color: var(--color-personal);
+	filter: opacity(0.8);
+    border-radius: 0.2rem;
+    color: var(--color-text);
+}
+.move-top:hover {
 	font-weight: 500;
 }
 .input-note {
@@ -1465,6 +1482,11 @@ td.tb-project-people {
 	width: 100px;
     height: 100px;
     object-fit: contain;
+}
+.text-overflow-hide {
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 /* ====================================== */
 /*  700 px ~ 1200 px screen               */

@@ -91,9 +91,36 @@ const getNotes = async (req, res) => {
 	res.status(result.statusCode).send(result['data']);
 }
 
+const setTopNote = async (req, res) => {
+	let projectId = req.body.projectId;
+	let originalPos = req.body.originalPos;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	if(originalPos == null) {
+		result = await noteModel.setTopNote(projectId, memberInfo['id']);
+	}
+	else {
+		result = await noteModel.setTopNoteOriginalPos(projectId, memberInfo['id'], originalPos);
+	}
+	
+	res.status(result.statusCode).send(result['data']);
+}
+
 module.exports = {
 	addNote,
 	getOneNote,
 	deleteNote,
-	getNotes
+	getNotes,
+	setTopNote
 }

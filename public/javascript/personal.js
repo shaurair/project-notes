@@ -53,6 +53,7 @@ function setNote(noteList) {
 			let projectId = note['project_id'];
 			let projectSummary = note['summary'];
 			let noteText = note['note'];
+			let pos = note['pos'];
 
 			let noteContainer = document.createElement('div');
 			noteContainer.className = 'note';
@@ -64,7 +65,7 @@ function setNote(noteList) {
 			noteContainer.appendChild(elementHead);
 
 			let element =  document.createElement('div');
-			element.className = 'note-title';
+			element.className = 'note-title text-overflow-hide';
 			let linkElement = document.createElement('a');
 			linkElement.className = 'hyperlink project-text';
 			linkElement.href = `/project/${projectId}`;
@@ -72,6 +73,28 @@ function setNote(noteList) {
 			linkElement.textContent = `project-${projectId}: ${projectSummary}`;
 			element.appendChild(linkElement);
 			elementHead.appendChild(element);
+
+			let moveTopContainer =  document.createElement('div');
+			moveTopContainer.className = 'note-action-container mouseover';
+			elementHead.appendChild(moveTopContainer);
+
+			let moveTop = document.createElement('div');
+			moveTop.className = 'move-top';
+			moveTop.textContent = 'Move to top';
+			moveTopContainer.appendChild(moveTop);
+			
+			moveTop.addEventListener('click', async ()=>{
+				let result = await setTopNote(projectId, pos);
+				if(result == 'ok') {
+					window.scrollTo(0,0);
+					noteListContainer.insertBefore(noteContainer, noteListContainer.firstChild);
+					noteContainer.classList.add('top-note-selected');
+					noteContainer.addEventListener('mouseover', function removeHighLight() {
+						noteContainer.classList.remove('top-note-selected');
+						noteContainer.removeEventListener('mouseover', removeHighLight);
+					})
+				}
+			})
 
 			// note
 			let elementNote = document.createElement('div');
@@ -160,6 +183,28 @@ function setNote(noteList) {
 	}
 }
 
+async function setTopNote(projectId, originalPos) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/note/top-note`, {
+		method: 'PUT',
+		headers: {Authorization: `Bearer ${token}`,
+								'Content-Type':'application/json'
+				},
+		body: JSON.stringify( {
+			projectId: projectId,
+			originalPos: originalPos
+		})
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		return 'ok'
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 function addWaitingChild(container) {
 	let element = document.createElement('span');
 	element.className = 'waiting-text';
@@ -229,3 +274,6 @@ searchNoteProjectIdBtn.addEventListener('click', async ()=> {
 loadmoreBtn.addEventListener('click', ()=>{
 	getNotes();
 })
+
+// Enter events
+addEnterEffect([searchNoteProjectIdInput], [searchNoteProjectIdBtn]);
