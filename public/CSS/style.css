@@ -153,11 +153,72 @@ html,body {
 /* ================== */
 /*  index page usage  */
 /* ================== */
+.slogan {
+	filter: saturate(1.4);
+	font-family: system-ui;
+	word-spacing: 4px;
+    letter-spacing: 0.8px;
+	font-size: 28px;
+	line-height: 1.5;
+	font-weight: 900;
+}
+.info-container {
+	display: flex;
+	justify-content: space-between;
+	box-sizing: border-box;
+    padding: 40px 20px 40px 30px;
+}
+.demo-text-part {
+	width: 500px;
+	display: flex;
+	flex-direction: column;
+}
+.sub-slogan-area {
+	display: flex;
+	gap: 1rem;
+	margin-top: 0.5rem;
+	margin-right: 10px;
+}
+.sub-slogan-text {
+	margin-top: 0;
+	margin-bottom: 0.8rem;
+	line-height: 1.5;
+	font-size: 20px;
+	font-family: system-ui;
+    letter-spacing: 1px;
+	word-spacing: 1.5px;
+    font-weight: 400;
+	color: rgb(107 114 128);
+}
+.demo-image-part {
+	margin-right: 40px;
+	display: flex;
+    align-items: center;
+}
 .demo-image {
+	width: 600px;
+	height: 400px;
+	object-fit: cover;
+	box-shadow: 0 8px 16px rgba(46,71,93,.3);
+}
+.start-area {
 	display: flex;
 	justify-content: center;
+}
+#start-button {
+	background-color: var(--color-highlight);
+	color: white;
+	border-radius: 5px;
 	box-sizing: border-box;
-    padding: 0 20px;
+	padding: 10px 12px;
+	margin-top: 10px;
+	font-size: 22px;
+	font-weight: 400;
+	letter-spacing: 0.9px;
+}
+#start-button:hover{
+	box-shadow: 0 8px 16px rgba(46,71,93,.3);
+	font-weight: 600;
 }
 /* ================== */
 /*  sign page usage   */
@@ -546,6 +607,15 @@ td.tb-project-people {
 }
 .success-text {
 	color: rgb(19, 92, 19);
+}
+.slogan-link-text {
+	color: #267e68;
+}
+.slogan-project-text {
+	color: #338baa;
+}
+.slogan-note-text {
+	color: #d6a317;
 }
 .note-button-group {
 	display: flex;
@@ -1396,6 +1466,7 @@ td.tb-project-people {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin-bottom: 80px;
 }
 .main-log {
 	display: flex;
@@ -1478,6 +1549,15 @@ td.tb-project-people {
 .highlight-block {
 	border: 2px solid #f22;
 }
+.project-text-color {
+	color: var(--color-project);
+	font-weight: 700;
+}
+.note-text-color {
+	color: var(--color-personal);
+	filter: brightness(0.9);
+	font-weight: 700;
+}
 .main-image {
 	width: 50px;
     height: 50px;
@@ -1540,6 +1620,9 @@ td.tb-project-people {
 	}
 	#summary-input-content, #description-input  {
 		width: calc(100vw - 250px);;
+	}
+	.info-container {
+		flex-direction: column;
 	}
 }
 

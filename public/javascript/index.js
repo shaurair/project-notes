@@ -3,6 +3,7 @@ async function initIndex() {
 
 	if(userInfo == null) {
 		showPublicNav();
+		document.getElementById('start-button').classList.remove('unseen');
 	}
 	else {
 		showMemberNav();
