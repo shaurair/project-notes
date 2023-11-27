@@ -1551,12 +1551,10 @@ td.tb-project-people {
 }
 .project-text-color {
 	color: var(--color-project);
-	font-weight: 700;
 }
 .note-text-color {
 	color: var(--color-personal);
 	filter: brightness(0.9);
-	font-weight: 700;
 }
 .main-image {
 	width: 50px;
@@ -1666,5 +1664,12 @@ td.tb-project-people {
 	}
 	.tb-people {
 		display: none;
+	}
+	.demo-text-part {
+		width: 80%;
+	}
+	.demo-image {
+		width: 80%;
+		height: auto;
 	}
 }
