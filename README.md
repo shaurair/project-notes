@@ -1,2 +1,2 @@
 # Database Entiry Relationship Diagram
-![image](https://github.com/shaurair/project-notes/blob/develop/ReadMeImages/ErdColorCut.jpg)
+<img src='https://github.com/shaurair/project-notes/blob/develop/ReadMeImages/ErdColorCut.jpg' width=95%>
