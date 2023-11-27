@@ -6,7 +6,7 @@ const AUTH = {
 }
 
 async function createProject(summary, description, priority, deadline, creator) {
-	let sql = 'INSERT INTO project(summary, description, priority, deadline, creater_id) VALUES(?, ?, ?, ?, ?);';
+	let sql = 'INSERT INTO project(summary, description, priority, deadline, creator_member_id) VALUES(?, ?, ?, ?, ?);';
 	try {
 		let result = await database.databasePool.query(sql, [summary, description, priority, deadline, creator]);
 
@@ -32,7 +32,7 @@ async function setAssociate(associate, projectId) {
 	let teamList = Object.keys(associate.team);
 
 	let sqlMember = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
-	let sqlTeam =  'INSERT INTO project_team(project_id, group_id) VALUES(?, ?);';
+	let sqlTeam =  'INSERT INTO project_group(project_id, group_id) VALUES(?, ?);';
 	try {
 		for( let i = 0; i < ownerNumber; i++) {
 			await database.databasePool.query(sqlMember, [projectId, ownerList[i], 'owner']);
@@ -57,7 +57,7 @@ async function setAssociate(associate, projectId) {
 }
 
 async function getAuthorization(projectId, memberId) {
-	let sql = 'SELECT project_member.project_id FROM project_member LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id INNER JOIN project ON project_member.project_id = project.id WHERE project_member.project_id = ? AND (project_member.member_id = ? OR group_member.member_id = ? OR project.creater_id = ?);';
+	let sql = 'SELECT project_member.project_id FROM project_member LEFT JOIN project_group ON project_member.project_id = project_group.project_id LEFT JOIN group_member ON project_group.group_id = group_member.group_id INNER JOIN project ON project_member.project_id = project.id WHERE project_member.project_id = ? AND (project_member.member_id = ? OR group_member.member_id = ? OR project.creator_member_id = ?);';
 	let sqlParam = [projectId, memberId, memberId, memberId];
 
 	try {
@@ -78,9 +78,9 @@ async function getAuthorization(projectId, memberId) {
 }
 
 async function getProjectContent(projectId) {
-	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creater_id = member.id WHERE project.id = ?;';
+	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creator_member_id = member.id WHERE project.id = ?;';
 	let sqlRole = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
-	let sqlTeam = 'SELECT group_table.name, group_table.id FROM project_team INNER JOIN group_table ON project_team.group_id = group_table.id WHERE project_team.project_id = ?;';
+	let sqlTeam = 'SELECT group_table.name, group_table.id FROM project_group INNER JOIN group_table ON project_group.group_id = group_table.id WHERE project_group.project_id = ?;';
 
 	try {
 		let contentResult = await database.databasePool.query(sql, [projectId]);
@@ -113,7 +113,7 @@ async function getProjectContent(projectId) {
 async function getComment(projectId, page) {
 	let limit = 5;
 	let offset = page * limit;
-	let sqlComment = 'SELECT comment.*, member.image_filename, member.name FROM comment INNER JOIN member ON comment.member_id = member.id  WHERE project_id = ? LIMIT ? OFFSET ?;'
+	let sqlComment = 'SELECT project_comment.*, member.image_filename, member.name FROM project_comment INNER JOIN member ON project_comment.member_id = member.id  WHERE project_id = ? LIMIT ? OFFSET ?;'
 
 	try {
 		let commentResult = await database.databasePool.query(sqlComment, [projectId, (limit + 1), offset]);
@@ -198,8 +198,8 @@ async function updateAssociatePeople(projectId, associateRole, changeMemberList)
 }
 
 async function updateAssociateGroup(projectId, changeGroupList) {
-	let sqlRemoveGroup = 'DELETE FROM project_team WHERE project_id = ? AND group_id = ?;';
-	let sqlAddGroup = 'INSERT INTO project_team(project_id, group_id) VALUES(?, ?);';
+	let sqlRemoveGroup = 'DELETE FROM project_group WHERE project_id = ? AND group_id = ?;';
+	let sqlAddGroup = 'INSERT INTO project_group(project_id, group_id) VALUES(?, ?);';
 
 	try {
 		for( let i = 0; i < changeGroupList.add.length; i++) {
@@ -223,7 +223,7 @@ async function updateAssociateGroup(projectId, changeGroupList) {
 }
 
 async function addComment(projectId, memberId, comment, datetime) {
-	let sql = 'INSERT INTO comment(project_id, member_id, comment, datetime) VALUES(?, ?, ?, ?);';
+	let sql = 'INSERT INTO project_comment(project_id, member_id, comment, datetime) VALUES(?, ?, ?, ?);';
 	try {
 		let result = await database.databasePool.query(sql, [projectId, memberId, comment, datetime]);
 
@@ -241,7 +241,7 @@ async function addComment(projectId, memberId, comment, datetime) {
 }
 
 async function deleteComment(commentId) {
-	let sql = 'DELETE FROM comment WHERE id = ?;';
+	let sql = 'DELETE FROM project_comment WHERE id = ?;';
 	try {
 		await database.databasePool.query(sql, [commentId]);
 
@@ -258,7 +258,7 @@ async function deleteComment(commentId) {
 }
 
 async function updateComment(commentId, comment) {
-	let sql = 'UPDATE comment set comment = ? WHERE id = ?;';
+	let sql = 'UPDATE project_comment set comment = ? WHERE id = ?;';
 	try {
 		await database.databasePool.query(sql, [comment, commentId]);
 
@@ -291,11 +291,11 @@ async function getProjectMain(memberId, status, page, keyword, myRole) {
 	}
 	else {
 		if(keyword == '') {
-			sql = 'SELECT DISTINCT project.id AS project_id, project.summary, project.priority, project.deadline FROM project LEFT JOIN project_member ON project_member.project_id = project.id LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id WHERE (project_member.member_id = ? OR group_member.member_id = ?) AND project.status = ? GROUP BY project.id ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+			sql = 'SELECT DISTINCT project.id AS project_id, project.summary, project.priority, project.deadline FROM project LEFT JOIN project_member ON project_member.project_id = project.id LEFT JOIN project_group ON project_member.project_id = project_group.project_id LEFT JOIN group_member ON project_group.group_id = group_member.group_id WHERE (project_member.member_id = ? OR group_member.member_id = ?) AND project.status = ? GROUP BY project.id ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
 			sqlParam = [memberId, memberId, status, (limit + 1), offset];
 		}
 		else {
-			sql = 'SELECT DISTINCT project.id AS project_id, project.summary, project.priority, project.deadline FROM project LEFT JOIN project_member ON project_member.project_id = project.id LEFT JOIN project_team ON project_member.project_id = project_team.project_id LEFT JOIN group_member ON project_team.group_id = group_member.group_id WHERE (project_member.member_id = ? OR group_member.member_id = ?) AND project.status = ?  AND project.summary like ? GROUP BY project.id ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
+			sql = 'SELECT DISTINCT project.id AS project_id, project.summary, project.priority, project.deadline FROM project LEFT JOIN project_member ON project_member.project_id = project.id LEFT JOIN project_group ON project_member.project_id = project_group.project_id LEFT JOIN group_member ON project_group.group_id = group_member.group_id WHERE (project_member.member_id = ? OR group_member.member_id = ?) AND project.status = ?  AND project.summary like ? GROUP BY project.id ORDER BY project.deadline is null, project.deadline ASC LIMIT ? OFFSET ?;';
 			sqlParam = [memberId, memberId, status, `%${keyword}%`, (limit + 1), offset];
 		}
 	}
