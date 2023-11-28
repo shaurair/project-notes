@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Project Notes</title>
+	<link rel="stylesheet" type="text/css" href="/CSS/style.css"/>
+</head>
+<body>
+<%- include('header') -%>
+<div class="main main-log">
+	<div id='sign-in-area' class="sign-area">
+		<div class="sign-main-title">Sign in</div>
+		<div class="sign-box">
+			<input type="text" id="email" class="sign-input-text" placeholder="Email"/>
+		</div>
+		<div class="sign-box">
+			<input type="password" id="password" class="sign-input-text" placeholder="Password"/>
+		</div>
+		<div class="demo-user mouseover">Use demo user account</div>
+		<div class="sign-btn mouseover" id="sign-in-btn" >
+			<div class="sign-btn-text">Sign in</div>
+		</div>
+		<div class="sign-message" id="sign-in-message"></div>
+		<hr class="separator"/>
+		<div class="sign-switch mouseover" id="go-sign-up-btn">Create new account</div>
+	</div>
+	<div id='sign-up-area' class="sign-area unseen">
+		<div class="sign-main-title">Register</div>
+		<div class="sign-box">
+			<input type="text" id="sign-name" class="sign-input-text" placeholder="Name"/>
+		</div>
+		<div class="sign-box">
+			<input type="text" id="sign-email" class="sign-input-text" placeholder="Email"/>
+		</div>
+		<div class="sign-box">
+			<input type="password" id="sign-password" class="sign-input-text" placeholder="Password"/>
+		</div>
+		<div class="sign-btn mouseover" id="sign-up-btn" >
+			<div class="sign-btn-text">Sign up</div>
+		</div>
+		<div class="sign-message" id="sign-up-message"></div>
+		<hr class="separator"/>
+		<div class="sign-switch mouseover" id="go-sign-in-btn">Click me to log in</div>
+	</div>
+	<div class="sign-close">
+		<div class="close-icon"></div>
+	</div>
+</div>
+
+<%- include('footer') -%>
+</body>
+<script src="/javascript/auth.js"></script>
+<script src="/javascript/log.js"></script>
+<script>initLog();</script>
+</html>

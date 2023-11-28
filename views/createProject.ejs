@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Create Project</title>
+	<link rel="stylesheet" type="text/css" href="/CSS/style.css"/>
+</head>
+<body>
+<%- include('header') -%>
+<div class="main main-create-project">
+	<div class="all-content">
+		<div class="head-container">
+			<div class="head project-text">Summary</div>
+			<div><input id="summary-input-content" type="text"></div>
+		</div>
+		<div class="head-container">
+			<div class="head project-text">Description</div>
+			<div><textarea id="description-input" type="text"></textarea></div>
+		</div>
+		<div class="head-container">
+			<div class="head project-text">Priority</div>
+			<select id="create-priority" class="dropdown-select">
+				<option>Critical</option>
+				<option>Major</option>
+				<option>Minor</option>
+			</select>
+		</div>
+		<div class="head-container">
+			<div class="head project-text">Deadline</div>
+			<input type="date" id="deadline-input" id="calendar" name="date">
+		</div>
+		<div class="head-container">
+			<div class="head project-text">Owner</div>
+			<div class="people-area">
+				<div class="name-input-area">
+					<input type="text" id="owner-input" name="owner">
+					<div class="icon-container">
+						<div id="owner-search" class="search-icon mouseover"></div>
+					</div>
+				</div>
+				<div class="search-select">
+					<input type="radio" name="select-owner" id="select-name-owner" checked>User name
+					<input type="radio" name="select-owner" id="select-id-owner">Id
+				</div>
+				<div id="owner-search-result" class="unseen">
+					<div id="owner-search-list"></div>
+				</div>
+				<div id="owner-people-list" class="people-list"></div>
+			</div>
+		</div>
+		<div class="head-container">
+			<div class="head project-text">Reviewer</div>
+			<div class="people-area">
+				<div class="name-input-area">
+					<input type="text" id="reviewer-input" name="reviewer">
+					<div id="reviewer-search" class="icon-container">
+						<div class="search-icon mouseover"></div>
+					</div>
+				</div>
+				<div class="search-select">
+					<input type="radio" name="select-reviewer" id="select-name-reviewer" checked>User name
+					<input type="radio" name="select-reviewer" id="select-id-reviewer">Id
+				</div>
+				<div id="reviewer-search-result" class="unseen">
+					<div id="reviewer-search-list"></div>
+				</div>
+				<div id="reviewer-people-list" class="people-list"></div>
+			</div>
+		</div>
+		<div class="head-container">
+			<div class="head project-text">Related Team</div>
+			<div class="people-area">
+				<div class="name-input-area">
+					<input type="text" id="team-input" name="follower">
+					<div id="team-search" class="icon-container">
+						<div class="search-icon mouseover"></div>
+					</div>
+				</div>
+				<div id="team-search-result" class="unseen">
+					<div id="team-search-list"></div>
+				</div>
+				<div id="team-list" class="people-list"></div>
+			</div>
+		</div>
+<!-- TOBE DELETE -->
+		<div class="head-container" style="display: none;">
+			<div class="head project-text">Follower</div>
+			<div class="people-area">
+				<div class="name-input-area">
+					<input type="text" id="follower-input" name="follower">
+					<div id="follower-search" class="icon-container">
+						<div class="search-icon mouseover"></div>
+					</div>
+				</div>
+				<div class="search-select">
+					<input type="radio" name="select-follower" id="select-name-follower" checked>User name
+					<input type="radio" name="select-follower" id="select-id-follower">Id
+				</div>
+				<div id="follower-search-result" class="unseen">
+					<div id="follower-search-list"></div>
+				</div>
+				<div id="follower-people-list" class="people-list"></div>
+			</div>
+		</div>
+<!-- TOBE DEL -->
+		<div class="button-container">
+			<div id='add-project' class="create-button project-text mouseover">Add project</div>
+		</div>
+	</div>
+</div>
+
+<div class="team-content-dark-background unseen"></div>
+<div class="project-team-content-area unseen">
+	<div class="project-team-content">
+		<div class="team-head-area">
+			<div id="team-name-title"></div>
+			<div id='close-team-content' class="close mouseover"><div class="close-icon"></div></div>
+		</div>
+
+		<div class="team-member-area">
+			<div id="member-people-list" class="people-list"></div>
+		</div>
+	</div>
+</div>
+<%- include('footer') -%>
+</body>
+<script src="/javascript/auth.js"></script>
+<script src="/javascript/commonFunction.js"></script>
+<script src="/javascript/createProject.js"></script>
+<script>initCreateProject();</script>
+</html>

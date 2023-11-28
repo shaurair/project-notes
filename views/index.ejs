@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Project Notes</title>
+	<link rel="stylesheet" type="text/css" href="/CSS/style.css"/>
+</head>
+<body>
+<%- include('header') -%>
+<div class="main main-index">
+	<div class="sight-fit">
+		<div>
+			<div class="info-container">
+				<div class="demo-text-part">
+					<h2 class="slogan">Track<span class="project-text-color"> Projects</span> And Write Down Personal <span class="note-text-color">Notes</span> In One Place</h2>
+
+					<div class="sub-slogan-area">
+						<h3 class="sub-slogan-text slogan-project-text">Discuss and manage projects belong to you or your team.</h3>
+					</div>
+					<div class="sub-slogan-area">
+						<h3 class="sub-slogan-text slogan-link-text">Create personal notes linked to the specific projects with a single click.</h3>
+					</div>
+					<div class="sub-slogan-area">
+						<h3 class="sub-slogan-text slogan-note-text">Personal notes are private and can be arranged as you prefer.</h3>
+					</div>
+					<div class="start-area"><a href="/log" class="hyperlink"><div id="start-button" class="unseen mouseover">Get Started</div></a></div>
+				</div>
+				<div class="demo-image-part">
+					<img class="demo-image" src="/images/demo.gif"></img>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<%- include('footer') -%>
+</body>
+<script src="/javascript/auth.js"></script>
+<script src="/javascript/index.js"></script>
+<script>initIndex();</script>
+</html>
