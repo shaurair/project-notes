@@ -63,5 +63,6 @@ memberCenterBtn.addEventListener('click', ()=>{
 
 signOutBtn.addEventListener('click', () => {
 	localStorage.removeItem('token');
+	localStorage.removeItem('lastNotifyDate');
 	location.reload();
 });

@@ -34,6 +34,7 @@ async function initProject() {
 		getMainAndRole('INPROGRESS');
 		getMainAndRole('REVIEWING');
 		getMainAndRole('DONE');
+		checkNotification();
 	}
 }
 

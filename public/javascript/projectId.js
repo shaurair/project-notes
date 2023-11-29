@@ -78,6 +78,7 @@ async function initProjectId() {
 							setCommentImage(), 
 							getPersonalNote()]);
 		showOption();
+		checkNotification();
 	}
 }
 
