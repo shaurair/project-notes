@@ -209,3 +209,11 @@ async function getNote(projectId) {
 	})
 	return await response.json();
 }
+
+function getTodayDate() {
+	let now = new Date();
+	let year = now.getFullYear();
+	let month = (now.getMonth() + 1).toString().padStart(2, '0');
+	let day = now.getDate().toString().padStart(2, '0');
+	return `${year}-${month}-${day}`;
+}
