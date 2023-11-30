@@ -269,6 +269,7 @@ const getProjectMainAndRole = async (req, res) => {
 
 const addFile = async (req, res) => {
 	let projectId = req.body.projectId;
+	let fileName = req.body.fileName;
 	let file = req.file;
 	let userToken;
 	let memberInfo;
@@ -288,7 +289,6 @@ const addFile = async (req, res) => {
 		return;
 	}
 
-	let fileName = file.originalname;
 	result = await operateStorage.uploadToImageStorage(file.buffer, fileName, file.mimetype, `project-${projectId}`);
 
 	if(result.ok) {

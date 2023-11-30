@@ -787,6 +787,7 @@ async function sendFile(file) {
 	let token = localStorage.getItem('token');
 	const formData = new FormData();
 	formData.append('file', file);
+	formData.append('fileName', file.name);
 	formData.append('projectId', projectId);
 
 	let response = await fetch("/api_project/file", {
