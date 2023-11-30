@@ -93,6 +93,8 @@ function showContent() {
 
 function showOption() {
 	document.querySelector('.project-option').classList.remove('unseen');
+	addFileBtn.classList.remove('unseen');
+	addCommentBtn.classList.remove('unseen');
 }
 
 async function CheckAuthorization() {
