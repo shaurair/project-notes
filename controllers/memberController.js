@@ -35,7 +35,7 @@ const updateImage = async (req, res) => {
 			}
 
 			newFilename = `${Date.now()}-${memberInfo.id}.${imageMetaData.format}`;
-			result = await operateStorage.uploadToImageStorage(imageResize, newFilename, fileMimeType);
+			result = await operateStorage.uploadToImageStorage(imageResize, newFilename, fileMimeType, 'user_img');
 
 			if(result.ok) {
 				result = await memberModel.updateUserImage(memberInfo.id, newFilename);

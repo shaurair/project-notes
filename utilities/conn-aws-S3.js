@@ -10,10 +10,10 @@ const s3 = new S3Client({
 	region: process.env.S3_REGION
 });
 
-async function uploadToS3(buffer, imageFilename, fileMimeType) {
+async function uploadToS3(buffer, imageFilename, fileMimeType, uploadFolder) {
 	const params = {
 		Bucket: myBucket,
-		Key: `project-note/user_img/${imageFilename}`,
+		Key: `project-note/${uploadFolder}/${imageFilename}`,
 		Body: buffer,
 		ContentType: fileMimeType
 	};

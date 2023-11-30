@@ -1,6 +1,12 @@
-const token = require('../utilities/token');
-const projectModel = require('../models/projectModel');
-const { format } = require('date-fns');
+const token 			= require('../utilities/token');
+const projectModel 		= require('../models/projectModel');
+const { format } 		= require('date-fns');
+const multer 			= require('multer'); // process formData doc.
+const operateStorage 	= require('../utilities/conn-aws-S3');
+
+const imageStorage 	= multer.memoryStorage();
+const upload = multer({storage: imageStorage});
+
 
 const create = async (req, res) => {
 	let summary = req.body.summary;
@@ -261,6 +267,39 @@ const getProjectMainAndRole = async (req, res) => {
 	res.status(result.statusCode).send({content: result.data.content, roles:roles, nextPage: result.data.nextPage})
 }
 
+const addFile = async (req, res) => {
+	let projectId = req.body.projectId;
+	let file = req.file;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	if(!file) {
+		res.status(400).send({data: {"message" : "None file request"}});
+		return;
+	}
+
+	let fileName = file.originalname;
+	result = await operateStorage.uploadToImageStorage(file.buffer, fileName, file.mimetype, `project-${projectId}`);
+
+	if(result.ok) {
+		result = await projectModel.addFile(projectId, memberInfo['id'], fileName);
+		res.status(result.statusCode).send(result.data);
+	}
+	else {
+		res.status(500).send({"message" : "Upload file failed"});
+	}
+}
+
 module.exports = {
 	create,
 	getContent,
@@ -271,5 +310,7 @@ module.exports = {
 	updateComment,
 	updateStatus,
 	getProjectMainAndRole,
-	getAuthorization
+	getAuthorization,
+	addFile,
+	upload
 }

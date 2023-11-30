@@ -337,6 +337,24 @@ async function getProjectRole(projectIdList) {
 	}
 }
 
+async function addFile(projectId, memberId, fileName) {
+	let sql = 'INSERT INTO project_file(project_id, member_id, file_name) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
+	try {
+		let result = await database.databasePool.query(sql, [projectId, memberId, fileName, memberId]);
+
+		return {
+			data: {
+				message: 'ok',
+				fileId: result.insertId
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
@@ -351,5 +369,6 @@ module.exports = {
 	updateComment,
 	getProjectMain,
 	getProjectRole,
-	getAuthorization
+	getAuthorization,
+	addFile
 }

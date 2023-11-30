@@ -38,6 +38,10 @@ const saveNoteBtn = document.getElementById('save-note-project');
 const deleteNoteBtn = document.getElementById('delete-note-project');
 const updateNoteWait = document.getElementById('update-waiting');
 const updateNoteSuccess = document.getElementById('update-success');
+const addFileInput = document.getElementById('add-file');
+const addFileBtn = document.getElementById('add-file-btn');
+const addFileSuccessElement = document.getElementById("file-success");
+const addFileWaitingElement = document.getElementById("file-waiting");
 const AUTH = {
 	PERMISSION_REJECT: 0,
 	SERVER_ERROR: 1,
@@ -779,10 +783,39 @@ async function deletePersonalNote() {
 	}
 }
 
+async function sendFile(file) {
+	let token = localStorage.getItem('token');
+	const formData = new FormData();
+	formData.append('file', file);
+	formData.append('projectId', projectId);
+
+	let response = await fetch("/api_project/file", {
+			method: "POST",
+			body: formData,
+			headers: {
+				'Authorization':`Bearer ${token}`,
+			}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		addFileWaitingElement.classList.add('unseen');
+		addFileSuccessElement.classList.remove('unseen');
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 // Select change events
 statusSelect.addEventListener('change', () => {
 	changeStatusColor();
 	updateProjectStatus(statusSelect.value);
+});
+
+addFileInput.addEventListener('change', ()=>{
+	addFileWaitingElement.classList.add('unseen');
+	addFileSuccessElement.classList.add('unseen');
 });
 
 personalNoteInput.addEventListener('input', ()=>{
@@ -909,6 +942,18 @@ deleteNoteBtn.addEventListener('click', ()=>{
 			updateNoteSuccess.classList.add('unseen');
 			deletePersonalNote();
 		}
+	}
+})
+
+addFileBtn.addEventListener('click', ()=>{
+	let file = addFileInput.files[0];
+
+	if(file) {
+		sendFile(file);
+		addFileWaitingElement.classList.remove('unseen');
+	}
+	else {
+		alert('Please select a file.')
 	}
 })
 

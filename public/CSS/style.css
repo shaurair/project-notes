@@ -893,7 +893,7 @@ td.tb-project-people {
 .auth-drop {
 	width: 120px;
 }
-#no-comment {
+#no-comment, #no-file {
 	margin: 0 0 0 10px;
 }
 .comment-container {
@@ -915,7 +915,7 @@ td.tb-project-people {
     border-radius: 50%;
 	background-position: center;
 }
-#no-comment {
+#no-comment, #no-file {
 	width: auto;
 }
 .comment-content {
@@ -1022,6 +1022,10 @@ td.tb-project-people {
     gap: 1rem;
 	width: 900px;
     min-height: 300px;
+}
+#add-file-btn {
+	line-height: 1;
+    letter-spacing: 0.5px;
 }
 /* ============= */
 /*  edit project */
@@ -1323,11 +1327,11 @@ td.tb-project-people {
 	display: flex;
     align-items: center;
 }
-#submit-waiting, #update-waiting {
+#submit-waiting, #update-waiting, #file-waiting {
 	gap: 5px;
 	color: rgb(34 120 201);
 }
-#submit-success, #update-success {
+#submit-success, #update-success, #file-success {
 	color: rgb(19, 92, 19);
 }
 .submit-status {
@@ -1521,6 +1525,12 @@ td.tb-project-people {
 /* ================== */
 /*  common usage      */
 /* ================== */
+.flex {
+	display: flex;
+}
+.align-centor {
+	align-items: center;
+}
 .hyperlink {
 	text-decoration: none;
 }
