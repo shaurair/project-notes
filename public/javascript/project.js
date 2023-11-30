@@ -188,6 +188,9 @@ function setStatusResult(status, dataList, roleInfo) {
 		// deadline
 		td = document.createElement('td');
 		td.textContent = deadline;
+		if(deadline !== '-' && deadline <= getTodayDate()) {
+			td.classList.add('highlight-text');
+		}
 		tr.appendChild(td);
 	}
 }
