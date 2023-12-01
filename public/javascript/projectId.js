@@ -60,6 +60,9 @@ let nextFilePage = 0;
 let currentPersonalNote = '';
 let isAllowSaveNote = false;
 let isAllowDeleteNote = false;
+let isAllowOwnerSearch = true;
+let isAllowReviewerSearch = true;
+let isAllowTeamSearch = true;
 
 async function initProjectId() {
 	await getUser();
@@ -928,6 +931,19 @@ personalNoteInput.addEventListener('input', ()=>{
 	}
 })
 
+// input event
+ownerSearchKeyWord.addEventListener('input', ()=>{
+	ownerSearchBtn.click();
+})
+
+reviewerSearchKeyWord.addEventListener('input', ()=>{
+	reviewerSearchBtn.click();
+})
+
+teamSearchKeyWord.addEventListener('input', ()=>{
+	teamSearchBtn.click();
+})
+
 // Click events
 // viewmoreBtn.addEventListener('click', () => {
 // 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
@@ -961,24 +977,57 @@ saveBtn.addEventListener('click', () => {
 })
 
 ownerSearchBtn.addEventListener('click', async() => {
+	if(isAllowOwnerSearch === false) {
+		return;
+	}
+	isAllowOwnerSearch = false;
+	let keyword = ownerSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
-	let searchResult = await searchMethod(ownerSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner', editAssociate);
+	
+	isAllowOwnerSearch = true;
+	if(keyword !== ownerSearchKeyWord.value) {
+		ownerSearchBtn.click();
+	}
 })
 
 reviewerSearchBtn.addEventListener('click', async() => {
+	if(isAllowReviewerSearch === false) {
+		return;
+	}
+	isAllowReviewerSearch = false;
+	let keyword = reviewerSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-reviewer').checked ? searchId : searchName;
-	let searchResult = await searchMethod(reviewerSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer', editAssociate);
+
+	isAllowReviewerSearch = true;
+	if(keyword !== reviewerSearchKeyWord.value) {
+		reviewerSearchBtn.click();
+	}
 })
 
 teamSearchBtn.addEventListener('click', async() => {
+	if(isAllowTeamSearch === false) {
+		return;
+	}
+	isAllowTeamSearch = false;
+	let keyword = teamSearchKeyWord.value;
+
 	searchMethod = searchTeam;
-	let searchResult = await searchMethod(teamSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', editAssociate);
+
+	isAllowTeamSearch = true;
+	if(keyword !== teamSearchKeyWord.value) {
+		teamSearchBtn.click();
+	}
 })
 
 addCommentBtn.addEventListener('click', () => {

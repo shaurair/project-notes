@@ -26,6 +26,9 @@ const teamContainer = document.querySelector('.project-team-content-area');
 const closeTeamContainerBtn = document.getElementById('close-team-content');
 const memberPeopleList = document.getElementById('member-people-list');
 let createAssociate = {owner:{}, reviewer:{}, follower:{}, team:{}};
+let isAllowOwnerSearch = true;
+let isAllowReviewerSearch = true;
+let isAllowTeamSearch = true;
 
 async function initCreateProject() {
 	await getUser();
@@ -99,19 +102,54 @@ async function createNewProject() {
 	}
 }
 
+// input event
+ownerSearchKeyWord.addEventListener('input', ()=>{
+	ownerSearchBtn.click();
+})
+
+reviewerSearchKeyWord.addEventListener('input', ()=>{
+	reviewerSearchBtn.click();
+})
+
+teamSearchKeyWord.addEventListener('input', ()=>{
+	teamSearchBtn.click();
+})
+
 // Click events
 ownerSearchBtn.addEventListener('click', async() => {
+	if(isAllowOwnerSearch === false) {
+		return;
+	}
+	isAllowOwnerSearch = false;
+	let keyword = ownerSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
-	let searchResult = await searchMethod(ownerSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner', createAssociate);
+	
+	isAllowOwnerSearch = true;
+	if(keyword !== ownerSearchKeyWord.value) {
+		ownerSearchBtn.click();
+	}
 })
 
 reviewerSearchBtn.addEventListener('click', async() => {
+	if(isAllowReviewerSearch === false) {
+		return;
+	}
+	isAllowReviewerSearch = false;
+	let keyword = reviewerSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-reviewer').checked ? searchId : searchName;
-	let searchResult = await searchMethod(reviewerSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer', createAssociate);
+
+	isAllowReviewerSearch = true;
+	if(keyword !== reviewerSearchKeyWord.value) {
+		reviewerSearchBtn.click();
+	}
 })
 
 followerSearchBtn.addEventListener('click', async() => {
@@ -122,10 +160,21 @@ followerSearchBtn.addEventListener('click', async() => {
 })
 
 teamSearchBtn.addEventListener('click', async() => {
+	if(isAllowTeamSearch === false) {
+		return;
+	}
+	isAllowTeamSearch = false;
+	let keyword = teamSearchKeyWord.value;
+
 	searchMethod = searchTeam;
-	let searchResult = await searchMethod(teamSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', createAssociate);
+
+	isAllowTeamSearch = true;
+	if(keyword !== teamSearchKeyWord.value) {
+		teamSearchBtn.click();
+	}
 })
 
 closeTeamContainerBtn.addEventListener('click', ()=>{

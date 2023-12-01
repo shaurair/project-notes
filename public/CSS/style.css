@@ -374,7 +374,6 @@ html,body {
 .search-container {
 	display: flex;
 	gap: 40px;
-	justify-content: space-between;
 	box-sizing: border-box;
 	padding: 0 5px;
 }
