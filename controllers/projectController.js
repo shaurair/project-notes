@@ -1,6 +1,11 @@
-const token = require('../utilities/token');
-const projectModel = require('../models/projectModel');
-const { format } = require('date-fns');
+const token 			= require('../utilities/token');
+const projectModel 		= require('../models/projectModel');
+const { format } 		= require('date-fns');
+const multer 			= require('multer'); // process formData doc.
+const operateStorage 	= require('../utilities/conn-aws-S3');
+
+const imageStorage 	= multer.memoryStorage();
+const upload = multer({storage: imageStorage});
 
 const create = async (req, res) => {
 	let summary = req.body.summary;
@@ -57,12 +62,11 @@ const getAuthorization = async (req, res) => {
 const getContent = async (req, res) => {
 	let projectId = req.query.id;
 	let userToken;
-	let memberInfo;
 	let result;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
-		memberInfo = token.decode(userToken);
+		token.decode(userToken);
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
@@ -83,12 +87,11 @@ const getComment = async (req, res) => {
 	let projectId = req.query.projectId;
 	let nextPage = req.query.nextPage;
 	let userToken;
-	let memberInfo;
 	let result;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
-		memberInfo = token.decode(userToken);
+		token.decode(userToken);
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
@@ -172,12 +175,11 @@ const addComment = async (req, res) => {
 const deleteComment = async (req, res) => {
 	let commentId = req.query.commentId;
 	let userToken;
-	let memberInfo;
 	let result;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
-		memberInfo = token.decode(userToken);
+		token.decode(userToken);
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
@@ -192,12 +194,11 @@ const updateComment = async (req, res) => {
 	let commentId = req.body.commentId;
 	let comment = req.body.comment;
 	let userToken;
-	let memberInfo;
 	let result;
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
-		memberInfo = token.decode(userToken);
+		token.decode(userToken);
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
@@ -215,7 +216,6 @@ const getProjectMainAndRole = async (req, res) => {
 	let myRole = req.query.myRole;
 	let keyword = req.query.keyword;
 	let userToken;
-	let memberInfo;
 	let result;
 	let roleResult;
 	let projectIdList = [];
@@ -223,7 +223,7 @@ const getProjectMainAndRole = async (req, res) => {
 
 	try {
 		userToken = req.headers.authorization.replace('Bearer ', '');
-		memberInfo = token.decode(userToken);
+		token.decode(userToken);
 	}
 	catch(err) {
 		res.status(403).send({data: {"message" : "User not log in"}});
@@ -261,6 +261,84 @@ const getProjectMainAndRole = async (req, res) => {
 	res.status(result.statusCode).send({content: result.data.content, roles:roles, nextPage: result.data.nextPage})
 }
 
+const addFile = async (req, res) => {
+	let projectId = req.body.projectId;
+	let fileName = req.body.fileName;
+	let file = req.file;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	if(!file) {
+		res.status(400).send({data: {"message" : "None file request"}});
+		return;
+	}
+
+	result = await operateStorage.uploadToS3(file.buffer, fileName, file.mimetype, `project-${projectId}`);
+
+	if(result.ok) {
+		result = await projectModel.addFile(projectId, memberInfo['id'], fileName);
+		res.status(result.statusCode).send(result.data);
+	}
+	else {
+		res.status(500).send({"message" : "Upload file failed"});
+	}
+}
+
+const getFile = async (req, res) => {
+	let projectId = req.query.projectId;
+	let page = req.query.page;
+	let userToken;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.getFile(projectId, page);
+	res.status(result.statusCode).send(result.data);
+}
+
+const deleteFile = async (req, res) => {
+	let fileId = req.query.fileId;
+	let fileName = req.query.fileName;
+	let projectId = req.query.projectId;
+	let userToken;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await operateStorage.deleteFileOnS3(fileName,  `project-${projectId}`);
+	if(!result.ok) {
+		res.status(500).send({"message" : "Upload file failed"});
+		return;
+	}
+
+	result = await projectModel.deleteFile(fileId);
+	res.status(result.statusCode).send(result.data);
+}
+
 module.exports = {
 	create,
 	getContent,
@@ -271,5 +349,9 @@ module.exports = {
 	updateComment,
 	updateStatus,
 	getProjectMainAndRole,
-	getAuthorization
+	getAuthorization,
+	addFile,
+	upload,
+	getFile,
+	deleteFile
 }

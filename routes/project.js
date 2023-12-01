@@ -12,5 +12,8 @@ router.delete('/comment', projectController.deleteComment);
 router.patch('/comment', projectController.updateComment);
 router.patch('/status', projectController.updateStatus);
 router.get('/main-info', projectController.getProjectMainAndRole);
+router.post('/file', projectController.upload.single('file'),projectController.addFile);
+router.get('/file', projectController.getFile);
+router.delete('/file', projectController.deleteFile);
 
 module.exports = router;

@@ -1,6 +1,10 @@
 require('dotenv').config();
 const {S3Client, PutObjectCommand, DeleteObjectCommand} = require("@aws-sdk/client-s3")
 const myBucket = process.env.S3_BUCKET;
+const STATUSCODE = {
+	EVERYTHING_OK: 200,
+	REQUEST_OK: 204
+}
 
 const s3 = new S3Client({
 	credentials: {
@@ -10,10 +14,10 @@ const s3 = new S3Client({
 	region: process.env.S3_REGION
 });
 
-async function uploadToS3(buffer, imageFilename, fileMimeType) {
+async function uploadToS3(buffer, imageFilename, fileMimeType, uploadFolder) {
 	const params = {
 		Bucket: myBucket,
-		Key: `project-note/user_img/${imageFilename}`,
+		Key: `project-note/${uploadFolder}/${imageFilename}`,
 		Body: buffer,
 		ContentType: fileMimeType
 	};
@@ -22,25 +26,25 @@ async function uploadToS3(buffer, imageFilename, fileMimeType) {
 	let response = await s3.send(command);
 	let result = {};
 
-	result["ok"] = (response["$metadata"]["httpStatusCode"] == 200) ? true : false;
+	result["ok"] = (response["$metadata"]["httpStatusCode"] == STATUSCODE.EVERYTHING_OK) ? true : false;
 	return result;
 }
 
-async function deleteFileOnS3(imageFilename) {
+async function deleteFileOnS3(imageFilename, uploadFolder) {
 	const params = {
 		Bucket: myBucket,
-		Key: `project-note/user_img/${imageFilename}`
+		Key: `project-note/${uploadFolder}/${imageFilename}`
 	};
 	const command = new DeleteObjectCommand(params);
 
 	let response = await s3.send(command);
 	let result = {};
 
-	result["ok"] = (response["$metadata"]["httpStatusCode"] == 200) ? true : false;
+	result["ok"] = (response["$metadata"]["httpStatusCode"] == 204) ? true : false;
 	return result;
 }
 
 module.exports = {
-	uploadToImageStorage: uploadToS3,
-	deleteImageOnStorage: deleteFileOnS3
+	uploadToS3,
+	deleteFileOnS3
 }

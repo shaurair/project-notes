@@ -19,6 +19,7 @@ async function initPersonal() {
 		personalOptBtn.classList.add('in-personal');
 		showMemberNav();
 		getNotes();
+		checkNotification();
 	}
 }
 

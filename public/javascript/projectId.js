@@ -38,6 +38,12 @@ const saveNoteBtn = document.getElementById('save-note-project');
 const deleteNoteBtn = document.getElementById('delete-note-project');
 const updateNoteWait = document.getElementById('update-waiting');
 const updateNoteSuccess = document.getElementById('update-success');
+const addFileInput = document.getElementById('add-file');
+const addFileBtn = document.getElementById('add-file-btn');
+const addFileSuccessElement = document.getElementById("file-success");
+const addFileWaitingElement = document.getElementById("file-waiting");
+const fileContainer = document.querySelector('.file-container');
+const fileLoadMoreBtn = document.getElementById('loadmore-file-button');
 const AUTH = {
 	PERMISSION_REJECT: 0,
 	SERVER_ERROR: 1,
@@ -48,7 +54,9 @@ let projectData;
 let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
 let editContent;
+let fileNameSet = {};
 let nextCommentPage = 0;
+let nextFilePage = 0;
 let currentPersonalNote = '';
 let isAllowSaveNote = false;
 let isAllowDeleteNote = false;
@@ -75,9 +83,11 @@ async function initProjectId() {
 
 		await Promise.all([	getProjectContent(),
 							getProjectComment(), 
-							setCommentImage(), 
+							setCommentImage(),
+							getProjectFile(),
 							getPersonalNote()]);
 		showOption();
+		checkNotification();
 	}
 }
 
@@ -88,6 +98,8 @@ function showContent() {
 
 function showOption() {
 	document.querySelector('.project-option').classList.remove('unseen');
+	addFileBtn.classList.remove('unseen');
+	addCommentBtn.classList.remove('unseen');
 }
 
 async function CheckAuthorization() {
@@ -176,6 +188,9 @@ function setProjectContent(data) {
 	if(data['deadline'] != null) {
 		element = document.getElementById('project-deadline');
 		element.textContent = data['deadline'];
+		if(data['deadline'] <= getTodayDate()) {
+			element.classList.add('highlight-text');
+		}
 	}
 
 	// set creator
@@ -775,10 +790,129 @@ async function deletePersonalNote() {
 	}
 }
 
+async function sendFile(file) {
+	let token = localStorage.getItem('token');
+	const formData = new FormData();
+	formData.append('file', file);
+	formData.append('fileName', file.name);
+	formData.append('projectId', projectId);
+
+	let response = await fetch("/api_project/file", {
+			method: "POST",
+			body: formData,
+			headers: {
+				'Authorization':`Bearer ${token}`,
+			}
+	});
+	let result = await response.json();
+
+	if(response.ok) {
+		addFileWaitingElement.classList.add('unseen');
+		addFileSuccessElement.classList.remove('unseen');
+		addFileBlock(result['fileId'], file.name, userInfo['file_name'], userInfo['name']);
+		addFileInput.value = '';
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
+async function getProjectFile() {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/file?projectId=${projectId}&page=${nextFilePage}`, {
+								headers: {Authorization: `Bearer ${token}`}
+							});
+	let result = await response.json();
+
+	if(response.ok) {
+		setFile(result['file']);
+		nextFilePage = result['nextPage'];
+		if(nextFilePage == null) {
+			fileLoadMoreBtn.classList.add('unseen');
+		}
+		else {
+			fileLoadMoreBtn.classList.remove('unseen');
+		}
+	}
+	else {
+		alert('something went wrong while loading comment, please redirect and try again');
+	}
+}
+
+function setFile(fileList) {
+	fileList.forEach(fileItem=>{
+		addFileBlock(fileItem['file_id'], fileItem['file_name'], fileItem['member_image'], fileItem['name'])
+	})
+}
+
+function addFileBlock(fileId, fileName, imageFilename, userName) {
+	let fileBlock = document.createElement('div');
+	fileBlock.className = 'file-block';
+	fileContainer.appendChild(fileBlock);
+
+	let fileLink = document.createElement('a');
+	fileLink.href = `https://d2o8k69neolkqv.cloudfront.net/project-note/project-${projectId}/${fileName}`
+	fileBlock.appendChild(fileLink);
+
+	let filenameElement = document.createElement('div');
+	filenameElement.className = 'filename';
+	filenameElement.textContent = fileName;
+	fileLink.appendChild(filenameElement);
+	
+	let fileAddedArea = document.createElement('div');
+	fileAddedArea.className = 'file-add-by';
+	fileBlock.appendChild(fileAddedArea);
+
+	let uploadTextElement = document.createElement('p');
+	uploadTextElement.className = 'descript-upload';
+	uploadTextElement.textContent = 'Uploaded by';
+	fileAddedArea.appendChild(uploadTextElement);
+
+	let peopleContainer = document.createElement('div');
+	peopleContainer.className = 'project-people-container';
+	addSmallImgToContainer(userImageFilenameToUrl(imageFilename), peopleContainer);
+	addNameToContainer(userName, peopleContainer)
+	fileAddedArea.appendChild(peopleContainer);
+
+	let fileDelete = document.createElement('div');
+	fileDelete.className = 'file-action-opt mouseover';
+	fileDelete.textContent = 'Delete';
+	fileBlock.appendChild(fileDelete);
+	fileDelete.addEventListener('click', ()=>{
+		let userConfirm = confirm(`Are you sure to delete this file: ${fileName}?`);
+			if(userConfirm) {
+				deleteFile(fileId, fileBlock, fileName);
+			}
+	})
+
+	fileNameSet[fileName] = true;
+}
+
+async function deleteFile(fileId, fileBlock, fileName) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/file?fileId=${fileId}&fileName=${fileName}&projectId=${projectId}`, {
+		method: 'DELETE',
+		headers: {Authorization: `Bearer ${token}`}
+	});
+
+	if(response.ok) {
+		fileContainer.removeChild(fileBlock);
+		delete fileNameSet[fileName];
+	}
+	else {
+		alert('something went wrong while deleting comment, please redirect and try again');
+	}
+}
+
 // Select change events
 statusSelect.addEventListener('change', () => {
 	changeStatusColor();
 	updateProjectStatus(statusSelect.value);
+});
+
+addFileInput.addEventListener('change', ()=>{
+	addFileWaitingElement.classList.add('unseen');
+	addFileSuccessElement.classList.add('unseen');
 });
 
 personalNoteInput.addEventListener('input', ()=>{
@@ -906,6 +1040,27 @@ deleteNoteBtn.addEventListener('click', ()=>{
 			deletePersonalNote();
 		}
 	}
+})
+
+addFileBtn.addEventListener('click', ()=>{
+	let file = addFileInput.files[0];
+
+	if(!file) {
+		alert('Please select a file.');
+		return;
+	}
+
+	if(fileNameSet.hasOwnProperty(file.name)) {
+		alert('There is already a file with the same name in this project.');
+		return;
+	}
+
+	sendFile(file);
+	addFileWaitingElement.classList.remove('unseen');
+})
+
+fileLoadMoreBtn.addEventListener('click', ()=>{
+	getProjectFile();
 })
 
 window.addEventListener('click', () => {
