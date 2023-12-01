@@ -300,6 +300,26 @@ const addFile = async (req, res) => {
 	}
 }
 
+const getFile = async (req, res) => {
+	let projectId = req.query.projectId;
+	let page = req.query.page;
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await projectModel.getFile(projectId, page);
+	res.status(result.statusCode).send(result.data);
+}
+
 module.exports = {
 	create,
 	getContent,
@@ -312,5 +332,6 @@ module.exports = {
 	getProjectMainAndRole,
 	getAuthorization,
 	addFile,
-	upload
+	upload,
+	getFile
 }

@@ -354,6 +354,28 @@ async function addFile(projectId, memberId, fileName) {
 		return database.ErrorProcess(error);
 	}
 }
+async function getFile(projectId, page) {
+	let limit = 5;
+	let offset = page * limit;
+	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id LIMIT ? OFFSET ?';
+	
+	try {
+		let result = await database.databasePool.query(sql, [projectId, (limit + 1), offset]);
+		let nextPage = result.length == (limit + 1) ? page + 1 : null;
+
+		return {
+			data: {
+				message: 'ok',
+				file: result.slice(0, limit),
+				nextPage: nextPage
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
 
 module.exports = {
 	createProject,
@@ -370,5 +392,6 @@ module.exports = {
 	getProjectMain,
 	getProjectRole,
 	getAuthorization,
-	addFile
+	addFile,
+	getFile
 }
