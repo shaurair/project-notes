@@ -966,14 +966,16 @@ td.tb-project-people {
 	display: flex;
 	justify-content: center;
 }
-#loadmore-comment-button {
-	background-color: var(--color-head-text);
-	color: white;
+#loadmore-comment-button, #loadmore-file-button {
+	color: var(--color-text);
 	border-radius: 5px;
 	box-sizing: border-box;
 	padding: 5px;
+	filter: brightness(1.2);
+	border-style: solid;
+	border-width: 1px;
 }
-#loadmore-comment-button:hover {
+#loadmore-comment-button:hover, #loadmore-file-button:hover {
 	opacity: 0.8;
 }
 .add-comment-btn-container {
@@ -1023,9 +1025,60 @@ td.tb-project-people {
 	width: 900px;
     min-height: 300px;
 }
+.file-block-vertical {
+	display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.add-file-area {
+	display: flex;
+	align-items: center;
+	margin: 0 0 0 10px;
+}
 #add-file-btn {
 	line-height: 1;
     letter-spacing: 0.5px;
+	font-size: 14px;
+	background-color: var(--color-head-text);
+    color: white;
+}
+.file-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 0 0 10px 10px;
+}
+.file-block {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+.filename {
+	width: 300px;
+}
+.descript-upload {
+	color: black;
+	font-weight: 400;
+	margin: 0;
+}
+.file-add-by {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	color: var(--color-text);
+	font-weight: 500;
+	width: 300px;
+}
+.file-action-opt {
+	background-color: #eee;
+    box-sizing: border-box;
+    border-radius: 0.3rem;
+	padding: 0 0.3rem;
+}
+.file-action-opt:hover {
+	font-weight: 600;
+    color: black;
 }
 /* ============= */
 /*  edit project */
@@ -1132,6 +1185,15 @@ td.tb-project-people {
 	background-image: url(https://d2o8k69neolkqv.cloudfront.net/user.png);
     width: 35px;
     height: 35px;
+	background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+}
+.small-people-img {
+	background-image: url(https://d2o8k69neolkqv.cloudfront.net/user.png);
+    width: 25px;
+    height: 25px;
 	background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1600,6 +1662,9 @@ td.tb-project-people {
 }
 .dark-text-filter {
 	filter: brightness(0.8);
+}
+.letter-space {
+	letter-spacing: 0.5px;
 }
 /* ====================================== */
 /*  700 px ~ 1200 px screen               */

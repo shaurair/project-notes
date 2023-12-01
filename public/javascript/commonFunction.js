@@ -66,6 +66,10 @@ function addSearchResult(resultData, listContainer, searchListElement, selectedL
 	}
 }
 
+function userImageFilenameToUrl(imageFilename) {
+	return (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
+}
+
 function addClickEffect(resultElement, imgUrl, userName, id, selectedListElement, associateRole, associate) {
 	resultElement.addEventListener('click', () => {
 		addToList(imgUrl, userName, id, selectedListElement, associateRole, associate)
@@ -95,6 +99,15 @@ function addToList(imgUrl, userName, id, selectedListElement, associateRole, ass
 function addImgToContainer(imgUrl, elementContainer) {
 	let element = document.createElement('div');
 	element.className = 'people-img';
+	elementContainer.appendChild(element);
+	if(imgUrl != null) {
+		element.style.backgroundImage = `url(${imgUrl})`;
+	}
+}
+
+function addSmallImgToContainer(imgUrl, elementContainer) {
+	let element = document.createElement('div');
+	element.className = 'small-people-img';
 	elementContainer.appendChild(element);
 	if(imgUrl != null) {
 		element.style.backgroundImage = `url(${imgUrl})`;
