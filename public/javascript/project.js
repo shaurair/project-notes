@@ -220,6 +220,10 @@ function resetLoadmoreBtn() {
 	loadmoreDoneBtn.classList.remove('unseen');
 }
 
+myRoleSelect.addEventListener('change', ()=>{
+	searchBtn.click();
+})
+
 loadmoreOpenBtn.addEventListener('click', () => {
 	getMainAndRole('OPEN');
 })
