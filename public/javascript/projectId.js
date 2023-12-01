@@ -881,12 +881,27 @@ function addFileBlock(fileId, fileName, imageFilename, userName) {
 	fileDelete.addEventListener('click', ()=>{
 		let userConfirm = confirm(`Are you sure to delete this file: ${fileName}?`);
 			if(userConfirm) {
-				// TODO
-				// deleteFile(fileId, fileBlock);
+				deleteFile(fileId, fileBlock, fileName);
 			}
 	})
 
 	fileNameSet[fileName] = true;
+}
+
+async function deleteFile(fileId, fileBlock, fileName) {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api_project/file?fileId=${fileId}&fileName=${fileName}&projectId=${projectId}`, {
+		method: 'DELETE',
+		headers: {Authorization: `Bearer ${token}`}
+	});
+
+	if(response.ok) {
+		fileContainer.removeChild(fileBlock);
+		delete fileNameSet[fileName];
+	}
+	else {
+		alert('something went wrong while deleting comment, please redirect and try again');
+	}
 }
 
 // Select change events

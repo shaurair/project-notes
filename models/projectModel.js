@@ -377,6 +377,23 @@ async function getFile(projectId, page) {
 	}
 }
 
+async function deleteFile(fileId) {
+	let sql = 'DELETE FROM project_file WHERE id = ?;';
+	try {
+		await database.databasePool.query(sql, [fileId]);
+
+		return {
+			data: {
+				message: 'ok'
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
@@ -393,5 +410,6 @@ module.exports = {
 	getProjectRole,
 	getAuthorization,
 	addFile,
-	getFile
+	getFile,
+	deleteFile
 }
