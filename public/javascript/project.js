@@ -20,6 +20,7 @@ const keywordInput = document.getElementById('search-input');
 let myRole = 0;
 let keyword = '';
 let nextPage = {'OPEN': 0, 'INPROGRESS': 0, 'REVIEWING': 0, 'DONE': 0,};
+let isAllowSearch = true;
 
 async function initProject() {
 	await getUser();
@@ -224,6 +225,10 @@ myRoleSelect.addEventListener('change', ()=>{
 	searchBtn.click();
 })
 
+keywordInput.addEventListener('input', ()=>{
+	searchBtn.click();
+})
+
 loadmoreOpenBtn.addEventListener('click', () => {
 	getMainAndRole('OPEN');
 })
@@ -240,7 +245,11 @@ loadmoreDoneBtn.addEventListener('click', () => {
 	getMainAndRole('DONE');
 })
 
-searchBtn.addEventListener('click', () => {
+searchBtn.addEventListener('click', async() => {
+	if(isAllowSearch === false) {
+		return;
+	}
+	isAllowSearch = false;
 	resultOpenContainer.classList.add('unseen');
 	resultProgressContainer.classList.add('unseen');
 	resultReviewingContainer.classList.add('unseen');
@@ -259,10 +268,17 @@ searchBtn.addEventListener('click', () => {
 	keyword = keywordInput.value;
 	nextPage = {'OPEN': 0, 'INPROGRESS': 0, 'REVIEWING': 0, 'DONE': 0,};
 
-	getMainAndRole('OPEN');
-	getMainAndRole('INPROGRESS');
-	getMainAndRole('REVIEWING');
-	getMainAndRole('DONE');
+	await Promise.all([
+		getMainAndRole('OPEN'),
+		getMainAndRole('INPROGRESS'),
+		getMainAndRole('REVIEWING'),
+		getMainAndRole('DONE'),
+	]);
+
+	isAllowSearch = true;
+	if(myRole !== myRoleSelect.value || keyword !== keywordInput.value) {
+		searchBtn.click();
+	}
 })
 
 // Enter events
