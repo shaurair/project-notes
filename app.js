@@ -52,4 +52,49 @@ app.use('/api/group', groupRouter);
 app.use('/api/note', noteRouter);
 app.use('/api/notification', notificationRouter);
 
-app.listen(port);
+// app.listen(port);
+
+// Websocket test
+const server = require('http').createServer(app)
+const WebSocket = require('ws')
+const wss = new WebSocket.Server({ server: server })
+const mapConn = new Map();
+wss.on('connection', function connection(ws) {
+    ws.on('message', function incoming(message) {
+		try {
+			const data = JSON.parse(message);
+			if(data.type === 'memberId') {
+				let memberId = data.memberId;
+				if(!mapConn.has(memberId)) {
+					mapConn.set(memberId, []);
+				}
+				mapConn.get(memberId).push(ws);
+			}
+		}
+		catch(error) {'ERROR while websocket connection:', console.error(error);}
+    });
+
+	ws.on('message', ()=>{
+		try {
+			let informedMemberId = 1;
+			mapConn.get(informedMemberId).forEach(connectedWs => {
+				connectedWs.send(('Add one connection!, current total len: ' + mapConn.get(informedMemberId).length))
+			});
+		}
+		catch(error) {'ERROR while websocket connection:', console.error(error);}
+	})
+
+	ws.on('close', ()=>{
+		try {
+			let informedMemberId = 1;
+			const memberConnections = mapConn.get(informedMemberId);
+			const connectionIndex = memberConnections.indexOf(ws);
+			if(connectionIndex !== -1) {
+				memberConnections.splice(connectionIndex, 1);
+			}
+		}
+		catch(error) {'ERROR while websocket connection:', console.error(error);}
+	})
+})
+
+server.listen(port);

@@ -42,4 +42,21 @@ function checkNotification() {
 	if(todayDate !== localStorage.getItem('lastNotifyDate')) {
 		getExpiredProject(todayDate);
 	}
+
+	debugTest();
+}
+
+function debugTest() {
+	const socket = new WebSocket('ws://' + window.location.host);
+	let memberId = userInfo['id'];
+
+	socket.addEventListener('open', function (event) {
+		socket.send(JSON.stringify({
+			type: 'memberId', memberId
+		}));
+	})
+
+	socket.addEventListener('message', function (event) {
+        console.log('message from server: ', event.data)
+    })
 }
