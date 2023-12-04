@@ -47,7 +47,8 @@ function checkNotification() {
 }
 
 function debugTest() {
-	const socket = new WebSocket('ws://' + window.location.host);
+	let wsHead = (PORT == PORT_OPT.HTTP) ? 'ws://' : 'wss://';
+	const socket = new WebSocket(wsHead + window.location.host);
 	let memberId = userInfo['id'];
 
 	socket.addEventListener('open', function (event) {
