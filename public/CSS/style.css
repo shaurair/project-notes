@@ -1057,9 +1057,10 @@ td.tb-project-people {
 	width: 300px;
 }
 .descript-upload {
-	color: black;
+	color: #555;
 	font-weight: 400;
 	margin: 0;
+	font-size: 14px;
 }
 .file-add-by {
 	display: flex;

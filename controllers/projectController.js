@@ -264,6 +264,7 @@ const getProjectMainAndRole = async (req, res) => {
 const addFile = async (req, res) => {
 	let projectId = req.body.projectId;
 	let fileName = req.body.fileName;
+	let datetime = req.body.datetime;
 	let file = req.file;
 	let userToken;
 	let memberInfo;
@@ -286,7 +287,7 @@ const addFile = async (req, res) => {
 	result = await operateStorage.uploadToS3(file.buffer, fileName, file.mimetype, `project-${projectId}`);
 
 	if(result.ok) {
-		result = await projectModel.addFile(projectId, memberInfo['id'], fileName);
+		result = await projectModel.addFile(projectId, memberInfo['id'], fileName, datetime);
 		res.status(result.statusCode).send(result.data);
 	}
 	else {

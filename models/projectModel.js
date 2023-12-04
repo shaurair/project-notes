@@ -337,10 +337,10 @@ async function getProjectRole(projectIdList) {
 	}
 }
 
-async function addFile(projectId, memberId, fileName) {
-	let sql = 'INSERT INTO project_file(project_id, member_id, file_name) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
+async function addFile(projectId, memberId, fileName, datetime) {
+	let sql = 'INSERT INTO project_file(project_id, member_id, file_name, datetime) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
 	try {
-		let result = await database.databasePool.query(sql, [projectId, memberId, fileName, memberId]);
+		let result = await database.databasePool.query(sql, [projectId, memberId, fileName, datetime, memberId]);
 
 		return {
 			data: {
@@ -357,7 +357,7 @@ async function addFile(projectId, memberId, fileName) {
 async function getFile(projectId, page) {
 	let limit = 5;
 	let offset = page * limit;
-	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id LIMIT ? OFFSET ?';
+	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image, datetime FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id LIMIT ? OFFSET ?';
 	
 	try {
 		let result = await database.databasePool.query(sql, [projectId, (limit + 1), offset]);

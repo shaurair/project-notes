@@ -795,10 +795,12 @@ async function deletePersonalNote() {
 
 async function sendFile(file) {
 	let token = localStorage.getItem('token');
+	const datetime = getNowDateTime();
 	const formData = new FormData();
 	formData.append('file', file);
 	formData.append('fileName', file.name);
 	formData.append('projectId', projectId);
+	formData.append('datetime', datetime);
 
 	let response = await fetch("/api_project/file", {
 			method: "POST",
@@ -812,7 +814,7 @@ async function sendFile(file) {
 	if(response.ok) {
 		addFileWaitingElement.classList.add('unseen');
 		addFileSuccessElement.classList.remove('unseen');
-		addFileBlock(result['fileId'], file.name, userInfo['file_name'], userInfo['name']);
+		addFileBlock(result['fileId'], file.name, userInfo['file_name'], userInfo['name'], datetime);
 		addFileInput.value = '';
 	}
 	else {
@@ -844,11 +846,11 @@ async function getProjectFile() {
 
 function setFile(fileList) {
 	fileList.forEach(fileItem=>{
-		addFileBlock(fileItem['file_id'], fileItem['file_name'], fileItem['member_image'], fileItem['name'])
+		addFileBlock(fileItem['file_id'], fileItem['file_name'], fileItem['member_image'], fileItem['name'], fileItem['datetime'])
 	})
 }
 
-function addFileBlock(fileId, fileName, imageFilename, userName) {
+function addFileBlock(fileId, fileName, imageFilename, userName, datetime) {
 	let fileBlock = document.createElement('div');
 	fileBlock.className = 'file-block';
 	fileContainer.appendChild(fileBlock);
@@ -866,16 +868,16 @@ function addFileBlock(fileId, fileName, imageFilename, userName) {
 	fileAddedArea.className = 'file-add-by';
 	fileBlock.appendChild(fileAddedArea);
 
-	let uploadTextElement = document.createElement('p');
-	uploadTextElement.className = 'descript-upload';
-	uploadTextElement.textContent = 'Uploaded by';
-	fileAddedArea.appendChild(uploadTextElement);
-
 	let peopleContainer = document.createElement('div');
 	peopleContainer.className = 'project-people-container';
 	addSmallImgToContainer(userImageFilenameToUrl(imageFilename), peopleContainer);
 	addNameToContainer(userName, peopleContainer)
 	fileAddedArea.appendChild(peopleContainer);
+
+	let uploadTextElement = document.createElement('p');
+	uploadTextElement.className = 'descript-upload';
+	uploadTextElement.textContent = datetime;
+	fileAddedArea.appendChild(uploadTextElement);
 
 	let fileDelete = document.createElement('div');
 	fileDelete.className = 'file-action-opt mouseover';
@@ -1040,14 +1042,7 @@ addCommentBtn.addEventListener('click', () => {
 		return;
 	}
 
-	const now = new Date();
-	const options = {
-		year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', 
-	};
-	const localTime = now.toLocaleString('en-US', options);
-	const formattedDate = localTime.split(', ').join(' ');
-
-	addComment(formattedDate);
+	addComment(getNowDateTime());
 })
 
 commentLoadMoreBtn.addEventListener('click', () => {
