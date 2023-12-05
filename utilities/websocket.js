@@ -1,6 +1,10 @@
 const WebSocket = require('ws')
 const mapConn = new Map();
 let wss;
+const MESSAGE_TYPE = {
+	REPLY_TO_MY_PROJECT: 0,
+	UPDATE_MY_PROJECT: 1,
+}
 
 function setServer(server) {
 	wss = new WebSocket.Server({ server: server });
@@ -37,7 +41,13 @@ function setServer(server) {
 }
 
 function checkUserConnected(memberId) {
-	return mapConn.has(memberId)
+	if(mapConn.has(memberId)) {
+		if(mapConn.get(memberId).length > 0) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function notify(memberId, message) {
@@ -52,5 +62,6 @@ function notify(memberId, message) {
 module.exports = {
 	setServer,
 	checkUserConnected,
-	notify
+	notify,
+	MESSAGE_TYPE
 }

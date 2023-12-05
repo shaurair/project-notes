@@ -8,10 +8,7 @@ const websocket 		= require('../utilities/websocket');
 const imageStorage 	= multer.memoryStorage();
 const upload = multer({storage: imageStorage});
 
-const MESSAGE_TYPE = {
-	REPLY_TO_MY_PROJECT: 0,
-	UPDATE_MY_PROJECT: 1,
-}
+const MESSAGE_TYPE = websocket.MESSAGE_TYPE;
 
 const create = async (req, res) => {
 	let summary = req.body.summary;
@@ -275,7 +272,7 @@ const getProjectMainAndRole = async (req, res) => {
 	});
 
 	if(result.data.content.length != 0 ) {
-			roleResult = await projectModel.getProjectRole(projectIdList);
+		roleResult = await projectModel.getProjectRole(projectIdList);
 		if(roleResult.data.message != 'ok') {
 			res.status(roleResult.statusCode).send(roleResult.data);
 			return;
@@ -285,8 +282,6 @@ const getProjectMainAndRole = async (req, res) => {
 			roles[role.project_id][role.role].push({name:role.name, image:role.image_filename})
 		})
 	}
-
-
 
 	res.status(result.statusCode).send({content: result.data.content, roles:roles, nextPage: result.data.nextPage})
 }
