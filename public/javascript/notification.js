@@ -36,12 +36,33 @@ async function getExpiredProject(todayDate) {
 	}
 }
 
+async function checkHistoryUpdateNotification() {
+	let token = localStorage.getItem('token');
+	let response = await fetch(`/api/notification/history-update`, {
+		headers: {Authorization: `Bearer ${token}`}
+	})
+	let result = await response.json();
+
+	if(response.ok) {
+		result['notification'].forEach(notification=>{
+			let projectId = notification['project_id'];
+			let messageText = notification['messageText'];
+			setUpdateNotification(projectId, messageText);
+		})
+	}
+	else {
+		alert(result["message"] + " Please redirect this page and try again.");
+	}
+}
+
 function checkNotification() {
 	let todayDate = getTodayDate();
 
 	if(todayDate !== localStorage.getItem('lastNotifyDate')) {
 		getExpiredProject(todayDate);
 	}
+
+	checkHistoryUpdateNotification();
 
 	setWebSocketNotification();
 }
@@ -58,15 +79,14 @@ function setWebSocketNotification() {
 	})
 
 	socket.addEventListener('message', function (event) {
-		setUpdateNotification(event.data);
+		let messageInfo = JSON.parse(event.data);
+		let projectId = messageInfo.projectId;
+		let messageText = messageInfo.message;
+		setUpdateNotification(projectId, messageText);
     })
 }
 
-async function setUpdateNotification(message) {
-	let messageInfo = JSON.parse(message);
-	let projectId = messageInfo.projectId;
-	let messageText = messageInfo.message;
-
+async function setUpdateNotification(projectId, messageText) {
 	Notification.requestPermission().then(permission=>{
 		if(permission === 'granted') {
 			const notificationUpdateProject = new Notification('Project Update', {

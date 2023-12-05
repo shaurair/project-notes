@@ -1,5 +1,6 @@
 const notificationModel	= require('../models/notificationModel');
 const token				= require('../utilities/token');
+const MESSAGE_TYPE 		= require('../utilities/websocket').MESSAGE_TYPE;
 
 const getExpiredProjectId = async (req, res) => {
 	let userToken;
@@ -24,6 +25,35 @@ const getExpiredProjectId = async (req, res) => {
 	result = await notificationModel.getExpiredProjectId(memberInfo['id'], formattedDate);
 	res.status(result.statusCode).send(result['data']);
 }
+
+const getHistoryUpdate = async (req, res) => {
+	let userToken;
+	let memberInfo;
+	let result;
+
+	try {
+		userToken = req.headers.authorization.replace('Bearer ', '');
+		memberInfo = token.decode(userToken);
+	}
+	catch(err) {
+		res.status(403).send({data: {"message" : "User not log in"}});
+		return;
+	}
+
+	result = await notificationModel.getHistoryUpdate(memberInfo['id']);
+	result['data'].notification.forEach(notificationItem=>{
+		let projectId = notificationItem['project_id']
+		if(notificationItem['messageText'] === MESSAGE_TYPE.REPLY_TO_MY_PROJECT) {
+			notificationItem['messageText'] = `Someone replies to project-${projectId}`;
+		}
+		else if(notificationItem['messageText'] === MESSAGE_TYPE.UPDATE_MY_PROJECT) {
+			notificationItem['messageText'] = `Someone updates project-${projectId}`;
+		}
+	})
+	res.status(result.statusCode).send(result['data']);
+}
+
 module.exports = {
 	getExpiredProjectId,
+	getHistoryUpdate
 }
