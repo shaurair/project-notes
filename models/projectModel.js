@@ -394,6 +394,24 @@ async function deleteFile(fileId) {
 	}
 }
 
+async function addNotification(projectId, memberId, messageType) {
+	let sql = 'INSERT INTO project_notification(project_id, member_id, message_type) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
+	try {
+		let result = await database.databasePool.query(sql, [projectId, memberId, messageType, memberId]);
+
+		return {
+			data: {
+				message: 'ok',
+				notificationId: result.insertId
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
@@ -411,5 +429,6 @@ module.exports = {
 	getAuthorization,
 	addFile,
 	getFile,
-	deleteFile
+	deleteFile,
+	addNotification
 }

@@ -3,9 +3,15 @@ const projectModel 		= require('../models/projectModel');
 const { format } 		= require('date-fns');
 const multer 			= require('multer'); // process formData doc.
 const operateStorage 	= require('../utilities/conn-aws-S3');
+const websocket 		= require('../utilities/websocket');
 
 const imageStorage 	= multer.memoryStorage();
 const upload = multer({storage: imageStorage});
+
+const MESSAGE_TYPE = {
+	REPLY_TO_MY_PROJECT: 0,
+	UPDATE_MY_PROJECT: 1,
+}
 
 const create = async (req, res) => {
 	let summary = req.body.summary;
@@ -170,6 +176,30 @@ const addComment = async (req, res) => {
 
 	result = await projectModel.addComment(projectId, memberInfo['id'], comment, datetime);
 	res.status(result.statusCode).send(result.data);
+
+	// notify owner
+	let informMessage= {
+		projectId: projectId,
+		message: `Someone replies to project-${projectId}`
+	}
+
+	result = await projectModel.getProjectContent(projectId);
+	if(result.data.message == 'ok') {
+		let ownerList = result.data.owner;
+		ownerList.forEach(owner=>{
+			let memberId = owner.id;
+			if(memberId === memberInfo['id']) {
+				return;
+			}
+
+			if(websocket.checkUserConnected(memberId)) {
+				websocket.notify(memberId, informMessage);
+			}
+			else {
+				projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
+			}
+		})
+	}
 }
 
 const deleteComment = async (req, res) => {

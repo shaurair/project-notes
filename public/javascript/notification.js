@@ -1,4 +1,4 @@
-async function setNotification(expiredList, todayDate) {
+async function setDeadlineNotification(expiredList, todayDate) {
 	Notification.requestPermission().then(permission=>{
 		if(permission === 'granted') {
 			expiredList.forEach(project=>{
@@ -6,7 +6,7 @@ async function setNotification(expiredList, todayDate) {
 				const notificationProject = new Notification('Project Expiration', {
 					body: `Project-${projectId} deadline has been meet!`,
 					icon: '/images/logo.png',
-					tag: `Project-${projectId}`,
+					tag: `Project-${projectId}-deadline`,
 					
 				})
 				notificationProject.addEventListener('click', ()=>{
@@ -29,7 +29,7 @@ async function getExpiredProject(todayDate) {
 
 	if(response.ok) {
 		let expiredList = result['expired'];
-		setNotification(expiredList, todayDate);
+		setDeadlineNotification(expiredList, todayDate);
 	}
 	else {
 		alert(result["message"] + " Please redirect this page and try again.");
@@ -43,10 +43,10 @@ function checkNotification() {
 		getExpiredProject(todayDate);
 	}
 
-	debugTest();
+	setWebSocketNotification();
 }
 
-function debugTest() {
+function setWebSocketNotification() {
 	let wsHead = (PORT == PORT_OPT.HTTP) ? 'ws://' : 'wss://';
 	const socket = new WebSocket(wsHead + window.location.host);
 	let memberId = userInfo['id'];
@@ -58,6 +58,26 @@ function debugTest() {
 	})
 
 	socket.addEventListener('message', function (event) {
-        console.log('message from server: ', event.data)
+		setUpdateNotification(event.data);
     })
+}
+
+async function setUpdateNotification(message) {
+	let messageInfo = JSON.parse(message);
+	let projectId = messageInfo.projectId;
+	let messageText = messageInfo.message;
+
+	Notification.requestPermission().then(permission=>{
+		if(permission === 'granted') {
+			const notificationUpdateProject = new Notification('Project Update', {
+				body: messageText,
+				icon: '/images/logo.png'
+				
+			})
+			notificationUpdateProject.addEventListener('click', ()=>{
+				window.open(`/project/${projectId}`, '_blank');
+				notificationUpdateProject.close();
+			})
+		}
+	})
 }
