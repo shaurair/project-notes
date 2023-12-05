@@ -4,6 +4,7 @@ const signInPasswordElement = document.getElementById('password');
 const signUpNameElement = document.getElementById('sign-name');
 const signUpEmailElement = document.getElementById('sign-email');
 const signUpPasswordElement = document.getElementById('sign-password');
+const signUpConfirmPasswordElement = document.getElementById('sign-confirm-password');
 const goSignUpBtn = document.getElementById('go-sign-up-btn');
 const goSignInBtn = document.getElementById('go-sign-in-btn');
 const signInAreaElement = document.getElementById('sign-in-area');
@@ -11,7 +12,7 @@ const signUpAreaElement = document.getElementById('sign-up-area');
 const signInBtn = document.getElementById('sign-in-btn');
 const signUpBtn = document.getElementById('sign-up-btn');
 
-function checkInputFormat(name, email, password) {
+function checkInputFormat(name, email, password, confirmPassword) {
 	let emailRule = /^[A-Za-z0-9_.-]+\@[A-Za-z0-9_.-]+$/;
 
 	if(name == '') {
@@ -29,12 +30,16 @@ function checkInputFormat(name, email, password) {
 		return 'Passowrd is required';
 	}
 
+	if(confirmPassword !== null && password !== confirmPassword) {
+		return 'Confirmed password is different from password'
+	}
+
 	return 'ok';
 }
 
 async function signIn(email, password) {
 	let messageElement = document.getElementById("sign-in-message");
-	let checkInputResult = checkInputFormat(null, email, password);
+	let checkInputResult = checkInputFormat(null, email, password, null);
 
 	if(checkInputResult == 'ok') {
 		let response = await fetch("/log", {
@@ -59,9 +64,9 @@ async function signIn(email, password) {
 	}
 }
 
-async function signUp(name, email, password) {
+async function signUp(name, email, password, confirmPassword) {
 	let messageElement = document.getElementById("sign-up-message");
-	let checkInputResult = checkInputFormat(name, email, password);
+	let checkInputResult = checkInputFormat(name, email, password, confirmPassword);
 
 	if(checkInputResult == 'ok') {
 		let response = await fetch("/log", {
@@ -108,7 +113,7 @@ signInBtn.addEventListener('click', () => {
 })
 
 signUpBtn.addEventListener('click', () => {
-	signUp(signUpNameElement.value, signUpEmailElement.value, signUpPasswordElement.value);
+	signUp(signUpNameElement.value, signUpEmailElement.value, signUpPasswordElement.value, signUpConfirmPasswordElement.value);
 })
 
 goSignUpBtn.addEventListener('click', () => {
