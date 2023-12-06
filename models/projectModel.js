@@ -117,7 +117,7 @@ async function getComment(projectId, page) {
 
 	try {
 		let commentResult = await database.databasePool.query(sqlComment, [projectId, (limit + 1), offset]);
-		let nextPage = commentResult.length == (limit + 1) ? page + 1 : null;
+		let nextPage = commentResult.length == (limit + 1) ? parseInt(page) + 1 : null;
 
 		return {
 			data: {
@@ -302,7 +302,7 @@ async function getProjectMain(memberId, status, page, keyword, myRole) {
 
 	try {
 		let contentResult = await database.databasePool.query(sql, sqlParam);
-		let nextPage = contentResult.length == (limit + 1) ? page + 1 : null;
+		let nextPage = contentResult.length == (limit + 1) ? parseInt(page) + 1 : null;
 
 		return {
 			data: {
@@ -361,7 +361,7 @@ async function getFile(projectId, page) {
 	
 	try {
 		let result = await database.databasePool.query(sql, [projectId, (limit + 1), offset]);
-		let nextPage = result.length == (limit + 1) ? page + 1 : null;
+		let nextPage = result.length == (limit + 1) ? parseInt(page) + 1 : null;
 
 		return {
 			data: {
