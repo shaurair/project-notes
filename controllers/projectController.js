@@ -88,7 +88,7 @@ const getContent = async (req, res) => {
 
 const getComment = async (req, res) => {
 	let projectId = req.query.projectId;
-	let nextPage = req.query.nextPage;
+	let nextCommentCursor = req.query.nextCommentCursor;
 	let userToken;
 	let result;
 
@@ -101,7 +101,7 @@ const getComment = async (req, res) => {
 		return;
 	}
 
-	result = await projectModel.getComment(projectId, nextPage);
+	result = await projectModel.getComment(projectId, nextCommentCursor);
 	res.status(result.statusCode).send(result.data);
 }
 

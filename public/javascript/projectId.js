@@ -25,7 +25,8 @@ const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
 const commentInputElement = document.getElementById('add-comment-text');
 const addCommentBtn = document.getElementById('add-comment');
-const commentContainer = document.querySelector('.comment-container');
+const existCommentContainer = document.getElementById('exist-comment-container');
+const newCommentContainer = document.getElementById('new-comment-container');
 const commentLoadMoreBtn = document.getElementById('loadmore-comment-button');
 const noCommentElement = document.getElementById('no-comment');
 const teamContainer = document.querySelector('.project-team-content-area');
@@ -55,7 +56,8 @@ let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
 let editContent;
 let fileNameSet = {};
-let nextCommentPage = 0;
+let newCommentSet = {};
+let nextCommentCursor = 0;
 let nextFilePage = 0;
 let currentPersonalNote = '';
 let isAllowSaveNote = false;
@@ -148,15 +150,15 @@ async function getProjectContent() {
 
 async function getProjectComment() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment?projectId=${projectId}&nextPage=${nextCommentPage}`, {
+	let response = await fetch(`/api_project/comment?projectId=${projectId}&nextCommentCursor=${nextCommentCursor}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
 
 	if(response.ok) {
 		setComment(result['comment']);
-		nextCommentPage = result['nextPage'];
-		if(nextCommentPage == null) {
+		nextCommentCursor = result['nextCommentCursor'];
+		if(nextCommentCursor == null) {
 			commentLoadMoreBtn.classList.add('unseen');
 		}
 		else {
@@ -247,9 +249,12 @@ function setComment(commentList) {
 		noCommentElement.classList.remove('unseen');
 	}
 	else {
-		for(let i = 0; i < commentList.length; i++) {
-			addCommentBlock(commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment'], commentList[i]['id']);
-		}
+		commentList.forEach(commentItem=>{
+			if(newCommentSet[commentItem['id']]) {
+				return;
+			}
+			addCommentBlock(existCommentContainer, commentItem['image_filename'], commentItem['name'], commentItem['member_id'], commentItem['datetime'], commentItem['comment'], commentItem['id']);
+		})
 	}
 }
 
@@ -259,7 +264,7 @@ function setCommentImage() {
 	}
 }
 
-function addCommentBlock(imageFilename, userName, userId, datetime, comment, commentId) {
+function addCommentBlock(commentContainer, imageFilename, userName, userId, datetime, comment, commentId) {
 	let commentBlock = document.createElement('div');
 	commentBlock.className = 'comment-block';
 	commentContainer.appendChild(commentBlock);
@@ -357,14 +362,17 @@ function addCommentBlock(imageFilename, userName, userId, datetime, comment, com
 		actionElement.addEventListener('click', () => {
 			let userConfirm = confirm('Are you sure to delete this comment?');
 			if(userConfirm) {
-				deleteComment(commentId, commentBlock);
+				deleteComment(commentId, commentBlock, commentContainer);
+				if(!newCommentSet[commentId]) {
+					nextCommentCursor = nextCommentCursor - 1;
+				}
 			}
 		});
 		commentAction.appendChild(actionElement);
 	}
 }
 
-async function deleteComment(commentId, commentBlock) {
+async function deleteComment(commentId, commentBlock, commentContainer) {
 	let token = localStorage.getItem('token');
 	let response = await fetch(`/api_project/comment?commentId=${commentId}`, {
 		method: 'DELETE',
@@ -373,9 +381,6 @@ async function deleteComment(commentId, commentBlock) {
 	
 	if(response.ok) {
 		commentContainer.removeChild(commentBlock);
-		if(commentContainer.innerHTML == '') {
-			noCommentElement.classList.remove('unseen');
-		}
 	}
 	else {
 		alert('something went wrong while deleting comment, please redirect and try again');
@@ -691,10 +696,11 @@ async function addComment(datetime) {
 	let result = await response.json();
 
 	if(response.ok) {
-		if(commentContainer.innerHTML == '') {
+		if(existCommentContainer.innerHTML == '') {
 			noCommentElement.classList.add('unseen');
 		}
-		addCommentBlock(userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value, result['commentId']);
+		newCommentSet[result['commentId']] = true;
+		addCommentBlock(newCommentContainer, userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value, result['commentId']);
 		commentInputElement.value = '';
 	}
 	else {

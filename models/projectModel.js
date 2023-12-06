@@ -110,20 +110,20 @@ async function getProjectContent(projectId) {
 	}
 }
 
-async function getComment(projectId, page) {
+async function getComment(projectId, currentCommentCursor) {
 	let limit = 5;
-	let offset = page * limit;
+	let offset = parseInt(currentCommentCursor);
 	let sqlComment = 'SELECT project_comment.*, member.image_filename, member.name FROM project_comment INNER JOIN member ON project_comment.member_id = member.id  WHERE project_id = ? LIMIT ? OFFSET ?;'
 
 	try {
 		let commentResult = await database.databasePool.query(sqlComment, [projectId, (limit + 1), offset]);
-		let nextPage = commentResult.length == (limit + 1) ? parseInt(page) + 1 : null;
+		nextCommentCursor = commentResult.length == (limit + 1) ? offset + limit : null;
 
 		return {
 			data: {
 				message: 'ok',
 				comment: commentResult.slice(0, limit),
-				nextPage: nextPage
+				nextCommentCursor: nextCommentCursor
 			},
 			statusCode: 200
 		};

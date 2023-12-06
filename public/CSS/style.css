@@ -813,7 +813,6 @@ td.tb-project-people {
 .comment-block-vertical {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
 }
 .block-title {
 	width: max-content;
@@ -832,7 +831,7 @@ td.tb-project-people {
 	width: min-content;
 }
 .title-comment {
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 .normal-text {
 	color: var(--color-text);
@@ -952,7 +951,7 @@ td.tb-project-people {
 	flex-direction: column;
 	gap: 5px;
 	width: fit-content;
-	margin: 0 0 0 10px;
+	margin: 20px 0 0 10px;
 }
 .edit-comment-text {
 	width: calc(50vw - 55px);
@@ -1029,6 +1028,9 @@ td.tb-project-people {
 	display: flex;
     flex-direction: column;
     gap: 5px;
+}
+.title-file {
+	margin-bottom: 10px;
 }
 .add-file-area {
 	display: flex;
