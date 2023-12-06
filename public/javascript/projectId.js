@@ -695,7 +695,7 @@ async function addComment(datetime) {
 	let result = await response.json();
 
 	if(response.ok) {
-		if(existCommentContainer.innerHTML == '') {
+		if(!noCommentElement.classList.contains('unseen')) {
 			noCommentElement.classList.add('unseen');
 		}
 		newCommentSet[result['commentId']] = true;

@@ -82,7 +82,17 @@ function setWebSocketNotification() {
 		let messageInfo = JSON.parse(event.data);
 		let projectId = messageInfo.projectId;
 		let messageText = messageInfo.message;
-		setUpdateNotification(projectId, messageText);
+
+		if(location.href.match(`/project/${projectId}`) != null) {
+			if(!noCommentElement.classList.contains('unseen')) {
+				noCommentElement.classList.add('unseen');
+			}
+			newCommentSet[messageInfo['newCommentId']] = true;
+			addCommentBlock(newCommentContainer, messageInfo['newCommentCreatorImage'], messageInfo['newCommentCreatorName'], messageInfo['newCommentCreatorId'], messageInfo['newCommentDatetime'], messageInfo['newCommentText'], messageInfo['newCommentId']);
+		}
+		else {
+			setUpdateNotification(projectId, messageText);
+		}
     })
 }
 
@@ -91,8 +101,8 @@ async function setUpdateNotification(projectId, messageText) {
 		if(permission === 'granted') {
 			const notificationUpdateProject = new Notification('Project Update', {
 				body: messageText,
-				icon: '/images/logo.png'
-				
+				icon: '/images/logo.png',
+				tag: `Project-${projectId}-comment`,
 			})
 			notificationUpdateProject.addEventListener('click', ()=>{
 				window.open(`/project/${projectId}`, '_blank');

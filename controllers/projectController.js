@@ -1,5 +1,6 @@
 const token 			= require('../utilities/token');
 const projectModel 		= require('../models/projectModel');
+const authModel			= require('../models/authModel');
 const { format } 		= require('date-fns');
 const multer 			= require('multer'); // process formData doc.
 const operateStorage 	= require('../utilities/conn-aws-S3');
@@ -172,12 +173,22 @@ const addComment = async (req, res) => {
 	}
 
 	result = await projectModel.addComment(projectId, memberInfo['id'], comment, datetime);
+	let commentId = result.data.commentId;
 	res.status(result.statusCode).send(result.data);
 
 	// notify owner
+	result = await authModel.getUserInfo(memberInfo['id']);
+	memberInfo['name'] = result.data.name;
+	memberInfo['imageFilename'] = result.data.imageFilename;
 	let informMessage= {
 		projectId: projectId,
-		message: `Someone replies to project-${projectId}`
+		message: `Someone replies to project-${projectId}`,
+		newCommentCreatorName: memberInfo['name'],
+		newCommentCreatorImage: memberInfo['imageFilename'],
+		newCommentCreatorId: memberInfo['id'],
+		newCommentText: comment,
+		newCommentId: commentId,
+		newCommentDatetime: datetime
 	}
 
 	result = await projectModel.getProjectContent(projectId);
