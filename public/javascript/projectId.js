@@ -58,7 +58,6 @@ let editContent;
 let fileNameSet = {};
 let newCommentSet = {};
 let nextCommentCursor = 0;
-let nextFilePage = 0;
 let currentPersonalNote = '';
 let isAllowSaveNote = false;
 let isAllowDeleteNote = false;
@@ -830,20 +829,13 @@ async function sendFile(file) {
 
 async function getProjectFile() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/file?projectId=${projectId}&page=${nextFilePage}`, {
+	let response = await fetch(`/api_project/file?projectId=${projectId}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
 
 	if(response.ok) {
 		setFile(result['file']);
-		nextFilePage = result['nextPage'];
-		if(nextFilePage == null) {
-			fileLoadMoreBtn.classList.add('unseen');
-		}
-		else {
-			fileLoadMoreBtn.classList.remove('unseen');
-		}
 	}
 	else {
 		alert('something went wrong while loading comment, please redirect and try again');

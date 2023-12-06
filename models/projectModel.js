@@ -354,20 +354,16 @@ async function addFile(projectId, memberId, fileName, datetime) {
 		return database.ErrorProcess(error);
 	}
 }
-async function getFile(projectId, page) {
-	let limit = 5;
-	let offset = page * limit;
-	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image, datetime FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id LIMIT ? OFFSET ?';
+async function getFile(projectId) {
+	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image, datetime FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id';
 	
 	try {
-		let result = await database.databasePool.query(sql, [projectId, (limit + 1), offset]);
-		let nextPage = result.length == (limit + 1) ? parseInt(page) + 1 : null;
+		let result = await database.databasePool.query(sql, [projectId]);
 
 		return {
 			data: {
 				message: 'ok',
-				file: result.slice(0, limit),
-				nextPage: nextPage
+				file: result
 			},
 			statusCode: 200
 		};

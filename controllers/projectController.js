@@ -322,7 +322,6 @@ const addFile = async (req, res) => {
 
 const getFile = async (req, res) => {
 	let projectId = req.query.projectId;
-	let page = req.query.page;
 	let userToken;
 	let result;
 
@@ -335,7 +334,7 @@ const getFile = async (req, res) => {
 		return;
 	}
 
-	result = await projectModel.getFile(projectId, page);
+	result = await projectModel.getFile(projectId);
 	res.status(result.statusCode).send(result.data);
 }
 
