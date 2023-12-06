@@ -260,7 +260,7 @@ searchNoteProjectIdBtn.addEventListener('click', async ()=> {
 				setNote(noteList);
 			}
 			else {
-				alert("You haven't create a note of this project id yet");
+				alert("You haven't created a note of this project id yet");
 			}
 		}
 		else {
