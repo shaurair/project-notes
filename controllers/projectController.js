@@ -4,12 +4,13 @@ const authModel			= require('../models/authModel');
 const { format } 		= require('date-fns');
 const multer 			= require('multer'); // process formData doc.
 const operateStorage 	= require('../utilities/conn-aws-S3');
-const websocket 		= require('../utilities/websocket');
+// const socketMethod 		= require('../utilities/socketMethod');
+const socketMethod 		= require('../utilities/socket-io');
 
 const imageStorage 	= multer.memoryStorage();
 const upload = multer({storage: imageStorage});
 
-const MESSAGE_TYPE = websocket.MESSAGE_TYPE;
+const MESSAGE_TYPE = socketMethod.MESSAGE_TYPE;
 
 const create = async (req, res) => {
 	let summary = req.body.summary;
@@ -200,8 +201,8 @@ const addComment = async (req, res) => {
 				return;
 			}
 
-			if(websocket.checkUserConnected(memberId)) {
-				websocket.notify(memberId, informMessage);
+			if(socketMethod.checkUserConnected(memberId)) {
+				socketMethod.notify(memberId, informMessage);
 			}
 			else {
 				projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
