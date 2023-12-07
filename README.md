@@ -12,7 +12,7 @@
   -  **Socket server** checks clients' connections and sends messages to update project discussions immediately.
 
 - ### c. Express server connects to database and executes CRUD operations
-  - see **Database Entiry Relationship Diagram** below
+  - member information and project information (contents, comments, files, notifications)
 
 - ### d. Express server uploads files to AWS S3
   - files of projects or users' profile images
