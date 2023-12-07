@@ -230,3 +230,12 @@ function getTodayDate() {
 	let day = now.getDate().toString().padStart(2, '0');
 	return `${year}/${month}/${day}`;
 }
+
+function getNowDateTime() {
+	const now = new Date();
+	const options = {
+		year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', 
+	};
+	const localTime = now.toLocaleString('en-US', options);
+	return localTime.split(', ').join(' ');
+}

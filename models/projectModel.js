@@ -110,20 +110,20 @@ async function getProjectContent(projectId) {
 	}
 }
 
-async function getComment(projectId, page) {
+async function getComment(projectId, currentCommentCursor) {
 	let limit = 5;
-	let offset = page * limit;
+	let offset = parseInt(currentCommentCursor);
 	let sqlComment = 'SELECT project_comment.*, member.image_filename, member.name FROM project_comment INNER JOIN member ON project_comment.member_id = member.id  WHERE project_id = ? LIMIT ? OFFSET ?;'
 
 	try {
 		let commentResult = await database.databasePool.query(sqlComment, [projectId, (limit + 1), offset]);
-		let nextPage = commentResult.length == (limit + 1) ? page + 1 : null;
+		nextCommentCursor = commentResult.length == (limit + 1) ? offset + limit : null;
 
 		return {
 			data: {
 				message: 'ok',
 				comment: commentResult.slice(0, limit),
-				nextPage: nextPage
+				nextCommentCursor: nextCommentCursor
 			},
 			statusCode: 200
 		};
@@ -302,7 +302,7 @@ async function getProjectMain(memberId, status, page, keyword, myRole) {
 
 	try {
 		let contentResult = await database.databasePool.query(sql, sqlParam);
-		let nextPage = contentResult.length == (limit + 1) ? page + 1 : null;
+		let nextPage = contentResult.length == (limit + 1) ? parseInt(page) + 1 : null;
 
 		return {
 			data: {
@@ -337,10 +337,10 @@ async function getProjectRole(projectIdList) {
 	}
 }
 
-async function addFile(projectId, memberId, fileName) {
-	let sql = 'INSERT INTO project_file(project_id, member_id, file_name) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
+async function addFile(projectId, memberId, fileName, datetime) {
+	let sql = 'INSERT INTO project_file(project_id, member_id, file_name, datetime) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
 	try {
-		let result = await database.databasePool.query(sql, [projectId, memberId, fileName, memberId]);
+		let result = await database.databasePool.query(sql, [projectId, memberId, fileName, datetime, memberId]);
 
 		return {
 			data: {
@@ -354,20 +354,16 @@ async function addFile(projectId, memberId, fileName) {
 		return database.ErrorProcess(error);
 	}
 }
-async function getFile(projectId, page) {
-	let limit = 5;
-	let offset = page * limit;
-	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id LIMIT ? OFFSET ?';
+async function getFile(projectId) {
+	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image, datetime FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id';
 	
 	try {
-		let result = await database.databasePool.query(sql, [projectId, (limit + 1), offset]);
-		let nextPage = result.length == (limit + 1) ? page + 1 : null;
+		let result = await database.databasePool.query(sql, [projectId]);
 
 		return {
 			data: {
 				message: 'ok',
-				file: result.slice(0, limit),
-				nextPage: nextPage
+				file: result
 			},
 			statusCode: 200
 		};
@@ -394,6 +390,24 @@ async function deleteFile(fileId) {
 	}
 }
 
+async function addNotification(projectId, memberId, messageType) {
+	let sql = 'INSERT INTO project_notification(project_id, member_id, message_type) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE member_id = ?;';
+	try {
+		let result = await database.databasePool.query(sql, [projectId, memberId, messageType, memberId]);
+
+		return {
+			data: {
+				message: 'ok',
+				notificationId: result.insertId
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 module.exports = {
 	createProject,
 	setAssociate,
@@ -411,5 +425,6 @@ module.exports = {
 	getAuthorization,
 	addFile,
 	getFile,
-	deleteFile
+	deleteFile,
+	addNotification
 }

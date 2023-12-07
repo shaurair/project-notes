@@ -297,9 +297,10 @@ html,body {
 	font-size: 22px;
 	font-style: normal;
 	font-weight: 500;
+	filter: saturate(1.2);
 }
 .sign-switch:hover {
-	filter: saturate(1.2);
+	opacity: 0.8;
 }
 #go-sign-in-btn {
 	background-color: var(--color-project);
@@ -314,7 +315,7 @@ html,body {
 	text-align: center;
 	border-radius: 8px;
 	padding: 3px 10px;
-	font-size: 16px;
+	font-size: 18px;
 	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .demo-user:hover {
@@ -374,7 +375,6 @@ html,body {
 .search-container {
 	display: flex;
 	gap: 40px;
-	justify-content: space-between;
 	box-sizing: border-box;
 	padding: 0 5px;
 }
@@ -813,7 +813,6 @@ td.tb-project-people {
 .comment-block-vertical {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
 }
 .block-title {
 	width: max-content;
@@ -832,7 +831,7 @@ td.tb-project-people {
 	width: min-content;
 }
 .title-comment {
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 .normal-text {
 	color: var(--color-text);
@@ -902,6 +901,9 @@ td.tb-project-people {
 	gap: 10px;
 	margin: 0 0 0 10px;
 }
+#exist-comment-container {
+	margin-bottom: 10px;
+}
 .comment-block {
 	display: flex;
 	gap: 10px;
@@ -952,7 +954,7 @@ td.tb-project-people {
 	flex-direction: column;
 	gap: 5px;
 	width: fit-content;
-	margin: 0 0 0 10px;
+	margin: 20px 0 0 10px;
 }
 .edit-comment-text {
 	width: calc(50vw - 55px);
@@ -1030,6 +1032,9 @@ td.tb-project-people {
     flex-direction: column;
     gap: 5px;
 }
+.title-file {
+	margin-bottom: 10px;
+}
 .add-file-area {
 	display: flex;
 	align-items: center;
@@ -1058,9 +1063,10 @@ td.tb-project-people {
 	width: 300px;
 }
 .descript-upload {
-	color: black;
+	color: #555;
 	font-weight: 400;
 	margin: 0;
+	font-size: 14px;
 }
 .file-add-by {
 	display: flex;

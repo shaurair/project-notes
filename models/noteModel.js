@@ -45,7 +45,7 @@ async function getNotes(memberId, page) {
 
 	try {
 		let result = await database.databasePool.query(sql, [memberId, (limit + 1), offset]);
-		let nextPage = result.length == (limit + 1) ? page + 1 : null;
+		let nextPage = result.length == (limit + 1) ? parseInt(page) + 1 : null;
 
 		return {
 			data: {

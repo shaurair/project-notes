@@ -44,7 +44,7 @@
 					<div id="project-description" class="block-content normal-text"></div>
 				</div>
 				<div class="file-block-vertical">
-					<div class="block-title project-text title-comment">File</div>
+					<div class="block-title project-text title-file">File</div>
 					<div class="add-file-area">
 						<input type="file" id="add-file" class="mouseover" placeholder="">
 						<div id='add-file-btn' class="create-button mouseover unseen">Add file</div>
@@ -63,8 +63,11 @@
 				<div class="comment-block-vertical">
 					<div class="block-title project-text title-comment">Comment</div>
 					<div id="no-comment" class="block-content normal-text unseen">No comment yet.</div>
-					<div class="comment-container"></div>
+					<div id='exist-comment-container' class="comment-container">
+					</div>
 					<div class="loadmore-comment"><div id="loadmore-comment-button" class="mouseover unseen">View more</div></div>
+					<div id='new-comment-container' class="comment-container">
+					</div>
 					<div class="add-comment-container normal-text">
 						<div class="comment-block">
 							<div id="add-comment-img" class="comment-img"></div>
@@ -240,6 +243,7 @@
 </body>
 <script src="/javascript/auth.js"></script>
 <script src="/javascript/commonFunction.js"></script>
+<script src="/javascript/env.js"></script>
 <script src="/javascript/notification.js"></script>
 <script src="/javascript/projectId.js"></script>
 <script>initProjectId();</script>

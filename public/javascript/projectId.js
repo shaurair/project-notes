@@ -25,7 +25,8 @@ const summaryElement = document.getElementById('summary-input-content');
 const descriptionElement = document.getElementById('description-input');
 const commentInputElement = document.getElementById('add-comment-text');
 const addCommentBtn = document.getElementById('add-comment');
-const commentContainer = document.querySelector('.comment-container');
+const existCommentContainer = document.getElementById('exist-comment-container');
+const newCommentContainer = document.getElementById('new-comment-container');
 const commentLoadMoreBtn = document.getElementById('loadmore-comment-button');
 const noCommentElement = document.getElementById('no-comment');
 const teamContainer = document.querySelector('.project-team-content-area');
@@ -55,11 +56,14 @@ let originalAssociate = {owner:{}, reviewer:{}, team:{}};
 let editAssociate = {owner:{}, reviewer:{}, team:{}};
 let editContent;
 let fileNameSet = {};
-let nextCommentPage = 0;
-let nextFilePage = 0;
+let newCommentSet = {};
+let nextCommentCursor = 0;
 let currentPersonalNote = '';
 let isAllowSaveNote = false;
 let isAllowDeleteNote = false;
+let isAllowOwnerSearch = true;
+let isAllowReviewerSearch = true;
+let isAllowTeamSearch = true;
 
 async function initProjectId() {
 	await getUser();
@@ -145,15 +149,15 @@ async function getProjectContent() {
 
 async function getProjectComment() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment?projectId=${projectId}&nextPage=${nextCommentPage}`, {
+	let response = await fetch(`/api_project/comment?projectId=${projectId}&nextCommentCursor=${nextCommentCursor}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
 
 	if(response.ok) {
 		setComment(result['comment']);
-		nextCommentPage = result['nextPage'];
-		if(nextCommentPage == null) {
+		nextCommentCursor = result['nextCommentCursor'];
+		if(nextCommentCursor == null) {
 			commentLoadMoreBtn.classList.add('unseen');
 		}
 		else {
@@ -244,9 +248,12 @@ function setComment(commentList) {
 		noCommentElement.classList.remove('unseen');
 	}
 	else {
-		for(let i = 0; i < commentList.length; i++) {
-			addCommentBlock(commentList[i]['image_filename'], commentList[i]['name'], commentList[i]['member_id'], commentList[i]['datetime'], commentList[i]['comment'], commentList[i]['id']);
-		}
+		commentList.forEach(commentItem=>{
+			if(newCommentSet[commentItem['id']]) {
+				return;
+			}
+			addCommentBlock(existCommentContainer, commentItem['image_filename'], commentItem['name'], commentItem['member_id'], commentItem['datetime'], commentItem['comment'], commentItem['id']);
+		})
 	}
 }
 
@@ -256,7 +263,7 @@ function setCommentImage() {
 	}
 }
 
-function addCommentBlock(imageFilename, userName, userId, datetime, comment, commentId) {
+function addCommentBlock(commentContainer, imageFilename, userName, userId, datetime, comment, commentId) {
 	let commentBlock = document.createElement('div');
 	commentBlock.className = 'comment-block';
 	commentContainer.appendChild(commentBlock);
@@ -354,14 +361,17 @@ function addCommentBlock(imageFilename, userName, userId, datetime, comment, com
 		actionElement.addEventListener('click', () => {
 			let userConfirm = confirm('Are you sure to delete this comment?');
 			if(userConfirm) {
-				deleteComment(commentId, commentBlock);
+				deleteComment(commentId, commentBlock, commentContainer);
+				if(!newCommentSet[commentId]) {
+					nextCommentCursor = nextCommentCursor - 1;
+				}
 			}
 		});
 		commentAction.appendChild(actionElement);
 	}
 }
 
-async function deleteComment(commentId, commentBlock) {
+async function deleteComment(commentId, commentBlock, commentContainer) {
 	let token = localStorage.getItem('token');
 	let response = await fetch(`/api_project/comment?commentId=${commentId}`, {
 		method: 'DELETE',
@@ -370,9 +380,6 @@ async function deleteComment(commentId, commentBlock) {
 	
 	if(response.ok) {
 		commentContainer.removeChild(commentBlock);
-		if(commentContainer.innerHTML == '') {
-			noCommentElement.classList.remove('unseen');
-		}
 	}
 	else {
 		alert('something went wrong while deleting comment, please redirect and try again');
@@ -688,10 +695,11 @@ async function addComment(datetime) {
 	let result = await response.json();
 
 	if(response.ok) {
-		if(commentContainer.innerHTML == '') {
+		if(!noCommentElement.classList.contains('unseen')) {
 			noCommentElement.classList.add('unseen');
 		}
-		addCommentBlock(userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value, result['commentId']);
+		newCommentSet[result['commentId']] = true;
+		addCommentBlock(newCommentContainer, userInfo['file_name'], userInfo['name'], userInfo['id'], datetime, commentInputElement.value, result['commentId']);
 		commentInputElement.value = '';
 	}
 	else {
@@ -792,10 +800,12 @@ async function deletePersonalNote() {
 
 async function sendFile(file) {
 	let token = localStorage.getItem('token');
+	const datetime = getNowDateTime();
 	const formData = new FormData();
 	formData.append('file', file);
 	formData.append('fileName', file.name);
 	formData.append('projectId', projectId);
+	formData.append('datetime', datetime);
 
 	let response = await fetch("/api_project/file", {
 			method: "POST",
@@ -809,7 +819,7 @@ async function sendFile(file) {
 	if(response.ok) {
 		addFileWaitingElement.classList.add('unseen');
 		addFileSuccessElement.classList.remove('unseen');
-		addFileBlock(result['fileId'], file.name, userInfo['file_name'], userInfo['name']);
+		addFileBlock(result['fileId'], file.name, userInfo['file_name'], userInfo['name'], datetime);
 		addFileInput.value = '';
 	}
 	else {
@@ -819,20 +829,13 @@ async function sendFile(file) {
 
 async function getProjectFile() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/file?projectId=${projectId}&page=${nextFilePage}`, {
+	let response = await fetch(`/api_project/file?projectId=${projectId}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
 
 	if(response.ok) {
 		setFile(result['file']);
-		nextFilePage = result['nextPage'];
-		if(nextFilePage == null) {
-			fileLoadMoreBtn.classList.add('unseen');
-		}
-		else {
-			fileLoadMoreBtn.classList.remove('unseen');
-		}
 	}
 	else {
 		alert('something went wrong while loading comment, please redirect and try again');
@@ -841,11 +844,11 @@ async function getProjectFile() {
 
 function setFile(fileList) {
 	fileList.forEach(fileItem=>{
-		addFileBlock(fileItem['file_id'], fileItem['file_name'], fileItem['member_image'], fileItem['name'])
+		addFileBlock(fileItem['file_id'], fileItem['file_name'], fileItem['member_image'], fileItem['name'], fileItem['datetime'])
 	})
 }
 
-function addFileBlock(fileId, fileName, imageFilename, userName) {
+function addFileBlock(fileId, fileName, imageFilename, userName, datetime) {
 	let fileBlock = document.createElement('div');
 	fileBlock.className = 'file-block';
 	fileContainer.appendChild(fileBlock);
@@ -863,16 +866,16 @@ function addFileBlock(fileId, fileName, imageFilename, userName) {
 	fileAddedArea.className = 'file-add-by';
 	fileBlock.appendChild(fileAddedArea);
 
-	let uploadTextElement = document.createElement('p');
-	uploadTextElement.className = 'descript-upload';
-	uploadTextElement.textContent = 'Uploaded by';
-	fileAddedArea.appendChild(uploadTextElement);
-
 	let peopleContainer = document.createElement('div');
 	peopleContainer.className = 'project-people-container';
 	addSmallImgToContainer(userImageFilenameToUrl(imageFilename), peopleContainer);
 	addNameToContainer(userName, peopleContainer)
 	fileAddedArea.appendChild(peopleContainer);
+
+	let uploadTextElement = document.createElement('p');
+	uploadTextElement.className = 'descript-upload';
+	uploadTextElement.textContent = datetime;
+	fileAddedArea.appendChild(uploadTextElement);
 
 	let fileDelete = document.createElement('div');
 	fileDelete.className = 'file-action-opt mouseover';
@@ -928,6 +931,19 @@ personalNoteInput.addEventListener('input', ()=>{
 	}
 })
 
+// input event
+ownerSearchKeyWord.addEventListener('input', ()=>{
+	ownerSearchBtn.click();
+})
+
+reviewerSearchKeyWord.addEventListener('input', ()=>{
+	reviewerSearchBtn.click();
+})
+
+teamSearchKeyWord.addEventListener('input', ()=>{
+	teamSearchBtn.click();
+})
+
 // Click events
 // viewmoreBtn.addEventListener('click', () => {
 // 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
@@ -961,24 +977,57 @@ saveBtn.addEventListener('click', () => {
 })
 
 ownerSearchBtn.addEventListener('click', async() => {
+	if(isAllowOwnerSearch === false) {
+		return;
+	}
+	isAllowOwnerSearch = false;
+	let keyword = ownerSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-owner').checked ? searchId : searchName;
-	let searchResult = await searchMethod(ownerSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], ownerSearchContainerElement, ownerSearchListElement, ownerPeopleList, 'owner', editAssociate);
+	
+	isAllowOwnerSearch = true;
+	if(keyword !== ownerSearchKeyWord.value) {
+		ownerSearchBtn.click();
+	}
 })
 
 reviewerSearchBtn.addEventListener('click', async() => {
+	if(isAllowReviewerSearch === false) {
+		return;
+	}
+	isAllowReviewerSearch = false;
+	let keyword = reviewerSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-reviewer').checked ? searchId : searchName;
-	let searchResult = await searchMethod(reviewerSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], reviewerSearchContainerElement, reviewerSearchListElement, reviewerPeopleList, 'reviewer', editAssociate);
+
+	isAllowReviewerSearch = true;
+	if(keyword !== reviewerSearchKeyWord.value) {
+		reviewerSearchBtn.click();
+	}
 })
 
 teamSearchBtn.addEventListener('click', async() => {
+	if(isAllowTeamSearch === false) {
+		return;
+	}
+	isAllowTeamSearch = false;
+	let keyword = teamSearchKeyWord.value;
+
 	searchMethod = searchTeam;
-	let searchResult = await searchMethod(teamSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', editAssociate);
+
+	isAllowTeamSearch = true;
+	if(keyword !== teamSearchKeyWord.value) {
+		teamSearchBtn.click();
+	}
 })
 
 addCommentBtn.addEventListener('click', () => {
@@ -991,14 +1040,7 @@ addCommentBtn.addEventListener('click', () => {
 		return;
 	}
 
-	const now = new Date();
-	const options = {
-		year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', 
-	};
-	const localTime = now.toLocaleString('en-US', options);
-	const formattedDate = localTime.split(', ').join(' ');
-
-	addComment(formattedDate);
+	addComment(getNowDateTime());
 })
 
 commentLoadMoreBtn.addEventListener('click', () => {

@@ -41,6 +41,7 @@ let isAllowImageSubmit = false;
 let isAllowDataSubmit = true;
 let isAllowGroupSubmit = true;
 let isAllowUpdateTeamNameSubmit = true;
+let isAllowMemberSearch = true;
 let originalMember = {member:{}};
 let editMember = {member:{}};
 
@@ -345,6 +346,10 @@ async function updateTeamName() {
 	}
 }
 
+memberSearchKeyWord.addEventListener('input', ()=>{
+	memberSearchBtn.click();
+})
+
 editImageBtn.addEventListener('click', ()=>{
 	if(editImageBtn.textContent == "Cancel") {
 		editImageElement.classList.add("unseen");
@@ -462,10 +467,21 @@ updateTeamNameBtn.addEventListener('click', ()=>{
 })
 
 memberSearchBtn.addEventListener('click', async() => {
+	if(isAllowMemberSearch === false) {
+		return;
+	}
+	isAllowMemberSearch = false;
+	let keyword = memberSearchKeyWord.value;
+
 	searchMethod = document.getElementById('select-id-member').checked ? searchId : searchName;
-	let searchResult = await searchMethod(memberSearchKeyWord.value);
+	let searchResult = await searchMethod(keyword);
 
 	addSearchResult(searchResult['data'], memberSearchContainerElement, memberSearchListElement, memberPeopleList, 'member', editMember);
+
+	isAllowMemberSearch = true;
+	if(keyword !== memberSearchKeyWord.value) {
+		memberSearchBtn.click();
+	}
 })
 
 updateMemberBtn.addEventListener('click', ()=>{
