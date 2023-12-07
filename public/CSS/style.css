@@ -901,6 +901,9 @@ td.tb-project-people {
 	gap: 10px;
 	margin: 0 0 0 10px;
 }
+#exist-comment-container {
+	margin-bottom: 10px;
+}
 .comment-block {
 	display: flex;
 	gap: 10px;
