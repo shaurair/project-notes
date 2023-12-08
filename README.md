@@ -1,7 +1,4 @@
 ## Catalog
-
-## 🔖 Catalog
-* [Main Features](#main-features)
 * [Backend Architecture](#Backend-Architecture)
 
 ## Backend Architecture
