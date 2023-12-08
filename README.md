@@ -2,23 +2,23 @@
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/BackendArchitecture_note.png' width=80%>
 
 
-- ### a. Users send HTTPS request to NGINX
+- ### a. Users send HTTPS requests to NGINX
   -  Users manage projects, join project discussions, upload files, etc.
 
-- ### b. NGINX processes HTTPS and passes to express server and socket server. 
+- ### b. NGINX processes HTTPS and passes to express server and socket.io server. 
 
-  -  **Express server** checks the requests above, decides control flow and sends response
+  -  **Express server** handles request processing and response generation.
 
-  -  **Socket server** checks clients' connections and sends messages to update project discussions immediately.
+  -  **Socket.io server** manages clients' connections and facilitates real-time update for project discussions.
 
 - ### c. Express server connects to database and executes CRUD operations
-  - member information and project information (contents, comments, files, notifications)
+  - member information, project details (contents, comments, files), and notifications
 
 - ### d. Express server uploads files to AWS S3
-  - files of projects or users' profile images
+  - files upload for projects or users' profile images
 
 - ### e. Users get files through AWS CDN
-  - Users get files from CloudFront to reduce latency
+  - Users download files from AWS CDN to reduce latency
 
 # Database Entiry Relationship Diagram
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/ErdColorCut.png' width=90%>
