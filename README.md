@@ -7,15 +7,15 @@
 
 - ### b. NGINX processes HTTPS and passes to express server and socket.io server. 
 
-  -  **Express server** handles request processing and response generation.
+  -  Express server handles request processing and response generation.
 
-  -  **Socket.io server** manages clients' connections and facilitates real-time update for project discussions.
+  -  Socket.io server manages clients' connections and facilitates real-time update for project discussions.
 
 - ### c. Express server connects to database and executes CRUD operations
-  - member information, project details (contents, comments, files), and notifications
+  - Member information, project details (contents, comments, files), and notifications
 
 - ### d. Express server uploads files to AWS S3
-  - files upload for projects or users' profile images
+  - Files upload for projects or users' profile images
 
 - ### e. Users get files through AWS CDN
   - Users download files from AWS CDN to reduce latency
