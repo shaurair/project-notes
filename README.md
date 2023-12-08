@@ -1,5 +1,6 @@
 ## Catalog
 * [Backend Architecture](#Backend-Architecture)
+* [Database Entiry Relationship Diagram](#Database-Entiry-Relationship-Diagram)
 
 ## Backend Architecture
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/BackendArchitecture_note.png' width=80%>
