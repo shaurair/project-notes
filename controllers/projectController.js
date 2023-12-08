@@ -6,11 +6,9 @@ const multer 			= require('multer'); // process formData doc.
 const operateStorage 	= require('../utilities/conn-aws-S3');
 // const socketMethod 		= require('../utilities/socketMethod');
 const socketMethod 		= require('../utilities/socket-io');
-
+const MESSAGE_TYPE 		= require('../utilities/socket-message').MESSAGE_TYPE;
 const imageStorage 	= multer.memoryStorage();
 const upload = multer({storage: imageStorage});
-
-const MESSAGE_TYPE = socketMethod.MESSAGE_TYPE;
 
 const create = async (req, res) => {
 	let summary = req.body.summary;

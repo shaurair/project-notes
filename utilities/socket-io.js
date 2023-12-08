@@ -21,7 +21,7 @@ function setSocket(server) {
 			catch(error) {'ERROR while websocket connection:', console.error(error);}
 		});
 
-		ioClient.on('close', ()=>{
+		ioClient.on('disconnect', ()=>{
 			try {
 				if(ioClient.memberId) {
 					let informedMemberId = ioClient.memberId;
