@@ -190,23 +190,32 @@ const addComment = async (req, res) => {
 		newCommentDatetime: datetime
 	}
 
+	let ownerIdList;
 	result = await projectModel.getProjectContent(projectId);
 	if(result.data.message == 'ok') {
-		let ownerList = result.data.owner;
-		ownerList.forEach(owner=>{
-			let memberId = owner.id;
-			if(memberId === memberInfo['id']) {
-				return;
-			}
-
-			if(socketMethod.checkUserConnected(memberId)) {
-				socketMethod.notify(memberId, informMessage);
-			}
-			else {
-				projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
-			}
-		})
+		ownerIdList = result.data.owner.map(owner=>owner.id)
 	}
+
+	let commentUserIdList
+	result = await projectModel.getCommentUser(projectId);
+	if(result.data.message == 'ok') {
+		commentUserIdList = result.data.user.map(user=>user.id)
+	}
+
+	let allInformUser = [...new Set([...commentUserIdList, ...ownerIdList])];
+
+	allInformUser.forEach(memberId=>{
+		if(memberId === memberInfo['id']) {
+			return;
+		}
+
+		if(socketMethod.checkUserConnected(memberId)) {
+			socketMethod.notify(memberId, informMessage);
+		}
+		else {
+			projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
+		}
+	})
 }
 
 const deleteComment = async (req, res) => {
