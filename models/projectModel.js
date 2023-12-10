@@ -133,6 +133,25 @@ async function getComment(projectId, currentCommentCursor) {
 	}
 }
 
+async function getCommentUser(projectId) {
+	let sql = 'SELECT member_id AS id FROM project_comment WHERE project_id = ? GROUP BY member_id;';
+
+	try {
+		let result = await database.databasePool.query(sql, [projectId]);
+
+		return {
+			data: {
+				message: 'ok',
+				user: result
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
 async function updateProject(projectId, changedItemList, changedValueList) {
 	let sql = 'UPDATE project set ';
 	changedItemList.forEach(item => {
@@ -418,6 +437,7 @@ module.exports = {
 	updateAssociateGroup,
 	addComment,
 	getComment,
+	getCommentUser,
 	deleteComment,
 	updateComment,
 	getProjectMain,

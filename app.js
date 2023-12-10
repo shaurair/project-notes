@@ -52,9 +52,18 @@ app.use('/api/group', groupRouter);
 app.use('/api/note', noteRouter);
 app.use('/api/notification', notificationRouter);
 
-// Websocket
-const websocket 	= require('./utilities/websocket');
-const server 		= require('http').createServer(app)
-websocket.setServer(server);
+const server 		= require('http').createServer(app);
+
+// ----------------- //
+// websocket         //
+// ----------------- //
+// const websocket 	= require('./utilities/websocket');
+// websocket.setServer(server);
+
+// ----------------- //
+// socket io         //
+// ----------------- //
+const socketIo 	= require('./utilities/socket-io.js');
+socketIo.setSocket(server);
 
 server.listen(port);

@@ -64,7 +64,8 @@ function checkNotification() {
 
 	checkHistoryUpdateNotification();
 
-	setWebSocketNotification();
+	// setWebSocketNotification();
+	setSocketIoNotification();
 }
 
 function setWebSocketNotification() {
@@ -94,6 +95,34 @@ function setWebSocketNotification() {
 			setUpdateNotification(projectId, messageText);
 		}
     })
+}
+
+function setSocketIoNotification() {
+	const socket = io.connect(window.location.host);
+	let memberId = userInfo['id'];
+
+	socket.on("connect", socketClient => {
+        socket.emit("message", JSON.stringify({
+						type: 'memberId', memberId
+					}));
+    });
+
+	socket.on('message', function (message){
+		let messageInfo = JSON.parse(message);
+		let projectId = messageInfo.projectId;
+		let messageText = messageInfo.message;
+
+		if(location.href.match(`/project/${projectId}`) != null) {
+			if(!noCommentElement.classList.contains('unseen')) {
+				noCommentElement.classList.add('unseen');
+			}
+			newCommentSet[messageInfo['newCommentId']] = true;
+			addCommentBlock(newCommentContainer, messageInfo['newCommentCreatorImage'], messageInfo['newCommentCreatorName'], messageInfo['newCommentCreatorId'], messageInfo['newCommentDatetime'], messageInfo['newCommentText'], messageInfo['newCommentId']);
+		}
+		else {
+			setUpdateNotification(projectId, messageText);
+		}
+	})
 }
 
 async function setUpdateNotification(projectId, messageText) {

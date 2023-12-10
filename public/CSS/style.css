@@ -136,7 +136,9 @@ html,body {
 	display: flex;
     justify-content: center;
     align-items: center;
-	height: -webkit-fill-available;
+	border-bottom: 1px solid;
+	border-bottom-color: var(--color-border);
+	line-height: 2.5;
 }
 .selection-item-text {
 	text-align: center;
@@ -146,9 +148,8 @@ html,body {
     font-style: normal;
     font-weight: 500;
 }
-#opt-member-center {
-	border-bottom: 1px solid;
-	border-bottom-color: var(--color-border);
+#opt-sign-out {
+	border-bottom-color: #fff0;
 }
 /* ================== */
 /*  index page usage  */
