@@ -240,7 +240,7 @@ function setTeam(name, teamListElement, groupId) {
 	elementContainer.className = 'project-team-container';
 	teamListElement.appendChild(elementContainer);
 
-	addNameAndLinkToContainer(name, elementContainer, groupId);
+	addNameAndLinkToContainerBackgroundDark(name, elementContainer, groupId, darkBackgroundTeamContentElement);
 }
 
 function setComment(commentList) {

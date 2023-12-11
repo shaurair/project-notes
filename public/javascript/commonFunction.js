@@ -130,6 +130,42 @@ function addNameAndLinkToContainer(name, elementContainer, groupId) {
 	element.addEventListener('click', async() => {
 		let result = await getGroupMembers(groupId);
 		teamContainer.classList.remove('unseen');
+		document.getElementById('team-name-title').textContent = name;
+
+		memberList = result['data']['groupMember'];
+		memberPeopleList.innerHTML = '';
+		memberList.forEach(memberData => {
+			let imageFilename = memberData['image_filename'];
+			let imgUrl = (imageFilename == null) ? null : `https://d2o8k69neolkqv.cloudfront.net/project-note/user_img/${imageFilename}`;
+			let memberName = memberData['name'];
+
+			let elementContainer = document.createElement('div');
+			elementContainer.className = 'people-container';
+			memberPeopleList.appendChild(elementContainer);
+		
+			let element = document.createElement('div');
+			element.className = 'people-img';
+			elementContainer.appendChild(element);
+			if(imgUrl != null) {
+				element.style.backgroundImage = `url(${imgUrl})`;
+			}
+			element = document.createElement('div');
+			element.className = 'people-text';
+			element.textContent = memberName;
+			elementContainer.appendChild(element);
+		});
+	})
+}
+
+function addNameAndLinkToContainerBackgroundDark(name, elementContainer, groupId, darkBackgroundTeamContentElement) {
+	let element = document.createElement('div');
+	element.className = 'people-text mouseover';
+	element.textContent = name;
+	elementContainer.appendChild(element);
+
+	element.addEventListener('click', async() => {
+		let result = await getGroupMembers(groupId);
+		teamContainer.classList.remove('unseen');
 		darkBackgroundTeamContentElement.classList.remove('unseen');
 		document.getElementById('team-name-title').textContent = name;
 
