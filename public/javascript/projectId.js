@@ -1022,7 +1022,7 @@ teamSearchBtn.addEventListener('click', async() => {
 	searchMethod = searchTeam;
 	let searchResult = await searchMethod(keyword);
 
-	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', editAssociate);
+	addTeamSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', editAssociate, darkBackgroundTeamContentElement);
 
 	isAllowTeamSearch = true;
 	if(keyword !== teamSearchKeyWord.value) {

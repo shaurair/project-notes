@@ -96,6 +96,48 @@ function addToList(imgUrl, userName, id, selectedListElement, associateRole, ass
 	associate[associateRole][id] = true;
 }
 
+function addTeamSearchResult(resultData, listContainer, searchListElement, selectedListElement, associateRole, associate, darkBackgroundTeamContentElement) {
+	listContainer.classList.remove('unseen');
+	searchListElement.innerHTML = '';
+
+	if(resultData['message'] == 'No results') {
+		element = document.createElement('div');
+		element.textContent = 'No result';
+		searchListElement.appendChild(element);
+	}
+	else {
+		let resultList = resultData['result'];
+		for(let resultIdx = 0; resultIdx < resultList.length; resultIdx++) {
+			let name = resultList[resultIdx]['name'];
+			let elementContainer = document.createElement('div');
+			elementContainer.className = 'search-people-container mouseover';
+			searchListElement.appendChild(elementContainer);
+
+			addNameToContainer(name, elementContainer);
+			addTeamClickEffect(elementContainer, name, resultList[resultIdx]['id'], selectedListElement, associateRole, associate, darkBackgroundTeamContentElement);
+		}
+	}
+}
+
+function addTeamClickEffect(resultElement, userName, id, selectedListElement, associateRole, associate, darkBackgroundTeamContentElement) {
+	resultElement.addEventListener('click', () => {
+		addToTeamList(userName, id, selectedListElement, associateRole, associate, darkBackgroundTeamContentElement)
+	})
+}
+
+function addToTeamList(userName, id, selectedListElement, associateRole, associate, darkBackgroundTeamContentElement) {
+	if(associate[associateRole][id]) {
+		return;
+	}
+	let elementContainer = document.createElement('div');
+	elementContainer.className = 'people-container';
+	selectedListElement.appendChild(elementContainer);
+
+	addNameAndLinkToContainerBackgroundDark(userName, elementContainer, id, darkBackgroundTeamContentElement);
+	addRemoveOption(elementContainer, selectedListElement, associate, associateRole, id);
+	associate[associateRole][id] = true;
+}
+
 function addImgToContainer(imgUrl, elementContainer) {
 	let element = document.createElement('div');
 	element.className = 'people-img';

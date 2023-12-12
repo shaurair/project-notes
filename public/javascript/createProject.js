@@ -8,11 +8,6 @@ const reviewerSearchContainerElement = document.getElementById('reviewer-search-
 const reviewerSearchListElement = document.getElementById('reviewer-search-list');
 const reviewerSearchKeyWord = document.getElementById('reviewer-input');
 const reviewerPeopleList = document.getElementById('reviewer-people-list');
-const followerSearchBtn = document.getElementById('follower-search');
-const followerSearchContainerElement = document.getElementById('follower-search-result');
-const followerSearchListElement = document.getElementById('follower-search-list');
-const followerSearchKeyWord = document.getElementById('follower-input');
-const followerPeopleList = document.getElementById('follower-people-list');
 const teamSearchBtn = document.getElementById('team-search');
 const teamSearchContainerElement = document.getElementById('team-search-result');
 const teamSearchListElement = document.getElementById('team-search-list');
@@ -25,7 +20,7 @@ const darkBackgroundTeamContentElement = document.querySelector('.team-content-d
 const teamContainer = document.querySelector('.project-team-content-area');
 const closeTeamContainerBtn = document.getElementById('close-team-content');
 const memberPeopleList = document.getElementById('member-people-list');
-let createAssociate = {owner:{}, reviewer:{}, follower:{}, team:{}};
+let createAssociate = {owner:{}, reviewer:{}, team:{}};
 let isAllowOwnerSearch = true;
 let isAllowReviewerSearch = true;
 let isAllowTeamSearch = true;
@@ -152,13 +147,6 @@ reviewerSearchBtn.addEventListener('click', async() => {
 	}
 })
 
-followerSearchBtn.addEventListener('click', async() => {
-	searchMethod = document.getElementById('select-id-follower').checked ? searchId : searchName;
-	let searchResult = await searchMethod(followerSearchKeyWord.value);
-
-	addSearchResult(searchResult['data'], followerSearchContainerElement, followerSearchListElement, followerPeopleList, 'follower', createAssociate);
-})
-
 teamSearchBtn.addEventListener('click', async() => {
 	if(isAllowTeamSearch === false) {
 		return;
@@ -169,7 +157,7 @@ teamSearchBtn.addEventListener('click', async() => {
 	searchMethod = searchTeam;
 	let searchResult = await searchMethod(keyword);
 
-	addSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', createAssociate);
+	addTeamSearchResult(searchResult['data'], teamSearchContainerElement, teamSearchListElement, teamList, 'team', createAssociate, darkBackgroundTeamContentElement);
 
 	isAllowTeamSearch = true;
 	if(keyword !== teamSearchKeyWord.value) {
@@ -188,9 +176,6 @@ window.addEventListener('click', (event) => {
 	}
 	if(!reviewerSearchContainerElement.classList.contains('unseen')) {
 		reviewerSearchContainerElement.classList.add('unseen');
-	}
-	if(!followerSearchContainerElement.classList.contains('unseen')) {
-		followerSearchContainerElement.classList.add('unseen');
 	}
 	if(!teamSearchContainerElement.classList.contains('unseen')) {
 		teamSearchContainerElement.classList.add('unseen');
