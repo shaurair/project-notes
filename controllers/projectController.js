@@ -77,12 +77,7 @@ const getContent = async (req, res) => {
 	}
 
 	result = await projectModel.getProjectContent(projectId);
-
-	if(result.data.deadline != null) {
-		let date = new Date(result.data.deadline);
-		result.data.deadline = format(date, 'yyyy/MM/dd');
-	}
-
+	result.data.deadline = setDateFormateSlash(result.data.deadline);
 	res.status(result.statusCode).send(result.data);
 }
 
@@ -282,10 +277,7 @@ const getProjectMainAndRole = async (req, res) => {
 	}
 
 	result.data.content.forEach(content => {
-		if(content.deadline != null) {
-			let date = new Date(content.deadline);
-			content.deadline = format(date, 'yyyy/MM/dd');
-		}
+		content.deadline = setDateFormateSlash(content.deadline);
 		projectIdList.push(content.project_id)
 		roles[content.project_id] = {owner:[], reviewer:[]}
 	});
@@ -381,6 +373,15 @@ const deleteFile = async (req, res) => {
 
 	result = await projectModel.deleteFile(fileId);
 	res.status(result.statusCode).send(result.data);
+}
+
+function setDateFormateSlash(date) {
+	if(date === null) {
+		return null
+	}
+	
+	let formateDate = new Date(date);
+	return format(formateDate, 'yyyy/MM/dd');
 }
 
 module.exports = {
