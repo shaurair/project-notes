@@ -4,9 +4,9 @@ const projectModel 		= require('../models/projectModel');
 const authModel			= require('../models/authModel');
 const multer 			= require('multer'); // process formData doc.
 const operateStorage 	= require('../models/conn-aws-S3');
-// const socketMethod 		= require('../utilities/socketMethod');
-const socketMethod 		= require('../utilities/socket-io');
-const MESSAGE_TYPE 		= require('../utilities/socket-message').MESSAGE_TYPE;
+// const socketMethod 		= require('../routes/socketMethod');
+const socketMethod 		= require('../routes/socket-io');
+const MESSAGE_TYPE 		= require('../routes/socket-message').MESSAGE_TYPE;
 const imageStorage 	= multer.memoryStorage();
 const upload = multer({storage: imageStorage});
 

@@ -57,13 +57,13 @@ const server 		= require('http').createServer(app);
 // ----------------- //
 // websocket         //
 // ----------------- //
-// const websocket 	= require('./utilities/websocket');
+// const websocket 	= require('./routes/websocket');
 // websocket.setServer(server);
 
 // ----------------- //
 // socket io         //
 // ----------------- //
-const socketIo 	= require('./utilities/socket-io.js');
+const socketIo 	= require('./routes/socket-io.js');
 socketIo.setSocket(server);
 
 server.listen(port);
