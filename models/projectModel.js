@@ -1,4 +1,5 @@
-const database = require('./conn-aws-RDS');
+const database 		= require('./conn-aws-RDS');
+const dataFormat 	= require('./dataFormat');
 const AUTH = {
 	PERMISSION_REJECT: 0,
 	SERVER_ERROR: 1,
@@ -95,7 +96,7 @@ async function getProjectContent(projectId) {
 				description: contentResult[0].description,
 				status: contentResult[0].status,
 				priority: contentResult[0].priority,
-				deadline: contentResult[0].deadline,
+				deadline: dataFormat.setDateFormateSlash(contentResult[0].deadline),
 				creatorName: contentResult[0].name,
 				creatorImage: contentResult[0].image_filename,
 				owner: ownerResult,
