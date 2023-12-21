@@ -1,5 +1,5 @@
-const authModel = require('../models/authModel');
-const token = require('../utilities/token');
+const authModel 	= require('../models/authModel');
+const token 		= require('../models/token');
 
 const getUser = async (req, res) => {
 	try {

@@ -1,6 +1,6 @@
 const noteModel		= require('../models/noteModel');
 const projectModel	= require('../models/projectModel');
-const token			= require('../utilities/token');
+const token			= require('../models/token');
 
 const addNote = async (req, res) => {
 	let projectId = req.body.projectId;

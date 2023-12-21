@@ -1,5 +1,5 @@
-const groupModel = require('../models/groupModel');
-const token = require('../utilities/token');
+const groupModel 	= require('../models/groupModel');
+const token 		= require('../models/token');
 
 const createGroup = async (req, res) => {
 	let name = req.body.name;

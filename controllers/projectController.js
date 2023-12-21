@@ -1,9 +1,9 @@
-const token 			= require('../utilities/token');
+const token 			= require('../models/token');
 const dataFormat 		= require('../models/dataFormat');
 const projectModel 		= require('../models/projectModel');
 const authModel			= require('../models/authModel');
 const multer 			= require('multer'); // process formData doc.
-const operateStorage 	= require('../utilities/conn-aws-S3');
+const operateStorage 	= require('../models/conn-aws-S3');
 // const socketMethod 		= require('../utilities/socketMethod');
 const socketMethod 		= require('../utilities/socket-io');
 const MESSAGE_TYPE 		= require('../utilities/socket-message').MESSAGE_TYPE;

@@ -1,5 +1,5 @@
 const notificationModel	= require('../models/notificationModel');
-const token				= require('../utilities/token');
+const token				= require('../models/token');
 const MESSAGE_TYPE 		= require('../utilities/socket-message').MESSAGE_TYPE;
 
 const getExpiredProjectId = async (req, res) => {

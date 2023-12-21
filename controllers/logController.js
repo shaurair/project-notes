@@ -1,5 +1,5 @@
-const logModel = require('../models/logModel');
-const token = require('../utilities/token');
+const logModel 	= require('../models/logModel');
+const token 	= require('../models/token');
 
 const checkSignInData = async (req, res) => {
 	let email = req.body.email;
