@@ -945,16 +945,6 @@ teamSearchKeyWord.addEventListener('input', ()=>{
 })
 
 // Click events
-// viewmoreBtn.addEventListener('click', () => {
-// 	const viewmoreDialogueElement = document.querySelector('.viewmore-dialogue-project');
-// 	if(viewmoreDialogueElement.classList.contains('unseen')) {
-// 		viewmoreDialogueElement.classList.remove('unseen');
-// 	}
-// 	else {
-// 		viewmoreDialogueElement.classList.add('unseen');
-// 	}
-// })
-
 editProjectBtn.addEventListener('click', () => {
 	darkBackgrountElement.classList.remove('unseen');
 	editProjectAreaElement.classList.remove('unseen');

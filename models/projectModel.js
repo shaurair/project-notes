@@ -47,7 +47,8 @@ async function setAssociate(associate, projectId) {
 
 		return {
 			data: {
-				message: 'ok'
+				message: 'ok',
+				id: projectId
 			},
 			statusCode: 200
 		};

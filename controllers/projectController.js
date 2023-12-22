@@ -17,7 +17,6 @@ const create = async (req, res) => {
 	let deadline = req.body.deadline;
 	let creator = req.body.creator;
 	let associate = req.body.associate;
-	let data;
 	let result;
 
 	result = await projectModel.createProject(summary, description, priority, deadline, creator);
@@ -29,17 +28,7 @@ const create = async (req, res) => {
 	else {
 		let projectId = result.data.id;
 		result = await projectModel.setAssociate(associate, projectId);
-		if(result.data.message != 'ok') {
-			res.status(result.statusCode).send(result.data);
-			return;
-		}
-		else {
-			data = {
-				message: 'ok',
-				id: projectId
-			}
-			res.status(result.statusCode).send(data);
-		}
+		res.status(result.statusCode).send(result.data);
 	}
 }
 
@@ -136,7 +125,7 @@ const update = async (req, res) => {
 		return;
 	}
 
-	res.send(req.body);
+	res.status(result.statusCode).send(result.data);
 }
 
 const updateStatus = async (req, res) => {
@@ -166,24 +155,39 @@ const addComment = async (req, res) => {
 	}
 
 	result = await projectModel.addComment(projectId, memberInfo['id'], comment, datetime);
-	let commentId = result.data.commentId;
 	res.status(result.statusCode).send(result.data);
 
-	// notify owner
-	result = await authModel.getUserInfo(memberInfo['id']);
-	memberInfo['name'] = result.data.name;
-	memberInfo['imageFilename'] = result.data.imageFilename;
+	// notify owner and users involved in discussion
+	let informMessage = await setInformMessage(memberInfo['id'], projectId, comment, result.data.commentId, datetime);
+	let allInformUser = await getInvolvedUserList(projectId, memberInfo['id']);
+
+	allInformUser.forEach(memberId=>{
+		if(socketMethod.checkUserConnected(memberId)) {
+			socketMethod.notify(memberId, informMessage);
+		}
+		else {
+			projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
+		}
+	})
+}
+
+async function setInformMessage(memberId, projectId, comment, commentId, datetime) {
+	result = await authModel.getUserInfo(memberId);
+
 	let informMessage= {
 		projectId: projectId,
 		message: `Someone replies to project-${projectId}`,
-		newCommentCreatorName: memberInfo['name'],
-		newCommentCreatorImage: memberInfo['imageFilename'],
-		newCommentCreatorId: memberInfo['id'],
+		newCommentCreatorName: result.data.name,
+		newCommentCreatorImage: result.data.imageFilename,
+		newCommentCreatorId: memberId,
 		newCommentText: comment,
 		newCommentId: commentId,
 		newCommentDatetime: datetime
 	}
+	return informMessage;
+}
 
+async function getInvolvedUserList(projectId, commentMemberId) {
 	let ownerIdList;
 	result = await projectModel.getProjectContent(projectId);
 	if(result.data.message == 'ok') {
@@ -197,19 +201,8 @@ const addComment = async (req, res) => {
 	}
 
 	let allInformUser = [...new Set([...commentUserIdList, ...ownerIdList])];
-
-	allInformUser.forEach(memberId=>{
-		if(memberId === memberInfo['id']) {
-			return;
-		}
-
-		if(socketMethod.checkUserConnected(memberId)) {
-			socketMethod.notify(memberId, informMessage);
-		}
-		else {
-			projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
-		}
-	})
+	allInformUser = allInformUser.filter(memberId => memberId !== commentMemberId);
+	return allInformUser;
 }
 
 const deleteComment = async (req, res) => {
