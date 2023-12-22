@@ -188,13 +188,13 @@ async function setInformMessage(memberId, projectId, comment, commentId, datetim
 }
 
 async function getInvolvedUserList(projectId, commentMemberId) {
-	let ownerIdList;
-	result = await projectModel.getProjectContent(projectId);
+	let ownerIdList = [];
+	result = await projectModel.getRoleInOneProject(projectId);
 	if(result.data.message == 'ok') {
-		ownerIdList = result.data.owner.map(owner=>owner.id)
+		ownerIdList = result.data.roles.filter(member=>member.role === 'owner').map(owner=>owner.id);
 	}
 
-	let commentUserIdList
+	let commentUserIdList = [];
 	result = await projectModel.getCommentUser(projectId);
 	if(result.data.message == 'ok') {
 		commentUserIdList = result.data.user.map(user=>user.id)
@@ -275,7 +275,7 @@ const getProjectMainAndRole = async (req, res) => {
 	});
 
 	if(result.data.content.length != 0 ) {
-		roleResult = await projectModel.getProjectRole(projectIdList);
+		roleResult = await projectModel.getRoleInProjectList(projectIdList);
 		if(roleResult.data.message != 'ok') {
 			res.status(roleResult.statusCode).send(roleResult.data);
 			return;
