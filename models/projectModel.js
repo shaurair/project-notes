@@ -1,4 +1,5 @@
-const database = require('./conn-aws-RDS');
+const database 		= require('./conn-aws-RDS');
+const dataFormat 	= require('./dataFormat');
 const AUTH = {
 	PERMISSION_REJECT: 0,
 	SERVER_ERROR: 1,
@@ -24,29 +25,27 @@ async function createProject(summary, description, priority, deadline, creator) 
 }
 
 async function setAssociate(associate, projectId) {
-	let ownerNumber = Object.keys(associate.owner).length;
 	let ownerList = Object.keys(associate.owner);
-	let reviewerNumber = Object.keys(associate.reviewer).length;
 	let reviewerList = Object.keys(associate.reviewer);
-	let teamNumber = Object.keys(associate.team).length;
 	let teamList = Object.keys(associate.team);
 
 	let sqlMember = 'INSERT INTO project_member(project_id, member_id, role) VALUES(?, ?, ?);';
 	let sqlTeam =  'INSERT INTO project_group(project_id, group_id) VALUES(?, ?);';
 	try {
-		for( let i = 0; i < ownerNumber; i++) {
-			await database.databasePool.query(sqlMember, [projectId, ownerList[i], 'owner']);
-		}
-		for( let i = 0; i < reviewerNumber; i++) {
-			await database.databasePool.query(sqlMember, [projectId, reviewerList[i], 'reviewer']);
-		}
-		for( let i = 0; i < teamNumber; i++) {
-			await database.databasePool.query(sqlTeam, [projectId, teamList[i]]);
-		}
+		ownerList.forEach(async owner => {
+			await database.databasePool.query(sqlMember, [projectId, owner, 'owner']);
+		})
+		reviewerList.forEach(async reviewer => {
+			await database.databasePool.query(sqlMember, [projectId, reviewer, 'reviewer']);
+		})
+		teamList.forEach(async team => {
+			await database.databasePool.query(sqlTeam, [projectId, team]);
+		})
 
 		return {
 			data: {
-				message: 'ok'
+				message: 'ok',
+				id: projectId
 			},
 			statusCode: 200
 		};
@@ -79,14 +78,14 @@ async function getAuthorization(projectId, memberId) {
 
 async function getProjectContent(projectId) {
 	let sql = 'SELECT project.*, member.image_filename, member.name FROM project INNER JOIN member ON project.creator_member_id = member.id WHERE project.id = ?;';
-	let sqlRole = 'SELECT member.id, member.image_filename, member.name FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_member.project_id = ? AND project_member.role = ?';
 	let sqlTeam = 'SELECT group_table.name, group_table.id FROM project_group INNER JOIN group_table ON project_group.group_id = group_table.id WHERE project_group.project_id = ?;';
 
 	try {
 		let contentResult = await database.databasePool.query(sql, [projectId]);
-		let ownerResult = await database.databasePool.query(sqlRole, [projectId, 'owner']);
-		let reviewerResult = await database.databasePool.query(sqlRole, [projectId, 'reviewer']);
 		let teamResult = await database.databasePool.query(sqlTeam, [projectId]);
+		let rolesResult = await getRoleInOneProject([projectId]);
+		let ownerList = rolesResult.data.roles.filter(member=>member.role === 'owner');
+		let reviewerList = rolesResult.data.roles.filter(member=>member.role === 'reviewer');
 
 		return {
 			data: {
@@ -95,11 +94,11 @@ async function getProjectContent(projectId) {
 				description: contentResult[0].description,
 				status: contentResult[0].status,
 				priority: contentResult[0].priority,
-				deadline: contentResult[0].deadline,
+				deadline: dataFormat.setDateFormateSlash(contentResult[0].deadline),
 				creatorName: contentResult[0].name,
 				creatorImage: contentResult[0].image_filename,
-				owner: ownerResult,
-				reviewer: reviewerResult,
+				owner: ownerList,
+				reviewer: reviewerList,
 				team: teamResult
 			},
 			statusCode: 200
@@ -337,7 +336,26 @@ async function getProjectMain(memberId, status, page, keyword, myRole) {
 	}
 }
 
-async function getProjectRole(projectIdList) {
+async function getRoleInOneProject(projectId) {
+	let sql = 'SELECT member.id, member.image_filename, member.name, role FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_id = ?;'
+
+	try {
+		let result = await database.databasePool.query(sql, [projectId]);
+
+		return {
+			data: {
+				message: 'ok',
+				roles: result
+			},
+			statusCode: 200
+		};
+	}
+	catch(error) {
+		return database.ErrorProcess(error);
+	}
+}
+
+async function getRoleInProjectList(projectIdList) {
 	let sql = 'SELECT project_id, member.image_filename, member.name, role FROM project_member INNER JOIN member ON project_member.member_id = member.id WHERE project_id in (?);'
 
 	try {
@@ -373,6 +391,7 @@ async function addFile(projectId, memberId, fileName, datetime) {
 		return database.ErrorProcess(error);
 	}
 }
+
 async function getFile(projectId) {
 	let sql = 'SELECT project_file.id as file_id, file_name, member_id, member.name, member.image_filename as member_image, datetime FROM project_file INNER JOIN member ON member_id = member.id WHERE project_id = ? ORDER BY project_file.id';
 	
@@ -441,7 +460,8 @@ module.exports = {
 	deleteComment,
 	updateComment,
 	getProjectMain,
-	getProjectRole,
+	getRoleInOneProject,
+	getRoleInProjectList,
 	getAuthorization,
 	addFile,
 	getFile,

@@ -35,7 +35,6 @@ app.get("/create-project", (req, res) => {
 // ----------------- //
 // routes            //
 // ----------------- //
-const logRouter 			= require('./routes/log');
 const authRouter			= require('./routes/auth');
 const memberRouter			= require('./routes/member');
 const searchRouter			= require('./routes/search');
@@ -43,11 +42,10 @@ const projectRouter 		= require('./routes/project');
 const groupRouter 			= require('./routes/group');
 const noteRouter 			= require('./routes/note');
 const notificationRouter	= require('./routes/notification');
-app.use('/log', logRouter);
-app.use('/auth', authRouter);
-app.use('/member', memberRouter);
-app.use('/search', searchRouter);
-app.use('/api_project', projectRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/member', memberRouter);
+app.use('/api/search', searchRouter);
+app.use('/api/project', projectRouter);
 app.use('/api/group', groupRouter);
 app.use('/api/note', noteRouter);
 app.use('/api/notification', notificationRouter);
@@ -57,13 +55,13 @@ const server 		= require('http').createServer(app);
 // ----------------- //
 // websocket         //
 // ----------------- //
-// const websocket 	= require('./utilities/websocket');
+// const websocket 	= require('./routes/websocket');
 // websocket.setServer(server);
 
 // ----------------- //
 // socket io         //
 // ----------------- //
-const socketIo 	= require('./utilities/socket-io.js');
+const socketIo 	= require('./routes/socket-io.js');
 socketIo.setSocket(server);
 
 server.listen(port);

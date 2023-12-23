@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const groupController = require('../controllers/groupController');
 
-router.post('/create', groupController.createGroup);
-router.get('/get-my-group', groupController.getMyGroup);
-router.get('/get-group-member', groupController.getGroupMember);
-router.put('/update-member', groupController.updateMember);
-router.put('/update-name', groupController.updateTeamName);
+router.post('/new-group', groupController.createGroup);
+router.get('/my-group', groupController.getMyGroup);
+router.get('/group-member', groupController.getGroupMember);
+router.put('/group-member', groupController.updateMember);
+router.put('/group-name', groupController.updateTeamName);
 
 module.exports = router;

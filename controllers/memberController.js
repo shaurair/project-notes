@@ -1,11 +1,11 @@
-const token = require('../utilities/token');
-const multer = require('multer');
-const sharp = require('sharp');
-const imageStorage = multer.memoryStorage();
-const upload = multer({storage: imageStorage});
-const operateStorage = require('../utilities/conn-aws-S3');
-const memberModel = require('../models/memberModel');
-const logModel = require('../models/logModel');
+const token 			= require('../models/token');
+const multer 			= require('multer');
+const sharp 			= require('sharp');
+const imageStorage 		= multer.memoryStorage();
+const upload 			= multer({storage: imageStorage});
+const operateStorage 	= require('../models/conn-aws-S3');
+const memberModel 		= require('../models/memberModel');
+const authModel 			= require('../models/authModel');
 
 const updateImage = async (req, res) => {
 	let userToken;
@@ -74,7 +74,7 @@ const updateName = async (req, res) => {
 		return;
 	}
 
-	result = await logModel.checkExistName(newName);
+	result = await authModel.checkExistName(newName);
 	if(result.data.message != 'ok') {
 		res.status(result.statusCode).send(result);
 		return;

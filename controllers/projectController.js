@@ -1,12 +1,12 @@
-const token 			= require('../utilities/token');
+const token 			= require('../models/token');
+const dataFormat 		= require('../models/dataFormat');
 const projectModel 		= require('../models/projectModel');
 const authModel			= require('../models/authModel');
-const { format } 		= require('date-fns');
 const multer 			= require('multer'); // process formData doc.
-const operateStorage 	= require('../utilities/conn-aws-S3');
-// const socketMethod 		= require('../utilities/socketMethod');
-const socketMethod 		= require('../utilities/socket-io');
-const MESSAGE_TYPE 		= require('../utilities/socket-message').MESSAGE_TYPE;
+const operateStorage 	= require('../models/conn-aws-S3');
+// const socketMethod 		= require('../routes/socketMethod');
+const socketMethod 		= require('../routes/socket-io');
+const MESSAGE_TYPE 		= require('../routes/socket-message').MESSAGE_TYPE;
 const imageStorage 	= multer.memoryStorage();
 const upload = multer({storage: imageStorage});
 
@@ -17,7 +17,6 @@ const create = async (req, res) => {
 	let deadline = req.body.deadline;
 	let creator = req.body.creator;
 	let associate = req.body.associate;
-	let data;
 	let result;
 
 	result = await projectModel.createProject(summary, description, priority, deadline, creator);
@@ -29,17 +28,7 @@ const create = async (req, res) => {
 	else {
 		let projectId = result.data.id;
 		result = await projectModel.setAssociate(associate, projectId);
-		if(result.data.message != 'ok') {
-			res.status(result.statusCode).send(result.data);
-			return;
-		}
-		else {
-			data = {
-				message: 'ok',
-				id: projectId
-			}
-			res.status(result.statusCode).send(data);
-		}
+		res.status(result.statusCode).send(result.data);
 	}
 }
 
@@ -77,12 +66,6 @@ const getContent = async (req, res) => {
 	}
 
 	result = await projectModel.getProjectContent(projectId);
-
-	if(result.data.deadline != null) {
-		let date = new Date(result.data.deadline);
-		result.data.deadline = format(date, 'yyyy/MM/dd');
-	}
-
 	res.status(result.statusCode).send(result.data);
 }
 
@@ -142,7 +125,7 @@ const update = async (req, res) => {
 		return;
 	}
 
-	res.send(req.body);
+	res.status(result.statusCode).send(result.data);
 }
 
 const updateStatus = async (req, res) => {
@@ -172,43 +155,13 @@ const addComment = async (req, res) => {
 	}
 
 	result = await projectModel.addComment(projectId, memberInfo['id'], comment, datetime);
-	let commentId = result.data.commentId;
 	res.status(result.statusCode).send(result.data);
 
-	// notify owner
-	result = await authModel.getUserInfo(memberInfo['id']);
-	memberInfo['name'] = result.data.name;
-	memberInfo['imageFilename'] = result.data.imageFilename;
-	let informMessage= {
-		projectId: projectId,
-		message: `Someone replies to project-${projectId}`,
-		newCommentCreatorName: memberInfo['name'],
-		newCommentCreatorImage: memberInfo['imageFilename'],
-		newCommentCreatorId: memberInfo['id'],
-		newCommentText: comment,
-		newCommentId: commentId,
-		newCommentDatetime: datetime
-	}
-
-	let ownerIdList;
-	result = await projectModel.getProjectContent(projectId);
-	if(result.data.message == 'ok') {
-		ownerIdList = result.data.owner.map(owner=>owner.id)
-	}
-
-	let commentUserIdList
-	result = await projectModel.getCommentUser(projectId);
-	if(result.data.message == 'ok') {
-		commentUserIdList = result.data.user.map(user=>user.id)
-	}
-
-	let allInformUser = [...new Set([...commentUserIdList, ...ownerIdList])];
+	// notify owner and users involved in discussion
+	let informMessage = await setInformMessage(memberInfo['id'], projectId, comment, result.data.commentId, datetime);
+	let allInformUser = await getInvolvedUserList(projectId, memberInfo['id']);
 
 	allInformUser.forEach(memberId=>{
-		if(memberId === memberInfo['id']) {
-			return;
-		}
-
 		if(socketMethod.checkUserConnected(memberId)) {
 			socketMethod.notify(memberId, informMessage);
 		}
@@ -216,6 +169,40 @@ const addComment = async (req, res) => {
 			projectModel.addNotification(projectId, memberId, MESSAGE_TYPE.REPLY_TO_MY_PROJECT);
 		}
 	})
+}
+
+async function setInformMessage(memberId, projectId, comment, commentId, datetime) {
+	result = await authModel.getUserInfo(memberId);
+
+	let informMessage= {
+		projectId: projectId,
+		message: `Someone replies to project-${projectId}`,
+		newCommentCreatorName: result.data.name,
+		newCommentCreatorImage: result.data.imageFilename,
+		newCommentCreatorId: memberId,
+		newCommentText: comment,
+		newCommentId: commentId,
+		newCommentDatetime: datetime
+	}
+	return informMessage;
+}
+
+async function getInvolvedUserList(projectId, commentMemberId) {
+	let ownerIdList = [];
+	result = await projectModel.getRoleInOneProject(projectId);
+	if(result.data.message == 'ok') {
+		ownerIdList = result.data.roles.filter(member=>member.role === 'owner').map(owner=>owner.id);
+	}
+
+	let commentUserIdList = [];
+	result = await projectModel.getCommentUser(projectId);
+	if(result.data.message == 'ok') {
+		commentUserIdList = result.data.user.map(user=>user.id)
+	}
+
+	let allInformUser = [...new Set([...commentUserIdList, ...ownerIdList])];
+	allInformUser = allInformUser.filter(memberId => memberId !== commentMemberId);
+	return allInformUser;
 }
 
 const deleteComment = async (req, res) => {
@@ -282,16 +269,13 @@ const getProjectMainAndRole = async (req, res) => {
 	}
 
 	result.data.content.forEach(content => {
-		if(content.deadline != null) {
-			let date = new Date(content.deadline);
-			content.deadline = format(date, 'yyyy/MM/dd');
-		}
+		content.deadline = dataFormat.setDateFormateSlash(content.deadline);
 		projectIdList.push(content.project_id)
 		roles[content.project_id] = {owner:[], reviewer:[]}
 	});
 
 	if(result.data.content.length != 0 ) {
-		roleResult = await projectModel.getProjectRole(projectIdList);
+		roleResult = await projectModel.getRoleInProjectList(projectIdList);
 		if(roleResult.data.message != 'ok') {
 			res.status(roleResult.statusCode).send(roleResult.data);
 			return;
