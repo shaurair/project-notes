@@ -42,7 +42,7 @@ async function signIn(email, password) {
 	let checkInputResult = checkInputFormat(null, email, password, null);
 
 	if(checkInputResult == 'ok') {
-		let response = await fetch("/log", {
+		let response = await fetch("/api/auth", {
 			method: "PUT",
 			body: JSON.stringify({"email":email,
 								"password":password       
@@ -69,7 +69,7 @@ async function signUp(name, email, password, confirmPassword) {
 	let checkInputResult = checkInputFormat(name, email, password, confirmPassword);
 
 	if(checkInputResult == 'ok') {
-		let response = await fetch("/log", {
+		let response = await fetch("/api/auth", {
 			method: "POST",
 			body: JSON.stringify({ "name":name,
 								"email":email,

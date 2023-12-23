@@ -127,8 +127,8 @@ async function sendImageFile() {
 	let token = localStorage.getItem('token');
 	let formData = new FormData();
 	formData.append('photo', imageFile);
-	let response = await fetch("/member/update/image", {
-			method: "PATCH",
+	let response = await fetch("/api/member/image", {
+			method: "PUT",
 			body: formData,
 			headers: {
 				'Authorization':`Bearer ${token}`,
@@ -152,8 +152,8 @@ async function sendImageFile() {
 
 async function updateData(name) {
 	let token = localStorage.getItem('token');
-	let response = await fetch("/member/update/name", {
-			method: "PATCH",
+	let response = await fetch("/api/member/name", {
+			method: "PUT",
 			body: JSON.stringify({
 				"name":name
 			}),
@@ -180,7 +180,7 @@ async function updateData(name) {
 
 async function createTeam(name) {
 	let token = localStorage.getItem('token');
-	let response = await fetch("/api/group/create", {
+	let response = await fetch("/api/group/new-group", {
 			method: "POST",
 			body: JSON.stringify({
 				"name":name
@@ -209,7 +209,7 @@ async function createTeam(name) {
 
 async function getTeam() {
 	let token = localStorage.getItem('token');
-	let response = await fetch('/api/group/get-my-group', {
+	let response = await fetch('/api/group/my-group', {
 			headers: {
 				'Authorization': `Bearer ${token}`
 			}
@@ -298,7 +298,7 @@ function setMemberList(memberList) {
 async function updateTeamMember(memberDiff) {
 	let groupId = teamNameTitleElement.value;
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/group/update-member?groupId=${groupId}`, {
+	let response = await fetch(`/api/group/group-member?groupId=${groupId}`, {
 			method: 'PUT',
 			body: JSON.stringify({
 				memberDiff
@@ -324,7 +324,7 @@ async function updateTeamName() {
 	let groupId = teamNameTitleElement.value;
 	let newName = updateTeamNameInput.value;
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/group/update-name?groupId=${groupId}&name=${newName}`, {
+	let response = await fetch(`/api/group/group-name?groupId=${groupId}&name=${newName}`, {
 			method: 'PUT',
 			headers: {
 				'Authorization':`Bearer ${token}`

@@ -4,23 +4,23 @@ const PRIORITYTEXT = {
 	'Minor': 'minor-text'
 }
 async function searchName(name) {
-	let response = await fetch(`/search?name=${name}`);
+	let response = await fetch(`/api/search?name=${name}`);
 	return await response.json();
 }
 
 async function searchId(id) {
-	let response = await fetch(`/search?id=${id}`);
+	let response = await fetch(`/api/search?id=${id}`);
 	return await response.json();
 }
 
 async function searchTeam(team) {
-	let response = await fetch(`/search?team=${team}`);
+	let response = await fetch(`/api/search?team=${team}`);
 	return await response.json();
 }
 
 async function getGroupMembers(groupId) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api/group/get-group-member?groupId=${groupId}`, {
+	let response = await fetch(`/api/group/group-member?groupId=${groupId}`, {
 			headers: {
 				'Authorization': `Bearer ${token}`
 			}

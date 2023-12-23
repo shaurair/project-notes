@@ -108,7 +108,7 @@ function showOption() {
 
 async function CheckAuthorization() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/auth?id=${projectId}`, {
+	let response = await fetch(`/api/project/auth?id=${projectId}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
@@ -124,7 +124,7 @@ async function CheckAuthorization() {
 
 async function getProjectContent() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/content?id=${projectId}`, {
+	let response = await fetch(`/api/project/content?id=${projectId}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
@@ -149,7 +149,7 @@ async function getProjectContent() {
 
 async function getProjectComment() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment?projectId=${projectId}&nextCommentCursor=${nextCommentCursor}`, {
+	let response = await fetch(`/api/project/comment?projectId=${projectId}&nextCommentCursor=${nextCommentCursor}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
@@ -373,7 +373,7 @@ function addCommentBlock(commentContainer, imageFilename, userName, userId, date
 
 async function deleteComment(commentId, commentBlock, commentContainer) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment?commentId=${commentId}`, {
+	let response = await fetch(`/api/project/comment?commentId=${commentId}`, {
 		method: 'DELETE',
 		headers: {Authorization: `Bearer ${token}`}
 	});
@@ -573,8 +573,8 @@ function changeStatusColor() {
 }
 
 async function updateProjectStatus(status) {
-	let response = await fetch('/api_project/status', {
-		method: 'PATCH',
+	let response = await fetch('/api/project/status', {
+		method: 'PUT',
 		body: JSON.stringify({
 			projectId: projectId,
 			status: status
@@ -663,8 +663,8 @@ function checkAssociateList(associateRole) {
 }
 
 async function updateProject() {
-	let response = await fetch("/api_project/", {
-		method: "PATCH",
+	let response = await fetch("/api/project/", {
+		method: "PUT",
 		body: JSON.stringify(editContent),
 		headers: {'Content-Type':'application/json'}
 	});
@@ -681,7 +681,7 @@ async function updateProject() {
 
 async function addComment(datetime) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment`, {
+	let response = await fetch(`/api/project/comment`, {
 		method: 'POST',
 		headers: {Authorization: `Bearer ${token}`,
 								'Content-Type':'application/json'
@@ -709,8 +709,8 @@ async function addComment(datetime) {
 
 async function updateComment(commentId, comment) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/comment`, {
-		method: 'PATCH',
+	let response = await fetch(`/api/project/comment`, {
+		method: 'PUT',
 		headers: {Authorization: `Bearer ${token}`,
 								'Content-Type':'application/json'
 				},
@@ -807,7 +807,7 @@ async function sendFile(file) {
 	formData.append('projectId', projectId);
 	formData.append('datetime', datetime);
 
-	let response = await fetch("/api_project/file", {
+	let response = await fetch("/api/project/file", {
 			method: "POST",
 			body: formData,
 			headers: {
@@ -829,7 +829,7 @@ async function sendFile(file) {
 
 async function getProjectFile() {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/file?projectId=${projectId}`, {
+	let response = await fetch(`/api/project/file?projectId=${projectId}`, {
 								headers: {Authorization: `Bearer ${token}`}
 							});
 	let result = await response.json();
@@ -893,7 +893,7 @@ function addFileBlock(fileId, fileName, imageFilename, userName, datetime) {
 
 async function deleteFile(fileId, fileBlock, fileName) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/file?fileId=${fileId}&fileName=${fileName}&projectId=${projectId}`, {
+	let response = await fetch(`/api/project/file?fileId=${fileId}&fileName=${fileName}&projectId=${projectId}`, {
 		method: 'DELETE',
 		headers: {Authorization: `Bearer ${token}`}
 	});

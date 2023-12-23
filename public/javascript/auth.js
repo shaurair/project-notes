@@ -28,7 +28,7 @@ function showPublicNav() {
 
 async function getUser() {
 	let token = localStorage.getItem('token');
-	let response = await fetch("/auth", {
+	let response = await fetch("/api/auth", {
 		headers: {'Authorization':`Bearer ${token}`}
 	});
 	let result = await response.json();

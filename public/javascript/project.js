@@ -41,7 +41,7 @@ async function initProject() {
 
 async function getMainAndRole(status) {
 	let token = localStorage.getItem('token');
-	let response = await fetch(`/api_project/main-info?memberId=${userInfo['id']}&status=${status}&page=${nextPage[status]}&myRole=${myRole}&keyword=${keyword}`, {
+	let response = await fetch(`/api/project/main-info?memberId=${userInfo['id']}&status=${status}&page=${nextPage[status]}&myRole=${myRole}&keyword=${keyword}`, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},

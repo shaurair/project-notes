@@ -75,7 +75,7 @@ async function createNewProject() {
 	let deadline = document.getElementById('deadline-input').value == '' ? null : document.getElementById('deadline-input').value;
 	let creator = userInfo['id'];
 
-	let response = await fetch("/api_project/", {
+	let response = await fetch("/api/project/", {
 		method: "POST",
 		body: JSON.stringify({ 'summary': summary,
 							   'description': description,
