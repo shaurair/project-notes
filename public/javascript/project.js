@@ -189,7 +189,7 @@ function setStatusResult(status, dataList, roleInfo) {
 		// deadline
 		td = document.createElement('td');
 		td.textContent = deadline;
-		if(deadline !== '-' && deadline <= getTodayDate()) {
+		if(deadline !== '-' && deadline <= getTodayDate() && status !== 'DONE') {
 			td.classList.add('highlight-text');
 		}
 		tr.appendChild(td);

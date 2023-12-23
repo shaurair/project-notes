@@ -192,7 +192,7 @@ function setProjectContent(data) {
 	if(data['deadline'] != null) {
 		element = document.getElementById('project-deadline');
 		element.textContent = data['deadline'];
-		if(data['deadline'] <= getTodayDate()) {
+		if(data['deadline'] <= getTodayDate() && data['status'] !== 'DONE') {
 			element.classList.add('highlight-text');
 		}
 	}

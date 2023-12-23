@@ -2,7 +2,7 @@ const database = require('./conn-aws-RDS');
 
 async function getExpiredProjectId(memberId, nowDate) {
 	let sql = `SELECT project_id FROM project INNER JOIN project_member ON project_member.project_id = project.id 
-			   WHERE project_member.member_id = ? AND deadline <= ?;`;
+			   WHERE project_member.member_id = ? AND deadline <= ? AND project.status != 'DONE';`;
 
 	try {
 		let result = await database.databasePool.query(sql, [memberId, nowDate]);
