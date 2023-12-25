@@ -3,9 +3,18 @@
 - Test account / password: test@test.com / test123
 
 ## Catalog
+* [Main Feature](#Main-Feature)
 * [Backend Architecture](#Backend-Architecture)
 * [Database Entiry Relationship Diagram](#Database-Entiry-Relationship-Diagram)
 * [Technique Summary](#Technique-Summary)
+
+## Main Feature
+- Track, update, create, comment, and upload files for projects
+- Search for specific project using keyword
+- Real-time discussions about projects
+- Privately record personal note for each project
+- Manage personal profile, create teams and manage team members
+- Restricted project access to owners, reviewers, creators, and relevant team members
 
 ## Backend Architecture
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/BackendArchitecture_note.png' width=80%>
