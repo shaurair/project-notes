@@ -1,6 +1,11 @@
+# Project Notes
+- Website URL: https://projects.shaurair.online/
+- Test account / password: test@test.com / test123
+
 ## Catalog
 * [Backend Architecture](#Backend-Architecture)
 * [Database Entiry Relationship Diagram](#Database-Entiry-Relationship-Diagram)
+* [Technique Summary](#Technique-Summary)
 
 ## Backend Architecture
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/BackendArchitecture_note.png' width=80%>
@@ -25,5 +30,25 @@
   - Users download files from AWS CDN to reduce latency
 
 # Database Entiry Relationship Diagram
+- Database structure follows normalization rules.
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/ErdColorCut.png' width=90%>
 
+## Technique Summary
+### Front-end
+- HTML
+- CSS
+- Javascript
+### Back-end
+- Express (Node.js)
+- RESTful API
+- Socket.IO
+- Unit test (Jest)
+### Database
+- MySQL
+### Infrastructure
+- DNS
+- SSL
+- NGINX
+- AWS EC2
+- AWS S3 + CloudFront
+- AWS RDS (MySQL)
