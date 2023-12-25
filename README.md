@@ -11,10 +11,24 @@
 ## Main Feature
 - Track, update, create, comment, and upload files for projects
 - Search for specific project using keyword
+- Notifications of project deadline and someone's reply
 - Real-time discussions about projects
 - Privately record personal note for each project
 - Manage personal profile, create teams and manage team members
 - Restricted project access to owners, reviewers, creators, and relevant team members
+
+### Feature showcase
+- **Projects / personal notes management**
+<img src='https://github.com/shaurair/project-notes/blob/main/public/images/demo.gif' width=60%>
+
+- **Web notification**
+<img src='https://github.com/shaurair/project-notes/blob/main/doc/Web-notification.png' width=60%>
+
+- **Real-time discussion**
+<img src='https://github.com/shaurair/project-notes/blob/main/doc/real-time-discussion.gif' width=60%>
+
+- **File management**
+<img src='https://github.com/shaurair/project-notes/blob/main/doc/upload-file.gif' width=60%>
 
 ## Backend Architecture
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/BackendArchitecture_note.png' width=80%>
