@@ -54,7 +54,7 @@
 
 # Database Entiry Relationship Diagram
 - Database structure follows normalization rules.
-<img src='https://github.com/shaurair/project-notes/blob/main/doc/ErdColorCut.png' width=90%>
+<img src='https://github.com/shaurair/project-notes/blob/main/doc/ErdColorCut.png' width=80%>
 
 ## Technique Summary
 ### Front-end
