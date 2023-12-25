@@ -33,6 +33,9 @@
 - **Create / search project**
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/create-search.gif' width=60%>
 
+- **Team management**
+<img src='https://github.com/shaurair/project-notes/blob/main/doc/team.gif' width=60%>
+
 ## Backend Architecture
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/BackendArchitecture_note.png' width=80%>
 
