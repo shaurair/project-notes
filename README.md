@@ -61,7 +61,7 @@
 - ### e. Users get files through AWS CDN
   - Users download files from AWS CDN to reduce latency
 
-# Database Entiry Relationship Diagram
+## Database Entiry Relationship Diagram
 - Database structure follows normalization rules.
 <img src='https://github.com/shaurair/project-notes/blob/main/doc/ErdColorCut.png' width=80%>
 
