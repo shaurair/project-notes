@@ -91,9 +91,8 @@ function setWebSocketNotification() {
 			newCommentSet[messageInfo['newCommentId']] = true;
 			addCommentBlock(newCommentContainer, messageInfo['newCommentCreatorImage'], messageInfo['newCommentCreatorName'], messageInfo['newCommentCreatorId'], messageInfo['newCommentDatetime'], messageInfo['newCommentText'], messageInfo['newCommentId']);
 		}
-		else {
-			setUpdateNotification(projectId, messageText);
-		}
+		
+		setUpdateNotification(projectId, messageText);
     })
 }
 
