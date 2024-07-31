@@ -1701,13 +1701,29 @@ td.tb-project-people {
 	#summary-input-content, #description-input  {
 		width: calc(100vw - 250px);;
 	}
+	.slogan {
+		font-size: 34px;
+	}
 	.info-container {
 		flex-direction: column;
+		align-items: center;
+		gap: 50px;
+	}
+	.demo-text-part {
+		width: 80%;
+	}
+	.demo-image-part {
+		display: none;
+	}
+	.sub-slogan-text {
+		margin-bottom: 2rem;
+		font-size: 34px;
+		font-weight: 500;
+		font-family: Arial, Helvetica, sans-serif;
 	}
 }
-
 /* ====================================== */
-/*  < 600 px screen                       */
+/*  < 700 px screen                       */
 /* ====================================== */
 @media (max-width: 700px) {
 	.headline {
