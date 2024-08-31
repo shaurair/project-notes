@@ -70,7 +70,7 @@ function setNote(noteList) {
 			let linkElement = document.createElement('a');
 			linkElement.className = 'hyperlink project-text';
 			linkElement.href = `/project/${projectId}`;
-			linkElement.target = '_blank';
+			// linkElement.target = '_blank';
 			linkElement.textContent = `project-${projectId}: ${projectSummary}`;
 			element.appendChild(linkElement);
 			elementHead.appendChild(element);
