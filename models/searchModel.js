@@ -1,4 +1,4 @@
-const database = require('./conn-aws-RDS');
+const database = require('./dbManager');
 
 async function searchName(name) {
 	let sql = 'SELECT id, name, image_filename FROM member WHERE name like ?;';

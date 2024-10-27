@@ -1,4 +1,4 @@
-const database = require('./conn-aws-RDS');
+const database = require('./dbManager');
 
 async function checkExistTeam(name) {
 	let sql = 'SELECT * FROM group_table WHERE name = ? COLLATE utf8mb4_bin;';

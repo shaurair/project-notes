@@ -1,4 +1,4 @@
-const database = require('./conn-aws-RDS');
+const database = require('./dbManager');
 
 async function updateUserImage(memberId, filename) {
 	let sql = 'UPDATE member SET image_filename = ? WHERE id = ?;';

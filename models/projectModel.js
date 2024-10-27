@@ -1,4 +1,4 @@
-const database 		= require('./conn-aws-RDS');
+const database 		= require('./dbManager');
 const dataFormat 	= require('./dataFormat');
 const AUTH = {
 	PERMISSION_REJECT: 0,

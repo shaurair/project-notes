@@ -1,4 +1,4 @@
-const database = require('./conn-aws-RDS');
+const database = require('./dbManager');
 
 async function getExpiredProjectId(memberId, nowDate) {
 	let sql = `SELECT project_id FROM project INNER JOIN project_member ON project_member.project_id = project.id 

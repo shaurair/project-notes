@@ -1,4 +1,4 @@
-const database = require('./conn-aws-RDS');
+const database = require('./dbManager');
 
 async function getUserInfo(memberId) {
 	let sql = 'SELECT name, image_filename FROM member WHERE id = ?;';

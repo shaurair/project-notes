@@ -1,4 +1,4 @@
-const database = require('./conn-aws-RDS');
+const database = require('./dbManager');
 
 async function addNote(projectId, memberId, note) {
 	let sql = 'INSERT INTO note(project_id, member_id, note) VALUES (?, ?, ?) ON duplicate key update note = ?;';
